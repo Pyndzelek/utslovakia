@@ -6,13 +6,10 @@ export function AboutBanner() {
     <section className="mx-auto w-full max-w-6xl px-4 py-8">
       <div className="grid overflow-hidden rounded-lg bg-secondary md:grid-cols-2">
         <div className="flex flex-col justify-center p-8">
-          <h2 className="text-2xl font-normal text-foreground text-balance">
-            Lorem ipsum dolor
-          </h2>
+          <h2 className="text-2xl font-normal text-foreground text-balance">Lorem ipsum dolor</h2>
           <p className="mt-3 max-w-md text-xs leading-relaxed text-muted-foreground">
-            Lorem ipsum dolor sit amet consectetur. Quam id tristique tristique
-            facilisis sem sed vitae. Id sit at curabitur quis mi bibendum
-            ultrices. Sit ac justo vel quam nunc.
+            Lorem ipsum dolor sit amet consectetur. Quam id tristique tristique facilisis sem sed
+            vitae. Id sit at curabitur quis mi bibendum ultrices. Sit ac justo vel quam nunc.
           </p>
           <Link
             href="#"
@@ -23,7 +20,7 @@ export function AboutBanner() {
         </div>
         <div className="relative min-h-48">
           <Image
-            src="/images/about-payment.png"
+            src="/maszynka.png"
             alt="Customer using a payment terminal"
             fill
             className="object-cover"

@@ -13,10 +13,7 @@ function CheckOutBadge() {
 
 export function CategoryCards() {
   return (
-    <section
-      aria-label="Product categories"
-      className="mx-auto w-full max-w-6xl px-4 py-8"
-    >
+    <section aria-label="Product categories" className="mx-auto w-full max-w-6xl px-4 py-8">
       <div className="grid gap-5 md:grid-cols-2">
         <div className="flex flex-col gap-5">
           {/* Coin acceptors */}
@@ -24,17 +21,9 @@ export function CategoryCards() {
             href="#"
             className="group relative flex min-h-56 overflow-hidden rounded-lg bg-secondary p-6 transition-shadow hover:shadow-md"
           >
-            <h3 className="text-xl font-bold text-foreground">
-              Coin acceptors
-            </h3>
+            <h3 className="text-xl font-bold text-foreground">Coin acceptors</h3>
             <div className="absolute bottom-2 right-10 h-40 w-40">
-              <Image
-                src="/images/coin-acceptor.png"
-                alt=""
-                fill
-                className="object-contain"
-                sizes="160px"
-              />
+              <Image src="/maszynka.png" alt="" fill className="object-contain" sizes="160px" />
             </div>
             <CheckOutBadge />
           </Link>
@@ -44,12 +33,10 @@ export function CategoryCards() {
             href="#"
             className="group relative flex min-h-56 overflow-hidden rounded-lg bg-primary p-6 transition-shadow hover:shadow-md"
           >
-            <h3 className="text-xl font-bold text-primary-foreground">
-              Monitors
-            </h3>
+            <h3 className="text-xl font-bold text-primary-foreground">Monitors</h3>
             <div className="absolute bottom-0 right-6 h-44 w-56">
               <Image
-                src="/images/monitor.png"
+                src="/maszynka.png"
                 alt=""
                 fill
                 className="object-contain object-bottom"
@@ -68,12 +55,10 @@ export function CategoryCards() {
           href="#"
           className="group relative flex min-h-56 overflow-hidden rounded-lg bg-navy p-6 transition-shadow hover:shadow-md md:min-h-full"
         >
-          <h3 className="text-xl font-bold text-primary-foreground">
-            Bill acceptors
-          </h3>
+          <h3 className="text-xl font-bold text-primary-foreground">Bill acceptors</h3>
           <div className="absolute inset-x-8 bottom-4 top-20">
             <Image
-              src="/images/bill-acceptor-dark.png"
+              src="/maszynka.png"
               alt=""
               fill
               className="object-contain mix-blend-lighten"

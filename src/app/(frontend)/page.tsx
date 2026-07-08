@@ -13,7 +13,7 @@ export default async function HomePage() {
       <SiteHeader />
       <main className="flex-1">
         <Hero />
-        <ProductSection title="Bestsellers" products={bestsellers} highlightFirst />
+        <ProductSection title="Bestsellers" products={bestsellers} />
         <CategoryCards />
         <ProductSection title="Promotions" products={promotions} />
         <Industries />
