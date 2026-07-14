@@ -52,7 +52,7 @@ export default buildConfig({
     seoPlugin({
       collections: ['products'],
       uploadsCollection: 'media',
-      generateTitle: ({ doc }) => `${doc?.title} | YourClient`,
+      generateTitle: ({ doc }) => `${doc?.title} | UTSlovakia`,
       generateDescription: ({ doc }) => doc?.description ?? '',
     }),
   ],

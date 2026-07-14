@@ -51,7 +51,7 @@ export const Product: CollectionConfig = {
     },
     {
       name: 'description',
-      type: 'richText',
+      type: 'textarea',
       label: 'Opis',
     },
     {

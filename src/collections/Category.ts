@@ -6,7 +6,6 @@ export const Category: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     description: 'Kategorie produktów',
-    icon: 'tag',
   },
   access: {
     read: () => true,
