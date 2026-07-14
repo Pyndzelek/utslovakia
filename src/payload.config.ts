@@ -8,6 +8,8 @@ import { pl } from '@payloadcms/translations/languages/pl'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Category } from './collections/Category'
+import { Product } from './collections/Product'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -33,7 +35,7 @@ export default buildConfig({
     supportedLanguages: { pl },
     fallbackLanguage: 'pl',
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Category, Product],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
