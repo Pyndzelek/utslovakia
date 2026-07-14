@@ -4,6 +4,7 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { pl } from '@payloadcms/translations/languages/pl'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -17,6 +18,20 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      graphics: {
+        Logo: '/components/admin/logo#Logo', // shown on login/create-first-user view
+        Icon: '/components/admin/icon#Icon', // small mark shown in the nav
+      },
+      // you can also override beforeLogin, afterLogin, beforeDashboard, etc.
+    },
+    meta: {
+      titleSuffix: '- YourClient Admin',
+    },
+  },
+  i18n: {
+    supportedLanguages: { pl },
+    fallbackLanguage: 'pl',
   },
   collections: [Users, Media],
   editor: lexicalEditor(),
