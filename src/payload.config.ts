@@ -5,6 +5,7 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { pl } from '@payloadcms/translations/languages/pl'
+import { seoPlugin } from '@payloadcms/plugin-seo'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -28,7 +29,7 @@ export default buildConfig({
       // you can also override beforeLogin, afterLogin, beforeDashboard, etc.
     },
     meta: {
-      titleSuffix: '- YourClient Admin',
+      titleSuffix: '- UTS Admin',
     },
   },
   i18n: {
@@ -47,5 +48,12 @@ export default buildConfig({
     },
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    seoPlugin({
+      collections: ['products'],
+      uploadsCollection: 'media',
+      generateTitle: ({ doc }) => `${doc?.title} | YourClient`,
+      generateDescription: ({ doc }) => doc?.description ?? '',
+    }),
+  ],
 })
