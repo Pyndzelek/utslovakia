@@ -36,6 +36,14 @@ export default buildConfig({
     supportedLanguages: { pl },
     fallbackLanguage: 'pl',
   },
+  localization: {
+    locales: [
+      { label: 'Polski', code: 'pl' },
+      { label: 'English', code: 'en' },
+    ],
+    defaultLocale: 'pl',
+    fallback: true,
+  },
   collections: [Users, Media, Category, Product],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

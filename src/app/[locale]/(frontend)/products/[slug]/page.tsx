@@ -12,7 +12,8 @@ export async function generateStaticParams() {
     limit: 1000,
     select: { slug: true },
   })
-  return docs.map((doc) => ({ slug: doc.slug }))
+  const locales = ['pl', 'en']
+  return locales.flatMap((locale) => docs.map((doc) => ({ locale, slug: doc.slug })))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -38,7 +39,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const { docs } = await payload.find({
     collection: 'products',
     where: { slug: { equals: slug } },
-    depth: 1, // resolves category + images relationships
+    locale,
+    depth: 1,
     limit: 1,
   })
   const product = docs[0]
