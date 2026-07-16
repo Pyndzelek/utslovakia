@@ -116,7 +116,7 @@ export default async function ContactPage({ params }: PageProps) {
           ))}
         </div>
 
-        <div className="mt-20 flex justify-center">
+        <div className="mt-20 flex flex-col items-center gap-3 justify-center">
           {/* Form (visual only) */}
           {/* <div className="rounded-3xl border border-line bg-white p-6 shadow-card sm:p-8">
             <h2 className="font-display text-2xl font-semibold tracking-tight text-navy-900">
@@ -200,6 +200,7 @@ export default async function ContactPage({ params }: PageProps) {
             </span>
           </div> */}
           <Logo className="w-md border border-white rounded-4xl p-5 bg-white shadow-card" />
+          <p className="text-sm text-slate-500"> VAT number: SK 2120871324</p>
         </div>
 
         {/* FAQ */}
