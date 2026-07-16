@@ -9,6 +9,7 @@ import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { CtaBanner } from '@/components/home/cta-banner'
 import { categories } from '@/lib/mock-data'
 import { getTranslations } from 'next-intl/server'
+import type { Metadata } from 'next'
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params
