@@ -58,15 +58,11 @@ export const Product: CollectionConfig = {
       localized: true,
     },
     {
-      name: 'specifications',
-      type: 'array',
-      label: 'Specyfikacja',
-      localized: true,
-      labels: { singular: 'Parametr', plural: 'Parametry' },
-      fields: [
-        { name: 'label', type: 'text', label: 'Nazwa', required: true, localized: true },
-        { name: 'value', type: 'text', label: 'Wartość', required: true, localized: true },
-      ],
+      name: 'link',
+      type: 'text',
+      label: 'Link do zakupu (ebay)',
+      localized: false,
+      required: false,
     },
   ],
 }
