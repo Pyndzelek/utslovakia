@@ -31,6 +31,18 @@ export const routing = defineRouting({
       sk: '/kategoria',
       'pt-br': '/categoria',
     },
+    '/products/[slug]': {
+      pl: '/produkty/[slug]',
+      en: '/products/[slug]',
+      sk: '/produkty/[slug]',
+      'pt-br': '/produtos/[slug]',
+    },
+    '/category/[slug]': {
+      pl: '/kategoria/[slug]',
+      en: '/category/[slug]',
+      sk: '/kategoria/[slug]',
+      'pt-br': '/categoria/[slug]',
+    },
   },
 })
 

@@ -1,2 +1,76 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+
+/* ---------------------------------------------------------------------------
+ * UT Slovakia design tokens
+ * Palette: deep navy ink + vivid brand blue on a cool off-white canvas.
+ * ------------------------------------------------------------------------- */
+@theme {
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: var(--font-sora), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand blue scale */
+  --color-brand-50: #f0f5ff;
+  --color-brand-100: #dfeaff;
+  --color-brand-200: #c3d8fe;
+  --color-brand-300: #98bdfc;
+  --color-brand-400: #6597f8;
+  --color-brand-500: #3f70f2;
+  --color-brand-600: #2953e6;
+  --color-brand-700: #2140c8;
+  --color-brand-800: #2136a0;
+  --color-brand-900: #20317e;
+  --color-brand-950: #171f4d;
+
+  /* Deep navy ink scale (dark surfaces, headings) */
+  --color-navy-600: #33456f;
+  --color-navy-700: #22315a;
+  --color-navy-800: #172344;
+  --color-navy-900: #0e1732;
+  --color-navy-950: #080e21;
+
+  /* Neutral surfaces */
+  --color-canvas: #f5f7fb;
+  --color-line: #e5eaf3;
+
+  /* Elevation */
+  --shadow-card: 0 1px 2px rgb(14 23 50 / 0.05), 0 8px 24px -12px rgb(14 23 50 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(14 23 50 / 0.07), 0 24px 48px -16px rgb(14 23 50 / 0.25);
+  --shadow-glow: 0 0 0 1px rgb(63 112 242 / 0.15), 0 24px 64px -16px rgb(63 112 242 / 0.35);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-slate-600 antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    @apply bg-brand-600 text-white;
+  }
+}
+
+/* Chevron pattern for dark hero / banner surfaces */
+@utility pattern-chevron-dark {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120' fill='none'%3E%3Cpath d='M-4 30 60 62 124 30' stroke='white' stroke-opacity='0.045' stroke-width='12'/%3E%3Cpath d='M-4 86 60 118 124 86' stroke='white' stroke-opacity='0.045' stroke-width='12'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+}
+
+/* Chevron pattern for light surfaces */
+@utility pattern-chevron-light {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120' fill='none'%3E%3Cpath d='M-4 30 60 62 124 30' stroke='%230e1732' stroke-opacity='0.035' stroke-width='12'/%3E%3Cpath d='M-4 86 60 118 124 86' stroke='%230e1732' stroke-opacity='0.035' stroke-width='12'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+}
+
+/* Hide scrollbars on horizontal product rails while keeping them scrollable */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

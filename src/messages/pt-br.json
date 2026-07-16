@@ -1,13 +1,27 @@
 {
   "Metadata": {
-    "title": "Utslovakia",
-    "description": "Utslovakia catalog and services"
+    "title": "UT Slovakia — Sistemas de pagamento e componentes",
+    "description": "Aceitadores de cédulas, validadores de moedas, monitores touch e módulos de pagamento sem contato para gaming, vending e entretenimento. Envio para toda a Europa a partir de Bratislava."
   },
   "nav": {
     "home": "Início",
-    "products": "Products",
-    "category": "Categoria",
-    "about": "Sobre",
+    "products": "Produtos",
+    "category": "Categorias",
+    "about": "Sobre nós",
     "contact": "Contato"
+  },
+  "header": {
+    "announcement": "Frete grátis em pedidos acima de 500 € — despacho em 24 horas",
+    "searchPlaceholder": "Buscar produtos, marcas, SKU…",
+    "cart": "Carrinho",
+    "menu": "Menu"
+  },
+  "footer": {
+    "tagline": "Sistemas de pagamento e componentes para gaming, vending e entretenimento — fornecidos e assistidos de Bratislava desde 2009.",
+    "categories": "Categorias",
+    "pages": "Páginas",
+    "contact": "Contato",
+    "hours": "seg–sex, 8:00 – 16:30",
+    "rights": "Todos os direitos reservados."
   }
 }

@@ -1,13 +1,27 @@
 {
   "Metadata": {
-    "title": "Utslovakia - en",
-    "description": "Utslovakia catalog and services"
+    "title": "UT Slovakia — Payment systems & components",
+    "description": "Bill acceptors, coin validators, touch monitors and cashless payment modules for gaming, vending and amusement. Shipped across Europe from Bratislava."
   },
   "nav": {
     "home": "Home",
     "products": "Products",
-    "category": "Category",
-    "about": "About",
+    "category": "Categories",
+    "about": "About us",
     "contact": "Contact"
+  },
+  "header": {
+    "announcement": "Free shipping on orders over €500 — dispatched within 24 hours",
+    "searchPlaceholder": "Search products, brands, SKU…",
+    "cart": "Cart",
+    "menu": "Menu"
+  },
+  "footer": {
+    "tagline": "Payment systems and components for gaming, vending and amusement — supplied and serviced from Bratislava since 2009.",
+    "categories": "Categories",
+    "pages": "Pages",
+    "contact": "Contact",
+    "hours": "Mon–Fri, 8:00 – 16:30",
+    "rights": "All rights reserved."
   }
 }

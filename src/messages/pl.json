@@ -1,7 +1,7 @@
 {
   "Metadata": {
-    "title": "Utslovakia",
-    "description": "Utslovakia catalog and services"
+    "title": "UT Slovakia — Systemy płatnicze i komponenty",
+    "description": "Akceptory banknotów, wrzutniki monet, monitory dotykowe i moduły płatności bezgotówkowych dla branży gamingowej, vendingowej i rozrywkowej. Wysyłka w całej Europie z Bratysławy."
   },
   "nav": {
     "home": "Strona główna",
@@ -9,5 +9,19 @@
     "category": "Kategorie",
     "about": "O nas",
     "contact": "Kontakt"
+  },
+  "header": {
+    "announcement": "Darmowa dostawa dla zamówień powyżej 500 € — wysyłka w 24 godziny",
+    "searchPlaceholder": "Szukaj produktów, marek, SKU…",
+    "cart": "Koszyk",
+    "menu": "Menu"
+  },
+  "footer": {
+    "tagline": "Systemy płatnicze i komponenty dla branży gamingowej, vendingowej i rozrywkowej — dostarczane i serwisowane z Bratysławy od 2009 roku.",
+    "categories": "Kategorie",
+    "pages": "Strony",
+    "contact": "Kontakt",
+    "hours": "pon.–pt., 8:00 – 16:30",
+    "rights": "Wszelkie prawa zastrzeżone."
   }
 }

@@ -1,13 +1,27 @@
 {
   "Metadata": {
-    "title": "Utslovakia",
-    "description": "Utslovakia catalog and services"
+    "title": "UT Slovakia — Platobné systémy a komponenty",
+    "description": "Akceptory bankoviek, mincovníky, dotykové monitory a bezhotovostné platobné moduly pre gaming, vending a zábavný priemysel. Expedujeme po celej Európe z Bratislavy."
   },
   "nav": {
     "home": "Domov",
     "products": "Produkty",
-    "category": "Kategória",
+    "category": "Kategórie",
     "about": "O nás",
     "contact": "Kontakt"
+  },
+  "header": {
+    "announcement": "Doprava zadarmo pri objednávkach nad 500 € — expedícia do 24 hodín",
+    "searchPlaceholder": "Hľadať produkty, značky, SKU…",
+    "cart": "Košík",
+    "menu": "Menu"
+  },
+  "footer": {
+    "tagline": "Platobné systémy a komponenty pre gaming, vending a zábavný priemysel — dodávané a servisované z Bratislavy od roku 2009.",
+    "categories": "Kategórie",
+    "pages": "Stránky",
+    "contact": "Kontakt",
+    "hours": "po–pia, 8:00 – 16:30",
+    "rights": "Všetky práva vyhradené."
   }
 }
