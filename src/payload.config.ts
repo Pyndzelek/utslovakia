@@ -40,6 +40,8 @@ export default buildConfig({
     locales: [
       { label: 'Polski', code: 'pl' },
       { label: 'English', code: 'en' },
+      { label: 'Slovenčina', code: 'sk' },
+      { label: 'Português (Brasil)', code: 'pt-br' },
     ],
     defaultLocale: 'pl',
     fallback: true,

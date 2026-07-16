@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Search, User, ShoppingCart, ChevronDown, Menu, X } from 'lucide-react'
+import { useLocale } from 'next-intl'
 
 const navLinks = [
   { label: 'Home', href: '#' },
@@ -27,6 +28,7 @@ const categories = [
 ]
 
 export function SiteHeader() {
+  const locale: string = useLocale()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   return (
@@ -72,7 +74,7 @@ export function SiteHeader() {
                 <ShoppingCart className="size-4" />
               </button>
               <button className="flex items-center gap-1 text-xs font-medium text-foreground transition-colors hover:text-primary">
-                EN
+                {locale.toUpperCase()}
                 <ChevronDown className="size-3" />
               </button>
             </div>
