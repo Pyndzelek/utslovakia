@@ -1,5 +1,13 @@
 import React from 'react'
-import { CarFront, Dice5, Gamepad2, Store, Trophy, WashingMachine, type LucideIcon } from 'lucide-react'
+import {
+  CarFront,
+  Dice5,
+  Gamepad2,
+  Store,
+  Trophy,
+  WashingMachine,
+  type LucideIcon,
+} from 'lucide-react'
 import { industries } from '@/lib/mock-data'
 
 const industryIcons: Record<string, LucideIcon> = {
@@ -13,7 +21,7 @@ const industryIcons: Record<string, LucideIcon> = {
 
 export function Industries() {
   return (
-    <ul className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6 lg:gap-5">
+    <ul className="grid grid-cols-2 gap-4 md:grid-cols-4  lg:gap-5">
       {industries.map((industry) => {
         const Icon = industryIcons[industry.slug] ?? Store
         return (

@@ -54,11 +54,19 @@ function CategoryTile({ slug, tone, className, large = false }: TileProps) {
         <p className={cn('text-xs font-medium', styles.tagline)}>
           {category.productCount} products
         </p>
-        <h3 className={cn('font-display mt-2 font-semibold tracking-tight', styles.name, large ? 'text-2xl sm:text-3xl' : 'text-xl')}>
+        <h3
+          className={cn(
+            'font-display mt-2 font-semibold tracking-tight',
+            styles.name,
+            large ? 'text-2xl sm:text-3xl' : 'text-xl',
+          )}
+        >
           {category.name}
         </h3>
         {large && (
-          <p className={cn('mt-3 hidden max-w-xs text-sm leading-relaxed sm:block', styles.tagline)}>
+          <p
+            className={cn('mt-3 hidden max-w-xs text-sm leading-relaxed sm:block', styles.tagline)}
+          >
             {category.tagline}
           </p>
         )}
@@ -81,7 +89,7 @@ function CategoryTile({ slug, tone, className, large = false }: TileProps) {
           styles.link,
         )}
       >
-        Check out
+        Zobacz
         <ArrowUpRight className="size-3.5" aria-hidden />
       </span>
     </Link>
@@ -99,14 +107,14 @@ export function CategoryShowcase() {
           className="min-h-72 lg:col-span-2 lg:row-span-2 lg:min-h-[520px]"
         />
         <CategoryTile slug="coin-acceptors" tone="light" className="min-h-60" />
-        <CategoryTile slug="monitors" tone="brand" className="min-h-60" />
-        <CategoryTile slug="cashless" tone="light" className="min-h-60" />
-        <CategoryTile slug="hoppers" tone="navy" className="min-h-60" />
+        <CategoryTile slug="monitors" tone="navy" className="min-h-60" />
+        <CategoryTile slug="cabinets" tone="light" className="min-h-60" />
+        <CategoryTile slug="printers" tone="navy" className="min-h-60" />
       </div>
 
       <div className="mt-8 text-center">
         <Link href="/category" className={buttonVariants({ variant: 'outline', size: 'md' })}>
-          View all categories
+          Zobacz wszystkie kategorie
           <ArrowUpRight aria-hidden />
         </Link>
       </div>

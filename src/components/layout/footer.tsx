@@ -17,7 +17,14 @@ function FacebookIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function InstagramIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden {...props}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden
+      {...props}
+    >
       <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" />
       <circle cx="12" cy="12" r="3.8" />
       <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
@@ -40,7 +47,6 @@ export async function Footer() {
   const pages = [
     { href: '/products', label: t('nav.products') },
     { href: '/category', label: t('nav.category') },
-    { href: '/about', label: t('nav.about') },
     { href: '/contact', label: t('nav.contact') },
   ] as const
 
@@ -49,15 +55,15 @@ export async function Footer() {
       <Container className="grid gap-12 py-14 lg:grid-cols-12 lg:gap-8">
         {/* Brand + contact */}
         <div className="lg:col-span-5">
-          <Logo onDark />
+          <Logo className="w-20 sm:w-24 md:w-28 lg:w-36 xl:w-36 " />
           <p className="mt-5 max-w-sm text-sm leading-relaxed">{t('footer.tagline')}</p>
           <ul className="mt-6 space-y-3 text-sm">
             <li className="flex items-start gap-3">
               <MapPin className="mt-0.5 size-4 shrink-0 text-brand-400" aria-hidden />
               <span>
-                Kopčianska 92/D
+                Trojičné námestie 191/11
                 <br />
-                851 01 Bratislava, Slovakia
+                Tvrdošín, Žilinski, Slovakia 02744
               </span>
             </li>
             <li>
@@ -66,7 +72,7 @@ export async function Footer() {
                 className="flex items-center gap-3 transition-colors hover:text-white"
               >
                 <Phone className="size-4 shrink-0 text-brand-400" aria-hidden />
-                +421 2 5478 9630
+                +421235456789
               </a>
             </li>
             <li>
@@ -124,7 +130,7 @@ export async function Footer() {
       <div className="border-t border-white/10">
         <Container className="flex flex-col items-center justify-between gap-4 py-6 sm:flex-row">
           <p className="text-xs">
-            © {year} UT Slovakia s.r.o. {t('footer.rights')}
+            © {year} unique Technology Solution s.r.o. {t('footer.rights')}
           </p>
           <div className="flex items-center gap-2">
             {[

@@ -25,15 +25,28 @@ export default async function HomePage({ params }: PageProps) {
   return (
     <>
       <Hero />
-      <BrandStrip />
 
-      {/* Bestsellers */}
-      <section className="py-16 lg:py-20">
+      {/* Industries */}
+      <section className="bg-white pt-16 lg:py-12">
         <Container>
           <SectionHeading
-            eyebrow="Proven in the field"
-            title="Bestsellers"
-            description="The devices our customers order again and again — stocked deep and ready to ship."
+            align="center"
+            eyebrow="Komu dostarczamy"
+            title="Przeglądaj według branży"
+            description="Jeden dostawca do każdego punktu płatności samoobsługowej w Twoim biznesie."
+            className="mb-10"
+          />
+          <Industries />
+        </Container>
+      </section>
+
+      {/* Bestsellers */}
+      <section className="py-12 lg:py-16">
+        <Container>
+          <SectionHeading
+            eyebrow="Najczęściej zamawiane"
+            title="Bestsellery"
+            description="Urządzenia, które nasze klienci zamawiają ponownie, w magazynie i gotowe do wysyłki."
             action={<ViewAllLink />}
             className="mb-8"
           />
@@ -42,12 +55,12 @@ export default async function HomePage({ params }: PageProps) {
       </section>
 
       {/* Category showcase */}
-      <section className="bg-white py-16 lg:py-20">
+      <section className="bg-white py-12 lg:py-16">
         <Container>
           <SectionHeading
-            eyebrow="Browse the catalog"
-            title="Find the right component"
-            description="From banknote validation to cashless retrofits — everything a self-service machine needs."
+            eyebrow="Przeglądaj katalog"
+            title="Znajdź odpowiednie komponenty"
+            description="Od walidacji banknotów do retrofitów bezgotówkowych – wszystko, co potrzebuje maszyna samoobsługowa."
             className="mb-10"
           />
           <CategoryShowcase />
@@ -55,40 +68,26 @@ export default async function HomePage({ params }: PageProps) {
       </section>
 
       {/* Promotions */}
-      <section className="py-16 lg:py-20">
+      {/* <section className="py-16 lg:py-20">
         <Container>
           <SectionHeading
-            eyebrow="Limited-time offers"
-            title="Promotions"
-            description="Clearance stock and seasonal discounts — prices include the lowest-price guarantee of the last 30 days."
+            eyebrow="Czas ograniczony"
+            title="Promocje"
+            description="Zniżki na magazynie i sezonowe promocje – ceny obejmują gwarancję najniższej ceny z ostatnich 30 dni."
             action={<ViewAllLink />}
             className="mb-8"
           />
           <ProductRail products={promotions} />
         </Container>
-      </section>
-
-      {/* Industries */}
-      <section className="bg-white py-16 lg:py-20">
-        <Container>
-          <SectionHeading
-            align="center"
-            eyebrow="Who we supply"
-            title="Browse by industry"
-            description="One supplier for every unattended payment point in your operation."
-            className="mb-10"
-          />
-          <Industries />
-        </Container>
-      </section>
+      </section> */}
 
       {/* New arrivals */}
-      <section className="py-16 lg:py-20">
+      <section className="py-12 lg:pt-16 lg:pb-20">
         <Container>
           <SectionHeading
-            eyebrow="Fresh off the bench"
-            title="New products"
-            description="Recently added to the catalog and already bench-tested by our engineers."
+            eyebrow="Nowości"
+            title="Nowe produkty"
+            description="Ostatnio dodane do katalogu i gotowe do wysyłki."
             action={<ViewAllLink />}
             className="mb-8"
           />
@@ -97,7 +96,7 @@ export default async function HomePage({ params }: PageProps) {
       </section>
 
       {/* CTA */}
-      <section className="pb-16 lg:pb-24">
+      <section className="pb-12 lg:pb-16">
         <Container>
           <CtaBanner />
         </Container>
@@ -109,7 +108,7 @@ export default async function HomePage({ params }: PageProps) {
 function ViewAllLink() {
   return (
     <Link href="/products" className={buttonVariants({ variant: 'ghost', size: 'sm' })}>
-      View all
+      Zobacz wszystkie
       <ArrowRight aria-hidden />
     </Link>
   )

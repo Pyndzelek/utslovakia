@@ -55,56 +55,107 @@ export const PRODUCT_IMAGE = '/maszynka.png'
 export const categories: Category[] = [
   {
     slug: 'bill-acceptors',
-    name: 'Bill acceptors',
-    tagline: 'High-security banknote validation',
+    name: 'Akceptory banknotów',
+    tagline: 'Zaawansowana weryfikacja banknotów',
     description:
-      'Bill validators and recyclers with multi-spectral sensing, anti-stringing protection and field-updatable currency firmware for unattended payment points.',
+      'Akceptory banknotów do automatów vendingowych, kiosków i urządzeń samoobsługowych.',
     productCount: 24,
     image: PRODUCT_IMAGE,
   },
   {
-    slug: 'coin-acceptors',
-    name: 'Coin acceptors',
-    tagline: 'Fast, precise coin validation',
-    description:
-      'Electronic coin validators and changers with programmable coin channels, tokens support and industry-leading acceptance rates.',
-    productCount: 18,
+    slug: 'printers',
+    name: 'Drukarki',
+    tagline: 'Przemysłowe drukarki do kiosków i automatów',
+    description: 'Drukarki termiczne i kioskowe do wydruku paragonów, biletów i kuponów.',
+    productCount: 0,
     image: PRODUCT_IMAGE,
   },
   {
     slug: 'monitors',
-    name: 'Touch monitors',
-    tagline: 'Industrial-grade displays',
-    description:
-      'Open-frame and kiosk touch monitors built for 24/7 operation — PCAP and infrared touch, vandal-resistant glass and VESA mounting.',
-    productCount: 15,
+    name: 'Monitory',
+    tagline: 'Monitory przemysłowe',
+    description: 'Wyświetlacze przeznaczone do pracy w automatach i kioskach.',
+    productCount: 0,
     image: PRODUCT_IMAGE,
   },
   {
-    slug: 'hoppers',
-    name: 'Hoppers & dispensers',
-    tagline: 'Reliable coin payout',
-    description:
-      'High-capacity coin hoppers and note dispensers with optical payout verification, designed for gaming and change machines.',
-    productCount: 12,
+    slug: 'pc',
+    name: 'Komputery PC',
+    tagline: 'Komputery przemysłowe',
+    description: 'Komputery i kontrolery przeznaczone do zastosowań przemysłowych.',
+    productCount: 0,
     image: PRODUCT_IMAGE,
   },
   {
-    slug: 'cashless',
-    name: 'Cashless & card readers',
-    tagline: 'Contactless payment modules',
-    description:
-      'EMV-certified card readers, NFC modules and telemetry units that bring contactless payments to any vending or amusement machine.',
-    productCount: 10,
+    slug: 'coin-acceptors',
+    name: 'Akceptory monet',
+    tagline: 'Precyzyjna weryfikacja monet',
+    description: 'Akceptory, walidatory i zmieniacze monet.',
+    productCount: 0,
     image: PRODUCT_IMAGE,
   },
   {
-    slug: 'spare-parts',
-    name: 'Spare parts & accessories',
-    tagline: 'Keep your fleet running',
-    description:
-      'Original bezels, cable harnesses, stacker boxes, mounting kits and consumables for every device family we carry.',
-    productCount: 36,
+    slug: 'scanners',
+    name: 'Skanery',
+    tagline: 'Skanery kodów kreskowych i QR',
+    description: 'Skanery do kiosków, automatów i systemów samoobsługowych.',
+    productCount: 0,
+    image: PRODUCT_IMAGE,
+  },
+  {
+    slug: 'flippers',
+    name: 'Flippery',
+    tagline: 'Mechanizmy sterujące',
+    description: 'Komponenty i mechanizmy typu flipper.',
+    productCount: 0,
+    image: PRODUCT_IMAGE,
+  },
+  {
+    slug: 'buttons',
+    name: 'Przyciski',
+    tagline: 'Przyciski przemysłowe',
+    description: 'Przyciski sterujące i podświetlane do kiosków oraz automatów.',
+    productCount: 0,
+    image: PRODUCT_IMAGE,
+  },
+  {
+    slug: 'touch-screens',
+    name: 'Ekrany dotykowe',
+    tagline: 'Panele dotykowe',
+    description: 'Panele dotykowe i nakładki dotykowe do monitorów.',
+    productCount: 0,
+    image: PRODUCT_IMAGE,
+  },
+  {
+    slug: 'cabinet-parts',
+    name: 'Części do obudów',
+    tagline: 'Elementy konstrukcyjne',
+    description: 'Elementy montażowe i części do obudów automatów oraz kiosków.',
+    productCount: 0,
+    image: PRODUCT_IMAGE,
+  },
+  {
+    slug: 'locks',
+    name: 'Zamki',
+    tagline: 'Zabezpieczenia',
+    description: 'Zamki mechaniczne i elektroniczne do automatów oraz kiosków.',
+    productCount: 0,
+    image: PRODUCT_IMAGE,
+  },
+  {
+    slug: 'power-supplies',
+    name: 'Zasilacze',
+    tagline: 'Stabilne zasilanie',
+    description: 'Zasilacze przemysłowe i moduły zasilające.',
+    productCount: 0,
+    image: PRODUCT_IMAGE,
+  },
+  {
+    slug: 'cabinets',
+    name: 'Obudowy',
+    tagline: 'Obudowy kioskowe',
+    description: 'Gotowe obudowy i konstrukcje do kiosków oraz urządzeń samoobsługowych.',
+    productCount: 0,
     image: PRODUCT_IMAGE,
   },
 ]
@@ -217,6 +268,7 @@ export const products: Product[] = [
     categorySlug: 'bill-acceptors',
     price: 1240,
     inStock: false,
+    badge: 'bestseller',
     leadTime: 'Back in stock in ~2 weeks',
     excerpt:
       'Recycling validator that pays change from accepted notes — cuts float requirements by up to 60% in high-turnover locations.',
@@ -577,7 +629,9 @@ export function getProductsByCategory(slug: string): Product[] {
 }
 
 export function getRelatedProducts(product: Product, limit = 4): Product[] {
-  return products.filter((p) => p.categorySlug === product.categorySlug && p.id !== product.id).slice(0, limit)
+  return products
+    .filter((p) => p.categorySlug === product.categorySlug && p.id !== product.id)
+    .slice(0, limit)
 }
 
 /* ------------------------------------------------------------------------ */
@@ -586,34 +640,24 @@ export function getRelatedProducts(product: Product, limit = 4): Product[] {
 
 export const industries: Industry[] = [
   {
-    slug: 'sport-betting',
-    name: 'Sport betting',
-    description: 'Self-service betting terminals and cash desks',
-  },
-  {
     slug: 'amusement',
-    name: 'Amusement',
-    description: 'Arcades, cranes, redemption and family entertainment',
-  },
-  {
-    slug: 'gaming',
-    name: 'Gaming',
-    description: 'Casino floors, slot cabinets and gaming halls',
+    name: 'Rozrywka i automaty',
+    description: 'Salony gier, automaty z nagrodami i automaty do płatności',
   },
   {
     slug: 'vending',
-    name: 'Vending & retail',
-    description: 'Vending machines, kiosks and self-checkout',
+    name: 'Vending i retail',
+    description: 'Maszyny vendingowe, kioski i kasy samoobsługowe',
   },
   {
     slug: 'laundry',
-    name: 'Payment & laundry systems',
-    description: 'Launderettes, car washes and access control',
+    name: 'Myjnie i pralnie',
+    description: 'Pralnie samoobsługowe, myjnie samochodowe',
   },
   {
     slug: 'transport',
-    name: 'Parking & transport',
-    description: 'Ticketing machines and parking pay stations',
+    name: 'Parkingi i transport',
+    description: 'Biletomaty i bramki płatnicze na parkingach',
   },
 ]
 
