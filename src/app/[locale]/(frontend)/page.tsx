@@ -1,5 +1,5 @@
 import React from 'react'
-import { setRequestLocale } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowRight } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
@@ -7,12 +7,11 @@ import { Container } from '@/components/ui/container'
 import { SectionHeading } from '@/components/ui/section-heading'
 import { buttonVariants } from '@/components/ui/button'
 import { Hero } from '@/components/home/hero'
-import { BrandStrip } from '@/components/home/brand-strip'
 import { CategoryShowcase } from '@/components/home/category-showcase'
 import { Industries } from '@/components/home/industries'
 import { CtaBanner } from '@/components/home/cta-banner'
 import { ProductRail } from '@/components/product/product-rail'
-import { bestsellers, newArrivals, promotions } from '@/lib/mock-data'
+import { bestsellers, newArrivals } from '@/lib/mock-data'
 
 interface PageProps {
   params: Promise<{ locale: Locale }>
@@ -21,6 +20,7 @@ interface PageProps {
 export default async function HomePage({ params }: PageProps) {
   const { locale } = await params
   setRequestLocale(locale)
+  const t = await getTranslations('home')
 
   return (
     <>
@@ -31,9 +31,9 @@ export default async function HomePage({ params }: PageProps) {
         <Container>
           <SectionHeading
             align="center"
-            eyebrow="Komu dostarczamy"
-            title="Obsługiwane branże"
-            description="Jeden dostawca do każdego punktu płatności samoobsługowej w Twoim biznesie."
+            eyebrow={t('industries.eyebrow')}
+            title={t('industries.title')}
+            description={t('industries.description')}
             className="mb-10"
           />
           <Industries />
@@ -44,9 +44,9 @@ export default async function HomePage({ params }: PageProps) {
       <section className="py-12 lg:py-16">
         <Container>
           <SectionHeading
-            eyebrow="Najczęściej zamawiane"
-            title="Bestsellery"
-            description="Urządzenia, które nasze klienci zamawiają ponownie, w magazynie i gotowe do wysyłki."
+            eyebrow={t('bestsellers.eyebrow')}
+            title={t('bestsellers.title')}
+            description={t('bestsellers.description')}
             action={<ViewAllLink />}
             className="mb-8"
           />
@@ -58,9 +58,9 @@ export default async function HomePage({ params }: PageProps) {
       <section className="bg-white py-12 lg:py-16">
         <Container>
           <SectionHeading
-            eyebrow="Przeglądaj katalog"
-            title="Znajdź odpowiednie komponenty"
-            description="Od walidacji banknotów do retrofitów bezgotówkowych – wszystko, co potrzebuje maszyna samoobsługowa."
+            eyebrow={t('categories.eyebrow')}
+            title={t('categories.title')}
+            description={t('categories.description')}
             className="mb-10"
           />
           <CategoryShowcase />
@@ -85,9 +85,9 @@ export default async function HomePage({ params }: PageProps) {
       <section className="py-12 lg:pt-16 lg:pb-20">
         <Container>
           <SectionHeading
-            eyebrow="Nowości"
-            title="Nowe produkty"
-            description="Ostatnio dodane do katalogu i gotowe do wysyłki."
+            eyebrow={t('newArrivals.eyebrow')}
+            title={t('newArrivals.title')}
+            description={t('newArrivals.description')}
             action={<ViewAllLink />}
             className="mb-8"
           />
@@ -105,10 +105,12 @@ export default async function HomePage({ params }: PageProps) {
   )
 }
 
-function ViewAllLink() {
+async function ViewAllLink() {
+  const t = await getTranslations('home')
+
   return (
     <Link href="/products" className={buttonVariants({ variant: 'ghost', size: 'sm' })}>
-      Zobacz wszystkie
+      {t('viewAll')}
       <ArrowRight aria-hidden />
     </Link>
   )

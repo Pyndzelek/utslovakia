@@ -41,9 +41,7 @@ export interface Category {
 }
 
 export interface Industry {
-  slug: string
-  name: string
-  description: string
+  slug: 'amusement' | 'vending' | 'laundry' | 'transport'
 }
 
 export const PRODUCT_IMAGE = '/maszynka.png'
@@ -628,26 +626,10 @@ export function getRelatedProducts(product: Product, limit = 4): Product[] {
 /* ------------------------------------------------------------------------ */
 
 export const industries: Industry[] = [
-  {
-    slug: 'amusement',
-    name: 'Rozrywka i automaty',
-    description: 'Salony gier, automaty z nagrodami i automaty do płatności',
-  },
-  {
-    slug: 'vending',
-    name: 'Vending i retail',
-    description: 'Maszyny vendingowe, kioski i kasy samoobsługowe',
-  },
-  {
-    slug: 'laundry',
-    name: 'Myjnie i pralnie',
-    description: 'Pralnie samoobsługowe, myjnie samochodowe',
-  },
-  {
-    slug: 'transport',
-    name: 'Parkingi i transport',
-    description: 'Biletomaty i bramki płatnicze na parkingach',
-  },
+  { slug: 'amusement' },
+  { slug: 'vending' },
+  { slug: 'laundry' },
+  { slug: 'transport' },
 ]
 
 export const brands = [

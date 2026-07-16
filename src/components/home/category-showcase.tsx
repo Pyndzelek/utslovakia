@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import { getTranslations } from 'next-intl/server'
 import { ArrowUpRight } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { buttonVariants } from '@/components/ui/button'
@@ -36,10 +37,11 @@ const toneStyles: Record<Tone, { tile: string; name: string; tagline: string; li
   },
 }
 
-function CategoryTile({ slug, tone, className, large = false }: TileProps) {
+async function CategoryTile({ slug, tone, className, large = false }: TileProps) {
   const category = getCategory(slug)
   if (!category) return null
   const styles = toneStyles[tone]
+  const t = await getTranslations('home.categoryShowcase')
 
   return (
     <Link
@@ -52,7 +54,7 @@ function CategoryTile({ slug, tone, className, large = false }: TileProps) {
     >
       <div className="relative z-10 max-w-[65%]">
         <p className={cn('text-xs font-medium', styles.tagline)}>
-          {category.productCount} products
+          {t('productCount', { count: category.productCount })}
         </p>
         <h3
           className={cn(
@@ -89,14 +91,16 @@ function CategoryTile({ slug, tone, className, large = false }: TileProps) {
           styles.link,
         )}
       >
-        Zobacz
+        {t('view')}
         <ArrowUpRight className="size-3.5" aria-hidden />
       </span>
     </Link>
   )
 }
 
-export function CategoryShowcase() {
+export async function CategoryShowcase() {
+  const t = await getTranslations('home.categoryShowcase')
+
   return (
     <div>
       <div className="grid gap-4 lg:grid-cols-4 lg:gap-5">
@@ -114,7 +118,7 @@ export function CategoryShowcase() {
 
       <div className="mt-8 text-center">
         <Link href="/category" className={buttonVariants({ variant: 'outline', size: 'md' })}>
-          Zobacz wszystkie kategorie
+          {t('viewAllCategories')}
           <ArrowUpRight aria-hidden />
         </Link>
       </div>

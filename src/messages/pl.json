@@ -23,5 +23,85 @@
     "contact": "Kontakt",
     "hours": "pon.–pt., 8:00 – 16:30",
     "rights": "Wszelkie prawa zastrzeżone."
+  },
+  "home": {
+    "viewAll": "Zobacz wszystkie",
+    "industries": {
+      "eyebrow": "Komu dostarczamy",
+      "title": "Obsługiwane branże",
+      "description": "Jeden dostawca do każdego punktu płatności samoobsługowej w Twoim biznesie.",
+      "items": {
+        "amusement": {
+          "name": "Rozrywka i automaty",
+          "description": "Salony gier, automaty z nagrodami i automaty do płatności"
+        },
+        "vending": {
+          "name": "Vending i retail",
+          "description": "Maszyny vendingowe, kioski i kasy samoobsługowe"
+        },
+        "laundry": {
+          "name": "Myjnie i pralnie",
+          "description": "Pralnie samoobsługowe, myjnie samochodowe"
+        },
+        "transport": {
+          "name": "Parkingi i transport",
+          "description": "Biletomaty i bramki płatnicze na parkingach"
+        }
+      }
+    },
+    "bestsellers": {
+      "eyebrow": "Najczęściej zamawiane",
+      "title": "Bestsellery",
+      "description": "Urządzenia, które nasze klienci zamawiają ponownie, w magazynie i gotowe do wysyłki."
+    },
+    "categories": {
+      "eyebrow": "Przeglądaj katalog",
+      "title": "Znajdź odpowiednie komponenty",
+      "description": "Od walidacji banknotów do retrofitów bezgotówkowych – wszystko, co potrzebuje maszyna samoobsługowa."
+    },
+    "newArrivals": {
+      "eyebrow": "Nowości",
+      "title": "Nowe produkty",
+      "description": "Ostatnio dodane do katalogu i gotowe do wysyłki."
+    },
+    "hero": {
+      "badge": "Dystrybutor od 2020 roku",
+      "title": "Technologie dla urządzeń <highlight>samoobsługowych</highlight>",
+      "description": "Akceptory banknotów, walidatory monet i obudowy dla gamingu oraz vendingu, przetestowane i wysyłane w ciągu 24 godzin.",
+      "ctaProducts": "Zobacz produkty",
+      "ctaContact": "Skontaktuj się z nami",
+      "statYears": "Lat w branży",
+      "statDevices": "Sprzedanych urządzeń",
+      "warrantyTitle": "12-miesięczna gwarancja",
+      "warrantySubtitle": "na wybrane produkty",
+      "shippingTitle": "Wysyłka w 24 godziny",
+      "shippingSubtitle": "na cały świat",
+      "imageAlt": "Komponent systemu płatniczego"
+    },
+    "categoryShowcase": {
+      "productCount": "{count} produktów",
+      "view": "Zobacz",
+      "viewAllCategories": "Zobacz wszystkie kategorie"
+    },
+    "cta": {
+      "eyebrow": "Więcej niż sklep z częściami",
+      "title": "Hardware, firmware i usługi od jednego dostawcy",
+      "description": "Pomagamy Ci wybrać odpowiedni walidator i utrzymać Twoją flotę. Jeśli coś pójdzie nie tak, nasz zespół techniczny pomoże Ci rozwiązać problem.",
+      "serviceAdvice": "Porada przedsprzedażowa",
+      "serviceSupport": "Wsparcie techniczne",
+      "servicePrice": "Gwarancja najniższej ceny",
+      "ctaContact": "Skontaktuj się z nami"
+    }
+  },
+  "product": {
+    "badge": {
+      "new": "Nowość",
+      "sale": "Promocja",
+      "bestseller": "Bestseller"
+    },
+    "stock": {
+      "inStock": "W magazynie",
+      "onOrder": "Na zamówienie"
+    }
   }
 }

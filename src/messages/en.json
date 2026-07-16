@@ -17,11 +17,91 @@
     "menu": "Menu"
   },
   "footer": {
-    "tagline": "Payment systems and components for gaming, vending and amusement — supplied and serviced from Bratislava since 2009.",
+    "tagline": "Payment systems and components for gaming, vending and amusement",
     "categories": "Categories",
     "pages": "Pages",
     "contact": "Contact",
     "hours": "Mon–Fri, 8:00 – 16:30",
     "rights": "All rights reserved."
+  },
+  "home": {
+    "viewAll": "View all",
+    "industries": {
+      "eyebrow": "Who we supply",
+      "title": "Industries we serve",
+      "description": "One supplier for every self-service payment point in your business.",
+      "items": {
+        "amusement": {
+          "name": "Amusement & machines",
+          "description": "Arcades, prize machines and payment terminals"
+        },
+        "vending": {
+          "name": "Vending & retail",
+          "description": "Vending machines, kiosks and self-checkout"
+        },
+        "laundry": {
+          "name": "Car washes & laundries",
+          "description": "Self-service laundries and car washes"
+        },
+        "transport": {
+          "name": "Parking & transport",
+          "description": "Ticket machines and parking payment gates"
+        }
+      }
+    },
+    "bestsellers": {
+      "eyebrow": "Most ordered",
+      "title": "Bestsellers",
+      "description": "Devices our customers reorder — in stock and ready to ship."
+    },
+    "categories": {
+      "eyebrow": "Browse the catalog",
+      "title": "Find the right components",
+      "description": "From bill validation to cashless retrofits — everything a self-service machine needs."
+    },
+    "newArrivals": {
+      "eyebrow": "Just in",
+      "title": "New products",
+      "description": "Recently added to the catalog and ready to ship."
+    },
+    "hero": {
+      "badge": "Distributor since 2020",
+      "title": "Technology for <highlight>self-service</highlight> machines",
+      "description": "Bill acceptors, coin validators and cabinets for gaming and vending — tested and shipped within 24 hours.",
+      "ctaProducts": "View products",
+      "ctaContact": "Contact us",
+      "statYears": "Years in the industry",
+      "statDevices": "Devices sold",
+      "warrantyTitle": "12-month warranty",
+      "warrantySubtitle": "on selected products",
+      "shippingTitle": "Ships within 24 hours",
+      "shippingSubtitle": "worldwide",
+      "imageAlt": "Payment system component"
+    },
+    "categoryShowcase": {
+      "productCount": "{count} products",
+      "view": "View",
+      "viewAllCategories": "View all categories"
+    },
+    "cta": {
+      "eyebrow": "More than a parts shop",
+      "title": "Hardware, firmware and services from one supplier",
+      "description": "We help you choose the right validator and keep your fleet running. If something goes wrong, our technical team will help you solve it.",
+      "serviceAdvice": "Pre-sales advice",
+      "serviceSupport": "Technical support",
+      "servicePrice": "Lowest price guarantee",
+      "ctaContact": "Contact us"
+    }
+  },
+  "product": {
+    "badge": {
+      "new": "New",
+      "sale": "Sale",
+      "bestseller": "Bestseller"
+    },
+    "stock": {
+      "inStock": "In stock",
+      "onOrder": "Made to order"
+    }
   }
 }

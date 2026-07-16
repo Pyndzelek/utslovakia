@@ -1,4 +1,7 @@
+'use client'
+
 import React from 'react'
+import { useTranslations } from 'next-intl'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import type { ProductBadge } from '@/lib/mock-data'
@@ -30,23 +33,25 @@ export function Badge({ className, variant, ...props }: BadgeProps) {
   return <span className={cn(badgeVariants({ variant }), className)} {...props} />
 }
 
-const productBadgeConfig: Record<ProductBadge, { label: string; variant: BadgeProps['variant'] }> =
-  {
-    new: { label: 'New', variant: 'brand' },
-    sale: { label: 'Sale', variant: 'sale' },
-    bestseller: { label: 'Bestseller', variant: 'navy' },
-  }
+const productBadgeVariants: Record<ProductBadge, BadgeProps['variant']> = {
+  new: 'brand',
+  sale: 'sale',
+  bestseller: 'navy',
+}
 
 export function ProductBadgeTag({ badge, className }: { badge: ProductBadge; className?: string }) {
-  const config = productBadgeConfig[badge]
+  const t = useTranslations('product.badge')
+
   return (
-    <Badge variant={config.variant} className={className}>
-      {config.label}
+    <Badge variant={productBadgeVariants[badge]} className={className}>
+      {t(badge)}
     </Badge>
   )
 }
 
 export function StockBadge({ inStock, className }: { inStock: boolean; className?: string }) {
+  const t = useTranslations('product.stock')
+
   return (
     <Badge
       variant={inStock ? 'success' : 'warning'}
@@ -56,7 +61,7 @@ export function StockBadge({ inStock, className }: { inStock: boolean; className
         className={cn('size-1.5 rounded-full', inStock ? 'bg-emerald-500' : 'bg-amber-500')}
         aria-hidden
       />
-      {inStock ? 'W magazynie' : 'Na zamówienie'}
+      {inStock ? t('inStock') : t('onOrder')}
     </Badge>
   )
 }

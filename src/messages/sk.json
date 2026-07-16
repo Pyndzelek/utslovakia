@@ -23,5 +23,85 @@
     "contact": "Kontakt",
     "hours": "po–pia, 8:00 – 16:30",
     "rights": "Všetky práva vyhradené."
+  },
+  "home": {
+    "viewAll": "Zobraziť všetky",
+    "industries": {
+      "eyebrow": "Komu dodávame",
+      "title": "Obsluhované odvetvia",
+      "description": "Jeden dodávateľ pre každý samoobslužný platobný bod vo vašom podnikaní.",
+      "items": {
+        "amusement": {
+          "name": "Zábava a automaty",
+          "description": "Herné salóny, automaty s cenami a platobné automaty"
+        },
+        "vending": {
+          "name": "Vending a retail",
+          "description": "Predajné automaty, kiosky a samoobslužné pokladne"
+        },
+        "laundry": {
+          "name": "Autoumyvárne a práčovne",
+          "description": "Samoobslužné práčovne a autoumyvárne"
+        },
+        "transport": {
+          "name": "Parkoviská a doprava",
+          "description": "Automaty na lístky a platobné brány na parkoviskách"
+        }
+      }
+    },
+    "bestsellers": {
+      "eyebrow": "Najčastejšie objednávané",
+      "title": "Bestellery",
+      "description": "Zariadenia, ktoré naši zákazníci objednávajú opakovane — skladom a pripravené na odoslanie."
+    },
+    "categories": {
+      "eyebrow": "Prehliadať katalóg",
+      "title": "Nájdite správne komponenty",
+      "description": "Od validácie bankoviek po bezhotovostné retrofit — všetko, čo samoobslužný automat potrebuje."
+    },
+    "newArrivals": {
+      "eyebrow": "Novinky",
+      "title": "Nové produkty",
+      "description": "Nedávno pridané do katalógu a pripravené na odoslanie."
+    },
+    "hero": {
+      "badge": "Distribútor od roku 2020",
+      "title": "Technológie pre <highlight>samoobslužné</highlight> zariadenia",
+      "description": "Akceptory bankoviek, validátory mincí a skrine pre gaming a vending — otestované a odoslané do 24 hodín.",
+      "ctaProducts": "Zobraziť produkty",
+      "ctaContact": "Kontaktujte nás",
+      "statYears": "Rokov v odvetví",
+      "statDevices": "Predaných zariadení",
+      "warrantyTitle": "12-mesačná záruka",
+      "warrantySubtitle": "na vybrané produkty",
+      "shippingTitle": "Expedícia do 24 hodín",
+      "shippingSubtitle": "do celého sveta",
+      "imageAlt": "Komponent platobného systému"
+    },
+    "categoryShowcase": {
+      "productCount": "{count} produktov",
+      "view": "Zobraziť",
+      "viewAllCategories": "Zobraziť všetky kategórie"
+    },
+    "cta": {
+      "eyebrow": "Viac než obchod s dielmi",
+      "title": "Hardvér, firmvér a služby od jedného dodávateľa",
+      "description": "Pomôžeme vám vybrať správny validátor a udržiavať vašu flotilu. Ak sa niečo pokazí, náš technický tím vám pomôže problém vyriešiť.",
+      "serviceAdvice": "Predajné poradenstvo",
+      "serviceSupport": "Technická podpora",
+      "servicePrice": "Záruka najnižšej ceny",
+      "ctaContact": "Kontaktujte nás"
+    }
+  },
+  "product": {
+    "badge": {
+      "new": "Novinka",
+      "sale": "Zľava",
+      "bestseller": "Bestseller"
+    },
+    "stock": {
+      "inStock": "Na sklade",
+      "onOrder": "Na objednávku"
+    }
   }
 }

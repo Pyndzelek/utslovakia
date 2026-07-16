@@ -23,5 +23,85 @@
     "contact": "Contato",
     "hours": "seg–sex, 8:00 – 16:30",
     "rights": "Todos os direitos reservados."
+  },
+  "home": {
+    "viewAll": "Ver todos",
+    "industries": {
+      "eyebrow": "Para quem fornecemos",
+      "title": "Setores atendidos",
+      "description": "Um único fornecedor para cada ponto de pagamento self-service no seu negócio.",
+      "items": {
+        "amusement": {
+          "name": "Entretenimento e máquinas",
+          "description": "Fliperamas, máquinas de prêmios e terminais de pagamento"
+        },
+        "vending": {
+          "name": "Vending e varejo",
+          "description": "Máquinas de vending, quiosques e autocheckout"
+        },
+        "laundry": {
+          "name": "Lava-rápidos e lavanderias",
+          "description": "Lavanderias self-service e lava-rápidos"
+        },
+        "transport": {
+          "name": "Estacionamento e transporte",
+          "description": "Bilheterias automáticas e cancelas de pagamento"
+        }
+      }
+    },
+    "bestsellers": {
+      "eyebrow": "Mais pedidos",
+      "title": "Mais vendidos",
+      "description": "Dispositivos que nossos clientes pedem de novo — em estoque e prontos para envio."
+    },
+    "categories": {
+      "eyebrow": "Navegar no catálogo",
+      "title": "Encontre os componentes certos",
+      "description": "Da validação de cédulas a retrofits sem dinheiro — tudo o que uma máquina self-service precisa."
+    },
+    "newArrivals": {
+      "eyebrow": "Novidades",
+      "title": "Novos produtos",
+      "description": "Adicionados recentemente ao catálogo e prontos para envio."
+    },
+    "hero": {
+      "badge": "Distribuidor desde 2020",
+      "title": "Tecnologia para máquinas <highlight>self-service</highlight>",
+      "description": "Aceitadores de cédulas, validadores de moedas e gabinetes para gaming e vending — testados e enviados em até 24 horas.",
+      "ctaProducts": "Ver produtos",
+      "ctaContact": "Fale conosco",
+      "statYears": "Anos no setor",
+      "statDevices": "Dispositivos vendidos",
+      "warrantyTitle": "Garantia de 12 meses",
+      "warrantySubtitle": "em produtos selecionados",
+      "shippingTitle": "Envio em 24 horas",
+      "shippingSubtitle": "para o mundo todo",
+      "imageAlt": "Componente de sistema de pagamento"
+    },
+    "categoryShowcase": {
+      "productCount": "{count} produtos",
+      "view": "Ver",
+      "viewAllCategories": "Ver todas as categorias"
+    },
+    "cta": {
+      "eyebrow": "Mais do que uma loja de peças",
+      "title": "Hardware, firmware e serviços de um único fornecedor",
+      "description": "Ajudamos você a escolher o validador certo e a manter sua frota. Se algo der errado, nossa equipe técnica ajuda a resolver.",
+      "serviceAdvice": "Consultoria pré-venda",
+      "serviceSupport": "Suporte técnico",
+      "servicePrice": "Garantia de menor preço",
+      "ctaContact": "Fale conosco"
+    }
+  },
+  "product": {
+    "badge": {
+      "new": "Novo",
+      "sale": "Promoção",
+      "bestseller": "Mais vendido"
+    },
+    "stock": {
+      "inStock": "Em estoque",
+      "onOrder": "Sob encomenda"
+    }
   }
 }

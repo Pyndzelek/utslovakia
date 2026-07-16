@@ -7,6 +7,7 @@ import { Price } from '@/components/ui/price'
 import type { Product } from '@/lib/mock-data'
 import { discountPercent } from '@/lib/format'
 import { cn } from '@/lib/utils'
+import { InStock } from '@/components/product/in-stock'
 
 export function ProductCard({ product, className }: { product: Product; className?: string }) {
   return (
@@ -55,14 +56,7 @@ export function ProductCard({ product, className }: { product: Product; classNam
             lowestPriceNote={product.lowestPriceNote}
             size="sm"
           />
-          <p
-            className={cn(
-              'mt-1.5 text-xs',
-              product.inStock ? 'text-emerald-600' : 'text-amber-600',
-            )}
-          >
-            {product.leadTime}
-          </p>
+          <InStock inStock={product.inStock} />
         </div>
       </div>
     </article>
