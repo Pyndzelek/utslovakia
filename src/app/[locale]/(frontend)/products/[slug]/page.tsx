@@ -55,7 +55,7 @@ export default async function ProductPage({ params }: PageProps) {
 
   return (
     <>
-      <div className="border-b border-line bg-white">
+      <div className="border-b border-line bg-white ">
         <Container className="py-5">
           <Breadcrumbs
             items={[

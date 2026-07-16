@@ -57,7 +57,11 @@ export default async function FrontendRootLayout({ children, params }: RootLayou
   const messages = await getMessages()
 
   return (
-    <html lang={locale} className={`${inter.variable} ${sora.variable}`}>
+    <html
+      lang={locale}
+      className={`${inter.variable} ${sora.variable}`}
+      data-scroll-behavior="smooth"
+    >
       <body>
         <NextIntlClientProvider messages={messages}>
           <div className="flex min-h-screen flex-col">
