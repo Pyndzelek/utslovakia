@@ -7,6 +7,7 @@ import { Container } from '@/components/ui/container'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { Button } from '@/components/ui/button'
 import { Checkbox, Input, Label, Select, Textarea } from '@/components/ui/field'
+import { Logo } from '@/components/layout/logo'
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -17,23 +18,23 @@ export const metadata: Metadata = {
 const contactCards = [
   {
     Icon: MapPin,
-    title: 'Visit us',
-    lines: ['Kopčianska 92/D', '851 01 Bratislava, Slovakia'],
+    title: 'Odwiedź nas',
+    lines: ['Trojičné námestie 191/11', 'Tvrdošín, Žilinski, Slovakia 02744'],
   },
   {
     Icon: Phone,
-    title: 'Call us',
-    lines: ['+421 2 5478 9630', '+421 911 482 267 (mobile)'],
+    title: 'Zadzwoń do nas',
+    lines: ['+42123456789 (mobile)'],
   },
   {
     Icon: Mail,
-    title: 'Write to us',
-    lines: ['sales@utslovakia.sk', 'service@utslovakia.sk'],
+    title: 'Napisz do nas',
+    lines: ['uts@uts.pl', 'contact@uts.pl'],
   },
   {
     Icon: Clock,
-    title: 'Opening hours',
-    lines: ['Mon–Fri: 8:00 – 16:30', 'Warehouse pickup until 15:30'],
+    title: 'Godziny otwarcia',
+    lines: ['Mon–Fri: 8:00 – 16:00'],
   },
 ]
 
@@ -54,24 +55,20 @@ const departments = [
 
 const faqs = [
   {
-    question: 'How quickly do you ship?',
-    answer:
-      'Orders placed before 14:00 leave our Bratislava warehouse the same working day. Delivery within Slovakia is next-day; most EU destinations take 2–3 working days.',
+    question: 'pytanie 1',
+    answer: 'odpowiedź 1',
   },
   {
-    question: 'Can you pre-configure devices before shipping?',
-    answer:
-      'Yes. Tell us your machine type and currency requirements and we will flash the correct firmware and currency tables free of charge, so the unit is plug-and-play on arrival.',
+    question: 'pytanie 2',
+    answer: 'odpowiedź 2',
   },
   {
-    question: 'Do you repair devices bought elsewhere?',
-    answer:
-      'We do. Our service centre handles all brands we distribute regardless of where the unit was purchased. Send us the model and fault description for a repair quote.',
+    question: 'pytanie 3',
+    answer: 'odpowiedź 3',
   },
   {
-    question: 'Do you offer volume or distributor pricing?',
-    answer:
-      'Volume discounts start at five units and we run partner terms for operators and OEMs. Contact sales with your expected quantities and we will prepare an offer.',
+    question: 'pytanie 4',
+    answer: 'odpowiedź 4',
   },
 ]
 
@@ -90,11 +87,11 @@ export default async function ContactPage({ params }: PageProps) {
         <Container className="py-8 lg:py-10">
           <Breadcrumbs items={[{ label: 'Contact' }]} />
           <h1 className="font-display mt-4 text-3xl font-semibold tracking-tight text-navy-900 sm:text-4xl">
-            Talk to a human who knows the hardware
+            Porozmawiaj z nami!
           </h1>
           <p className="mt-2 max-w-2xl text-[15px] text-slate-500">
-            Sales, technical questions or a repair — one message reaches the right engineer. We
-            answer within one business day.
+            Pytania dotyczące sprzętu czy porady przy zakupie. Odpowiadamy najszybciej jak to
+            możliwe.
           </p>
         </Container>
       </div>
@@ -119,9 +116,9 @@ export default async function ContactPage({ params }: PageProps) {
           ))}
         </div>
 
-        <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_420px] lg:gap-14">
+        <div className="mt-20 flex justify-center">
           {/* Form (visual only) */}
-          <div className="rounded-3xl border border-line bg-white p-6 shadow-card sm:p-8">
+          {/* <div className="rounded-3xl border border-line bg-white p-6 shadow-card sm:p-8">
             <h2 className="font-display text-2xl font-semibold tracking-tight text-navy-900">
               Send us a message
             </h2>
@@ -171,9 +168,8 @@ export default async function ContactPage({ params }: PageProps) {
                 />
               </div>
               <label className="flex items-start gap-2.5 text-xs leading-relaxed text-slate-500 sm:col-span-2">
-                <Checkbox className="mt-0.5" />
-                I agree to the processing of my personal data for the purpose of handling this
-                enquiry, in line with the privacy policy.
+                <Checkbox className="mt-0.5" />I agree to the processing of my personal data for the
+                purpose of handling this enquiry, in line with the privacy policy.
               </label>
               <div className="sm:col-span-2">
                 <Button variant="primary" size="lg" className="w-full sm:w-auto">
@@ -182,56 +178,34 @@ export default async function ContactPage({ params }: PageProps) {
                 </Button>
               </div>
             </form>
-          </div>
+          </div> */}
 
           {/* Departments + map placeholder */}
-          <div className="flex flex-col gap-5">
-            {departments.map(({ Icon, title, text, contact }) => (
-              <div key={title} className="rounded-2xl border border-line bg-white p-6 shadow-card">
-                <div className="flex items-start gap-4">
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
-                    <Icon className="size-5" aria-hidden />
-                  </span>
-                  <div>
-                    <h3 className="font-display text-base font-semibold text-navy-900">{title}</h3>
-                    <p className="mt-1 text-sm leading-relaxed text-slate-500">{text}</p>
-                    <a
-                      href={`mailto:${contact}`}
-                      className="mt-2 inline-block text-sm font-semibold text-brand-700 underline-offset-2 hover:underline"
-                    >
-                      {contact}
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ))}
+          {/* <div className="pattern-chevron-dark relative flex min-h-64 flex-1 flex-col items-center justify-center overflow-hidden rounded-2xl bg-navy-950 p-8 text-center shadow-card">
+            <div
+              className="absolute top-1/2 left-1/2 size-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-600/25 blur-3xl"
+              aria-hidden
+            />
 
-            {/* Map placeholder */}
-            <div className="pattern-chevron-dark relative flex min-h-64 flex-1 flex-col items-center justify-center overflow-hidden rounded-2xl bg-navy-950 p-8 text-center shadow-card">
-              <div
-                className="absolute top-1/2 left-1/2 size-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-600/25 blur-3xl"
-                aria-hidden
-              />
-              <span className="relative flex size-14 items-center justify-center rounded-full bg-brand-600 text-white shadow-glow">
-                <MapPin className="size-6" aria-hidden />
-              </span>
-              <p className="font-display relative mt-4 text-lg font-semibold text-white">
-                Kopčianska 92/D, Bratislava
-              </p>
-              <p className="relative mt-1 text-sm text-slate-400">
-                5 min from the D2 highway · parking on site
-              </p>
-              <span className="relative mt-5 inline-flex items-center gap-2 rounded-full border border-white/25 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10">
-                Open in maps
-              </span>
-            </div>
-          </div>
+            <Logo className="w-md border border-white" />
+
+            <p className="font-display relative mt-4 text-lg font-semibold text-white">
+              Kopčianska 92/D, Bratislava
+            </p>
+            <p className="relative mt-1 text-sm text-slate-400">
+              5 min from the D2 highway · parking on site
+            </p>
+            <span className="relative mt-5 inline-flex items-center gap-2 rounded-full border border-white/25 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10">
+              Open in maps
+            </span>
+          </div> */}
+          <Logo className="w-md border border-white rounded-4xl p-5 bg-white shadow-card" />
         </div>
 
         {/* FAQ */}
-        <div className="mt-16 lg:mt-20">
+        <div className="mt-16 lg:mt-10">
           <h2 className="font-display text-center text-2xl font-semibold tracking-tight text-navy-900 sm:text-3xl">
-            Frequently asked questions
+            Najczęściej zadawane pytania
           </h2>
           <div className="mx-auto mt-8 max-w-3xl space-y-3">
             {faqs.map((faq) => (

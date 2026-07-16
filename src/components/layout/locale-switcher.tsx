@@ -15,7 +15,12 @@ const localeNames: Record<Locale, string> = {
   'pt-br': 'Português (BR)',
 }
 
-export function LocaleSwitcher({ onDark = false }: { onDark?: boolean }) {
+interface LocaleSwitcherProps {
+  onDark?: boolean
+  variant?: 'dropdown' | 'inline'
+}
+
+export function LocaleSwitcher({ onDark = false, variant = 'dropdown' }: LocaleSwitcherProps) {
   const locale = useLocale()
   const pathname = usePathname()
   const params = useParams()
@@ -31,28 +36,52 @@ export function LocaleSwitcher({ onDark = false }: { onDark?: boolean }) {
     return () => document.removeEventListener('pointerdown', onPointerDown)
   }, [open])
 
+  const isInline = variant === 'inline'
+
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className={cn('relative', isInline && 'w-full')}>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         className={cn(
-          'flex cursor-pointer items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-semibold uppercase transition-colors',
-          onDark ? 'text-slate-300 hover:bg-white/10 hover:text-white' : 'text-slate-500 hover:bg-slate-100 hover:text-navy-900',
+          'flex cursor-pointer items-center transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500',
+          isInline
+            ? 'w-full gap-2 text-sm font-medium text-slate-600'
+            : cn(
+                'gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-semibold uppercase',
+                onDark
+                  ? 'text-slate-300 hover:bg-white/10 hover:text-white'
+                  : 'text-slate-500 hover:bg-slate-100 hover:text-navy-900',
+              ),
         )}
       >
-        <Globe className="size-3.5" aria-hidden />
-        {locale}
-        <ChevronDown className={cn('size-3 transition-transform', open && 'rotate-180')} aria-hidden />
+        <span className="flex items-center gap-2.5">
+          <Globe className={cn(isInline ? 'text-brand-600 size-4' : 'size-3.5')} aria-hidden />
+          <span>{isInline ? localeNames[locale as Locale] || locale : locale}</span>
+        </span>
+        <ChevronDown
+          className={cn(
+            'transition-transform duration-200 ease-in-out',
+            isInline ? 'size-4 text-slate-400' : 'size-3',
+            open && 'rotate-180',
+          )}
+          aria-hidden
+        />
       </button>
 
       {open && (
-        <div className="absolute right-0 z-50 mt-2 w-44 overflow-hidden rounded-xl border border-line bg-white py-1.5 shadow-lift">
+        <div
+          className={cn(
+            'overflow-hidden rounded-xl border border-line bg-white py-1.5 transition-all',
+            isInline
+              ? 'mt-2 w-full shadow-xs animate-in fade-in slide-in-from-top-1 duration-200'
+              : 'absolute right-0 z-50 mt-2 w-44 shadow-lift animate-in fade-in zoom-in-95 duration-150',
+          )}
+        >
           {routing.locales.map((l) => (
             <Link
               key={l}
-              // Re-resolve the current route in the target locale
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               href={{ pathname, params } as any}
               locale={l}
@@ -63,7 +92,7 @@ export function LocaleSwitcher({ onDark = false }: { onDark?: boolean }) {
               )}
             >
               {localeNames[l]}
-              {l === locale && <Check className="size-3.5" aria-hidden />}
+              {l === locale && <Check className="size-3.5 text-brand-600" aria-hidden />}
             </Link>
           ))}
         </div>

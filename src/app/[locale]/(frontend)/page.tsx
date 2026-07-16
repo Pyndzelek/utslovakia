@@ -32,7 +32,7 @@ export default async function HomePage({ params }: PageProps) {
           <SectionHeading
             align="center"
             eyebrow="Komu dostarczamy"
-            title="Przeglądaj według branży"
+            title="Obsługiwane branże"
             description="Jeden dostawca do każdego punktu płatności samoobsługowej w Twoim biznesie."
             className="mb-10"
           />

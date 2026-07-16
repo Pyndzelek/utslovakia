@@ -13,29 +13,22 @@ export function CatalogToolbar({ resultCount }: { resultCount: number }) {
         />
         <input
           type="search"
-          placeholder="Search in results…"
+          placeholder="Szukaj w wynikach…"
           className="h-11 w-full rounded-xl border border-transparent bg-slate-100 pr-4 pl-10 text-sm text-navy-900 placeholder:text-slate-400 focus:border-brand-400 focus:bg-white focus:outline-none"
         />
       </div>
 
       <p className="hidden text-sm whitespace-nowrap text-slate-400 md:block">
-        <span className="font-semibold text-navy-900">{resultCount}</span> products
+        <span className="font-semibold text-navy-900">{resultCount}</span> produktów
       </p>
 
-      <Select defaultValue="popular" aria-label="Sort by" className="w-44">
-        <option value="popular">Most popular</option>
-        <option value="newest">Newest first</option>
-        <option value="price-asc">Price: low to high</option>
-        <option value="price-desc">Price: high to low</option>
-      </Select>
-
-      <button
+      {/* <button
         type="button"
         className="flex h-11 cursor-pointer items-center gap-2 rounded-xl border border-line px-4 text-sm font-medium text-navy-900 transition-colors hover:border-brand-400 hover:text-brand-700 lg:hidden"
       >
         <SlidersHorizontal className="size-4" aria-hidden />
-        Filters
-      </button>
+        Filtry
+      </button> */}
     </div>
   )
 }

@@ -33,15 +33,6 @@ export function ProductCard({ product, className }: { product: Product; classNam
           sizes="(max-width: 640px) 60vw, (max-width: 1024px) 33vw, 280px"
           className="object-contain p-6 transition-transform duration-500 group-hover:scale-105"
         />
-        {/* Quick add — visual only */}
-        <button
-          type="button"
-          tabIndex={-1}
-          aria-label="Add to cart"
-          className="absolute right-3 bottom-3 z-10 flex size-10 cursor-pointer items-center justify-center rounded-full bg-navy-900 text-white opacity-0 shadow-lift transition-all duration-300 group-hover:opacity-100 hover:bg-brand-600"
-        >
-          <ShoppingCart className="size-4" aria-hidden />
-        </button>
       </div>
 
       {/* Body */}
@@ -58,8 +49,18 @@ export function ProductCard({ product, className }: { product: Product; classNam
           </Link>
         </h3>
         <div className="mt-auto pt-3">
-          <Price price={product.price} oldPrice={product.oldPrice} lowestPriceNote={product.lowestPriceNote} size="sm" />
-          <p className={cn('mt-1.5 text-xs', product.inStock ? 'text-emerald-600' : 'text-amber-600')}>
+          <Price
+            price={product.price}
+            oldPrice={product.oldPrice}
+            lowestPriceNote={product.lowestPriceNote}
+            size="sm"
+          />
+          <p
+            className={cn(
+              'mt-1.5 text-xs',
+              product.inStock ? 'text-emerald-600' : 'text-amber-600',
+            )}
+          >
             {product.leadTime}
           </p>
         </div>

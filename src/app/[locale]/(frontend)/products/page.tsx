@@ -11,9 +11,9 @@ import { ProductGrid } from '@/components/product/product-grid'
 import { products } from '@/lib/mock-data'
 
 export const metadata: Metadata = {
-  title: 'Products',
+  title: 'Produkty',
   description:
-    'Browse bill acceptors, coin validators, touch monitors, hoppers and cashless payment modules — in stock and shipped within 24 hours.',
+    'Przeglądaj akceptory banknotów, walidatory monet, monitory dotykowe, hoppery i moduły płatności bezgotówkowych – w magazynie i wysyłane w ciągu 24 godzin.',
 }
 
 interface PageProps {
@@ -29,18 +29,18 @@ export default async function ProductsPage({ params }: PageProps) {
       {/* Page header */}
       <div className="border-b border-line bg-white">
         <Container className="py-8 lg:py-10">
-          <Breadcrumbs items={[{ label: 'Products' }]} />
+          <Breadcrumbs items={[{ label: 'Produkty' }]} />
           <h1 className="font-display mt-4 text-3xl font-semibold tracking-tight text-navy-900 sm:text-4xl">
-            All products
+            Wszystkie produkty
           </h1>
           <p className="mt-2 max-w-2xl text-[15px] text-slate-500">
-            The full UT Slovakia catalog — validators, changers, displays and spare parts from the
-            brands that run Europe&apos;s unattended machines.
+            Pełny katalog unique Technology Solution s.r.o. — walidatory, zmieniacze, wyświetlacze i
+            części zamienne z najlepszych marek.
           </p>
         </Container>
       </div>
 
-      <Container className="py-8 lg:py-12">
+      <Container className="py-8 lg:py-10">
         <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
           <FilterSidebar className="hidden self-start lg:block" />
 

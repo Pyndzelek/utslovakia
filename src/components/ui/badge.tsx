@@ -24,18 +24,18 @@ export const badgeVariants = cva(
 )
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
-    VariantProps<typeof badgeVariants> {}
+  extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badgeVariants> {}
 
 export function Badge({ className, variant, ...props }: BadgeProps) {
   return <span className={cn(badgeVariants({ variant }), className)} {...props} />
 }
 
-const productBadgeConfig: Record<ProductBadge, { label: string; variant: BadgeProps['variant'] }> = {
-  new: { label: 'New', variant: 'brand' },
-  sale: { label: 'Sale', variant: 'sale' },
-  bestseller: { label: 'Bestseller', variant: 'navy' },
-}
+const productBadgeConfig: Record<ProductBadge, { label: string; variant: BadgeProps['variant'] }> =
+  {
+    new: { label: 'New', variant: 'brand' },
+    sale: { label: 'Sale', variant: 'sale' },
+    bestseller: { label: 'Bestseller', variant: 'navy' },
+  }
 
 export function ProductBadgeTag({ badge, className }: { badge: ProductBadge; className?: string }) {
   const config = productBadgeConfig[badge]
@@ -48,12 +48,15 @@ export function ProductBadgeTag({ badge, className }: { badge: ProductBadge; cla
 
 export function StockBadge({ inStock, className }: { inStock: boolean; className?: string }) {
   return (
-    <Badge variant={inStock ? 'success' : 'warning'} className={cn('normal-case tracking-normal', className)}>
+    <Badge
+      variant={inStock ? 'success' : 'warning'}
+      className={cn('normal-case tracking-normal', className)}
+    >
       <span
         className={cn('size-1.5 rounded-full', inStock ? 'bg-emerald-500' : 'bg-amber-500')}
         aria-hidden
       />
-      {inStock ? 'In stock' : 'On order'}
+      {inStock ? 'W magazynie' : 'Na zamówienie'}
     </Badge>
   )
 }

@@ -8,14 +8,19 @@ const fieldBase =
   'w-full rounded-xl border border-line bg-white text-sm text-navy-900 placeholder:text-slate-400 transition-colors focus:border-brand-500 focus:outline-2 focus:outline-brand-500/20'
 
 export function Label({ className, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) {
-  return <label className={cn('mb-1.5 block text-sm font-medium text-navy-900', className)} {...props} />
+  return (
+    <label className={cn('mb-1.5 block text-sm font-medium text-navy-900', className)} {...props} />
+  )
 }
 
 export function Input({ className, ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cn(fieldBase, 'h-11 px-4', className)} {...props} />
 }
 
-export function Textarea({ className, ...props }: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+export function Textarea({
+  className,
+  ...props
+}: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return <textarea className={cn(fieldBase, 'min-h-32 px-4 py-3', className)} {...props} />
 }
 
@@ -42,7 +47,7 @@ export function Checkbox({ className, ...props }: React.InputHTMLAttributes<HTML
     <input
       type="checkbox"
       className={cn(
-        'size-4 shrink-0 cursor-pointer appearance-none rounded border border-slate-300 bg-white transition-colors checked:border-brand-600 checked:bg-brand-600 checked:bg-[url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27 fill=%27white%27%3E%3Cpath d=%27M12.207 4.793a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L6.5 9.086l4.293-4.293a1 1 0 0 1 1.414 0z%27/%3E%3C/svg%3E")]',
+        'size-4 shrink-0 cursor-pointer appearance-none rounded border border-slate-300 bg-white transition-colors checked:border-brand-600 checked:bg-brand-600 ]',
         className,
       )}
       {...props}

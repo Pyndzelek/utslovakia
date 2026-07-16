@@ -55,7 +55,7 @@ export async function Footer() {
       <Container className="grid gap-12 py-14 lg:grid-cols-12 lg:gap-8">
         {/* Brand + contact */}
         <div className="lg:col-span-5">
-          <Logo className="w-20 sm:w-24 md:w-28 lg:w-36 xl:w-36 " />
+          <Logo className="w-20 sm:w-24 md:w-28 lg:w-36 xl:w-36 px-3 py-2 bg-white shadow-card rounded-2xl" />
           <p className="mt-5 max-w-sm text-sm leading-relaxed">{t('footer.tagline')}</p>
           <ul className="mt-6 space-y-3 text-sm">
             <li className="flex items-start gap-3">

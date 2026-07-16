@@ -187,11 +187,9 @@ export const products: Product[] = [
     sku: 'JCM-UBA10-EU',
     categorySlug: 'bill-acceptors',
     price: 396,
-    oldPrice: 449,
-    lowestPriceNote: 429,
     badge: 'bestseller',
     inStock: true,
-    leadTime: 'Ships in 24 h',
+    leadTime: 'W magazynie',
     excerpt:
       'The industry benchmark banknote validator with 500-note stacker, anti-stringing mechanism and best-in-class acceptance across EUR denominations.',
     description: defaultDescription,
@@ -218,7 +216,7 @@ export const products: Product[] = [
     price: 612,
     badge: 'new',
     inStock: true,
-    leadTime: 'Ships in 24 h',
+    leadTime: 'W magazynie',
     excerpt:
       'Next-generation validator with full-note imaging, encrypted communications and the fastest note-to-note cycle time in its class.',
     description: defaultDescription,
@@ -241,11 +239,10 @@ export const products: Product[] = [
     sku: 'ICT-XBA10',
     categorySlug: 'bill-acceptors',
     price: 289,
-    oldPrice: 335,
+
     lowestPriceNote: 319,
-    badge: 'sale',
     inStock: true,
-    leadTime: 'Ships in 24 h',
+    leadTime: 'W magazynie',
     excerpt:
       'Compact, cost-effective validator ideal for kiosks and amusement machines. Quick-release note path for tool-free cleaning.',
     description: defaultDescription,
@@ -269,7 +266,7 @@ export const products: Product[] = [
     price: 1240,
     inStock: false,
     badge: 'bestseller',
-    leadTime: 'Back in stock in ~2 weeks',
+    leadTime: 'Brak w magazynie',
     excerpt:
       'Recycling validator that pays change from accepted notes — cuts float requirements by up to 60% in high-turnover locations.',
     description: defaultDescription,
@@ -292,7 +289,7 @@ export const products: Product[] = [
     price: 168,
     badge: 'bestseller',
     inStock: true,
-    leadTime: 'Ships in 24 h',
+    leadTime: 'W magazynie',
     excerpt:
       'The most widely deployed electronic coin validator in Europe — 16 programmable coin channels with token support.',
     description: defaultDescription,
@@ -314,11 +311,10 @@ export const products: Product[] = [
     sku: 'NRI-CURC2',
     categorySlug: 'coin-acceptors',
     price: 486,
-    oldPrice: 540,
+
     lowestPriceNote: 522,
-    badge: 'sale',
     inStock: true,
-    leadTime: 'Ships in 24 h',
+    leadTime: 'W magazynie',
     excerpt:
       'Six-tube coin changer with intelligent float management and the fastest payout in vending. MDB plug-and-play.',
     description: defaultDescription,
@@ -340,7 +336,7 @@ export const products: Product[] = [
     categorySlug: 'coin-acceptors',
     price: 142,
     inStock: true,
-    leadTime: 'Ships in 24 h',
+    leadTime: 'W magazynie',
     excerpt:
       'Six-channel electronic selector with anti-fraud rejection lever and self-diagnostics. A workhorse for amusement cabinets.',
     description: defaultDescription,
@@ -363,7 +359,7 @@ export const products: Product[] = [
     price: 119,
     badge: 'new',
     inStock: true,
-    leadTime: 'Ships in 24 h',
+    leadTime: 'W magazynie',
     excerpt:
       'Heavy-duty evolution of the classic RM5 with reinforced front plate and improved discrimination for worn coins.',
     description: defaultDescription,
@@ -386,7 +382,7 @@ export const products: Product[] = [
     price: 428,
     badge: 'bestseller',
     inStock: true,
-    leadTime: 'Ships in 24 h',
+    leadTime: 'W magazynie',
     excerpt:
       'Compact open-frame touch monitor with IntelliTouch surface acoustic wave technology, built for 50,000-hour continuous duty.',
     description: defaultDescription,
@@ -408,11 +404,9 @@ export const products: Product[] = [
     sku: 'UTS-M215P',
     categorySlug: 'monitors',
     price: 519,
-    oldPrice: 585,
-    lowestPriceNote: 559,
-    badge: 'sale',
+
     inStock: true,
-    leadTime: 'Ships in 24 h',
+    leadTime: 'W magazynie',
     excerpt:
       'Full-HD projected-capacitive monitor with 10-point multitouch and edge-to-edge tempered glass, sized for gaming cabinets.',
     description: defaultDescription,
@@ -436,7 +430,7 @@ export const products: Product[] = [
     price: 742,
     badge: 'new',
     inStock: true,
-    leadTime: 'Ships in 48 h',
+    leadTime: 'W magazynie',
     excerpt:
       'J-curve slot-machine display with 2500R curvature, button-deck cutout options and integrated LED edge lighting.',
     description: defaultDescription,
@@ -459,7 +453,7 @@ export const products: Product[] = [
     price: 226,
     badge: 'bestseller',
     inStock: true,
-    leadTime: 'Ships in 24 h',
+    leadTime: 'W magazynie',
     excerpt:
       'The most compact coin hopper on the market — 1.5 L capacity with optical payout sensor and self-clearing agitation.',
     description: defaultDescription,
@@ -480,11 +474,9 @@ export const products: Product[] = [
     sku: 'AZK-UII',
     categorySlug: 'hoppers',
     price: 198,
-    oldPrice: 234,
-    lowestPriceNote: 219,
-    badge: 'sale',
+
     inStock: true,
-    leadTime: 'Ships in 24 h',
+    leadTime: 'W magazynie',
     excerpt:
       'Universal high-capacity hopper with quick-change coin discs and jam-free elevator design for change machines.',
     description: defaultDescription,
@@ -507,7 +499,7 @@ export const products: Product[] = [
     price: 312,
     badge: 'new',
     inStock: true,
-    leadTime: 'Ships in 24 h',
+    leadTime: 'W magazynie',
     excerpt:
       'All-in-one EMV cashless reader with 2.4″ touch display, NFC, chip & swipe, plus built-in telemetry and remote management.',
     description: defaultDescription,
@@ -529,7 +521,7 @@ export const products: Product[] = [
     categorySlug: 'cashless',
     price: 176,
     inStock: true,
-    leadTime: 'Ships in 24 h',
+    leadTime: 'W magazynie',
     excerpt:
       'Compact certified NFC tap-to-pay module for retrofitting existing cabinets — accepts cards, phones and wearables.',
     description: defaultDescription,
@@ -551,7 +543,7 @@ export const products: Product[] = [
     categorySlug: 'spare-parts',
     price: 64,
     inStock: true,
-    leadTime: 'Ships in 24 h',
+    leadTime: 'W magazynie',
     excerpt:
       'Original lockable 500-note cash box for the UBA and iVIZION series, with reinforced latch and anti-fishing shutter.',
     description: defaultDescription,
@@ -572,7 +564,7 @@ export const products: Product[] = [
     categorySlug: 'spare-parts',
     price: 18,
     inStock: true,
-    leadTime: 'Ships in 24 h',
+    leadTime: 'W magazynie',
     excerpt:
       'Shielded 1.2 m MDB harness with Molex connectors, compatible with all major validator and changer brands.',
     description: defaultDescription,
@@ -591,11 +583,8 @@ export const products: Product[] = [
     sku: 'UTS-BZL-BL',
     categorySlug: 'spare-parts',
     price: 42,
-    oldPrice: 55,
-    lowestPriceNote: 49,
-    badge: 'sale',
     inStock: true,
-    leadTime: 'Ships in 24 h',
+    leadTime: 'W magazynie',
     excerpt:
       'LED-illuminated replacement bezel that guides players to the note entry — direct fit for UBA and XBA validators.',
     description: defaultDescription,
