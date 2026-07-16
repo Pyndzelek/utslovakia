@@ -103,5 +103,117 @@
       "inStock": "In stock",
       "onOrder": "Made to order"
     }
+  },
+  "products": {
+    "meta": {
+      "title": "Products",
+      "description": "Browse bill acceptors, coin validators, touch monitors, hoppers and cashless payment modules — in stock and shipped within 24 hours."
+    },
+    "breadcrumb": "Products",
+    "title": "All products",
+    "description": "The full Unique Technology Solution s.r.o. catalog — validators, changers, displays and spare parts from leading brands.",
+    "filters": {
+      "title": "Filters",
+      "reset": "Reset",
+      "category": "Category",
+      "price": "Price",
+      "priceFrom": "From",
+      "priceTo": "To",
+      "priceFromAria": "Price from",
+      "priceToAria": "Price to",
+      "applyPrice": "Apply price range"
+    },
+    "toolbar": {
+      "searchPlaceholder": "Search results…",
+      "resultCount": "{count} products"
+    },
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Previous page",
+      "next": "Next page"
+    }
+  },
+  "productPage": {
+    "breadcrumbProducts": "Products",
+    "vatNote": "incl. VAT · volume discounts available",
+    "buyViaEbay": "Buy via eBay",
+    "bulkInquiry": "Need larger quantities or a different version? Contact us directly.",
+    "compatibilityHelp": "Not sure if it fits your equipment? <link>Contact us</link> — we'll reply as soon as possible.",
+    "description": "Description",
+    "keyFeatures": "Key features",
+    "relatedTitle": "You may also need",
+    "viewCategory": "View category",
+    "assurances": {
+      "shipping": {
+        "title": "International shipping",
+        "text": "FedEx international shipping"
+      },
+      "warranty": {
+        "title": "3-month warranty",
+        "text": "Verified product"
+      },
+      "returns": {
+        "title": "30-day returns",
+        "text": "Not satisfied? Return within 30 days"
+      }
+    }
+  },
+  "category": {
+    "meta": {
+      "title": "Categories",
+      "description": "Browse bill acceptors, coin validators, touch monitors, hoppers and cashless payment modules — in stock and shipped within 24 hours."
+    },
+    "breadcrumb": "Categories",
+    "title": "Categories",
+    "description": "Browse bill acceptors, coin validators, touch monitors, hoppers and cashless payment modules — in stock and shipped within 24 hours."
+  },
+  "contact": {
+    "meta": {
+      "title": "Contact",
+      "description": "Talk to the UT Slovakia team — sales, technical support and service centre in Bratislava. We answer within one business day."
+    },
+    "breadcrumb": "Contact",
+    "title": "Talk to us!",
+    "description": "Questions about equipment or advice before you buy. We reply as soon as we can.",
+    "cards": {
+      "visit": {
+        "title": "Visit us",
+        "line1": "Trojičné námestie 191/11",
+        "line2": "Tvrdošín, Žilinski, Slovakia 02744"
+      },
+      "call": {
+        "title": "Call us",
+        "line1": "+42123456789 (mobile)"
+      },
+      "write": {
+        "title": "Write to us",
+        "line1": "uts@uts.pl",
+        "line2": "contact@uts.pl"
+      },
+      "hours": {
+        "title": "Opening hours",
+        "line1": "Mon–Fri: 8:00 – 16:00"
+      }
+    },
+    "vatNumber": "VAT number: {number}",
+    "faqTitle": "Frequently asked questions",
+    "faqs": {
+      "1": {
+        "question": "Question 1",
+        "answer": "Answer 1"
+      },
+      "2": {
+        "question": "Question 2",
+        "answer": "Answer 2"
+      },
+      "3": {
+        "question": "Question 3",
+        "answer": "Answer 3"
+      },
+      "4": {
+        "question": "Question 4",
+        "answer": "Answer 4"
+      }
+    }
   }
 }

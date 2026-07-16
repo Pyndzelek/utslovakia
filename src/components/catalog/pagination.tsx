@@ -1,16 +1,18 @@
 import React from 'react'
+import { getTranslations } from 'next-intl/server'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 /** Visual-only pagination. */
-export function Pagination({ pages = 6, current = 1 }: { pages?: number; current?: number }) {
+export async function Pagination({ pages = 6, current = 1 }: { pages?: number; current?: number }) {
+  const t = await getTranslations('products.pagination')
   const visible = [1, 2, 3] as const
 
   return (
-    <nav aria-label="Pagination" className="flex items-center justify-center gap-1.5">
+    <nav aria-label={t('label')} className="flex items-center justify-center gap-1.5">
       <button
         type="button"
-        aria-label="Previous page"
+        aria-label={t('previous')}
         disabled={current === 1}
         className="flex size-10 cursor-pointer items-center justify-center rounded-full border border-line bg-white text-navy-900 transition-colors hover:border-brand-400 disabled:pointer-events-none disabled:opacity-40"
       >
@@ -44,7 +46,7 @@ export function Pagination({ pages = 6, current = 1 }: { pages?: number; current
 
       <button
         type="button"
-        aria-label="Next page"
+        aria-label={t('next')}
         className="flex size-10 cursor-pointer items-center justify-center rounded-full border border-line bg-white text-navy-900 transition-colors hover:border-brand-400"
       >
         <ChevronRight className="size-4" aria-hidden />

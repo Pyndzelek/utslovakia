@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: RootLayoutProps): Promise<Met
 
   return {
     title: {
-      template: '%s | UT Slovakia',
+      template: '%s | UTSlovakia',
       default: t('title'),
     },
     description: t('description'),

@@ -1,7 +1,8 @@
 import React from 'react'
+import { getTranslations } from 'next-intl/server'
 import { ChevronDown, RotateCcw } from 'lucide-react'
 import { Checkbox, Input } from '@/components/ui/field'
-import { brands, categories } from '@/lib/mock-data'
+import { categories } from '@/lib/mock-data'
 import { cn } from '@/lib/utils'
 
 /** Visual-only filter panel — no filtering logic is wired up yet. */
@@ -50,27 +51,29 @@ function CheckRow({
   )
 }
 
-export function FilterSidebar({
+export async function FilterSidebar({
   activeCategorySlug,
   className,
 }: {
   activeCategorySlug?: string
   className?: string
 }) {
+  const t = await getTranslations('products.filters')
+
   return (
     <aside className={cn('rounded-2xl border border-line bg-white p-5 shadow-card', className)}>
       <div className="mb-1 flex items-center justify-between">
-        <h2 className="font-display text-base font-semibold text-navy-900">Filtry</h2>
+        <h2 className="font-display text-base font-semibold text-navy-900">{t('title')}</h2>
         <button
           type="button"
           className="flex cursor-pointer items-center gap-1.5 text-xs font-medium text-slate-400 transition-colors hover:text-brand-600"
         >
           <RotateCcw className="size-3" aria-hidden />
-          Resetuj
+          {t('reset')}
         </button>
       </div>
 
-      <FilterGroup title="Kategoria">
+      <FilterGroup title={t('category')}>
         <div className="flex flex-col">
           {categories.map((category) => (
             <CheckRow
@@ -83,29 +86,29 @@ export function FilterSidebar({
         </div>
       </FilterGroup>
 
-      <FilterGroup title="Cena">
+      <FilterGroup title={t('price')}>
         <div className="flex items-center gap-2">
           <Input
             type="number"
-            placeholder="Od"
+            placeholder={t('priceFrom')}
             defaultValue={0}
             className="h-10"
-            aria-label="Cena od"
+            aria-label={t('priceFromAria')}
           />
           <span className="text-slate-400">–</span>
           <Input
             type="number"
-            placeholder="Do"
+            placeholder={t('priceTo')}
             defaultValue={1500}
             className="h-10"
-            aria-label="Cena do"
+            aria-label={t('priceToAria')}
           />
         </div>
         <button
           type="button"
           className="mt-3 w-full cursor-pointer rounded-full border border-line py-2 text-xs font-semibold text-navy-900 transition-colors hover:border-brand-400 hover:text-brand-700"
         >
-          Zastosuj zakres cenowy
+          {t('applyPrice')}
         </button>
       </FilterGroup>
     </aside>

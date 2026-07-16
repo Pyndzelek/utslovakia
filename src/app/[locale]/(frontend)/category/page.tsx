@@ -1,5 +1,4 @@
 import React from 'react'
-import type { Metadata } from 'next'
 import Image from 'next/image'
 import { setRequestLocale } from 'next-intl/server'
 import { ArrowRight } from 'lucide-react'
@@ -9,11 +8,16 @@ import { Container } from '@/components/ui/container'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { CtaBanner } from '@/components/home/cta-banner'
 import { categories } from '@/lib/mock-data'
+import { getTranslations } from 'next-intl/server'
 
-export const metadata: Metadata = {
-  title: 'Categories',
-  description:
-    'Explore our product categories: bill acceptors, coin validators, touch monitors, hoppers, cashless modules and spare parts.',
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'category.meta' })
+
+  return {
+    title: t('title'),
+    description: t('description'),
+  }
 }
 
 interface PageProps {
@@ -23,19 +27,16 @@ interface PageProps {
 export default async function CategoryIndexPage({ params }: PageProps) {
   const { locale } = await params
   setRequestLocale(locale)
-
+  const t = await getTranslations('category')
   return (
     <>
       <div className="border-b border-line bg-white">
         <Container className="py-8 lg:py-10">
-          <Breadcrumbs items={[{ label: 'Categories' }]} />
+          <Breadcrumbs items={[{ label: t('breadcrumb') }]} />
           <h1 className="font-display mt-4 text-3xl font-semibold tracking-tight text-navy-900 sm:text-4xl">
-            Product categories
+            {t('title')}
           </h1>
-          <p className="mt-2 max-w-2xl text-[15px] text-slate-500">
-            Six device families, one supplier. Every category is stocked in Bratislava and backed by
-            our in-house service centre.
-          </p>
+          <p className="mt-2 max-w-2xl text-[15px] text-slate-500">{t('description')}</p>
         </Container>
       </div>
 
@@ -49,7 +50,9 @@ export default async function CategoryIndexPage({ params }: PageProps) {
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-xs font-medium text-slate-400">{category.productCount} products</p>
+                  <p className="text-xs font-medium text-slate-400">
+                    {category.productCount} products
+                  </p>
                   <h2 className="font-display mt-1.5 text-xl font-semibold tracking-tight text-navy-900 transition-colors group-hover:text-brand-700">
                     {category.name}
                   </h2>

@@ -1,9 +1,11 @@
 import React from 'react'
-import { Search, SlidersHorizontal } from 'lucide-react'
-import { Select } from '@/components/ui/field'
+import { getTranslations } from 'next-intl/server'
+import { Search } from 'lucide-react'
 
 /** Search + sort toolbar above product listings — visual only. */
-export function CatalogToolbar({ resultCount }: { resultCount: number }) {
+export async function CatalogToolbar({ resultCount }: { resultCount: number }) {
+  const t = await getTranslations('products.toolbar')
+
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-line bg-white p-3 shadow-card">
       <div className="relative min-w-0 flex-1 basis-52">
@@ -13,22 +15,14 @@ export function CatalogToolbar({ resultCount }: { resultCount: number }) {
         />
         <input
           type="search"
-          placeholder="Szukaj w wynikach…"
+          placeholder={t('searchPlaceholder')}
           className="h-11 w-full rounded-xl border border-transparent bg-slate-100 pr-4 pl-10 text-sm text-navy-900 placeholder:text-slate-400 focus:border-brand-400 focus:bg-white focus:outline-none"
         />
       </div>
 
       <p className="hidden text-sm whitespace-nowrap text-slate-400 md:block">
-        <span className="font-semibold text-navy-900">{resultCount}</span> produktów
+        {t('resultCount', { count: resultCount })}
       </p>
-
-      {/* <button
-        type="button"
-        className="flex h-11 cursor-pointer items-center gap-2 rounded-xl border border-line px-4 text-sm font-medium text-navy-900 transition-colors hover:border-brand-400 hover:text-brand-700 lg:hidden"
-      >
-        <SlidersHorizontal className="size-4" aria-hidden />
-        Filtry
-      </button> */}
     </div>
   )
 }

@@ -103,5 +103,117 @@
       "inStock": "Em estoque",
       "onOrder": "Sob encomenda"
     }
+  },
+  "products": {
+    "meta": {
+      "title": "Produtos",
+      "description": "Navegue por aceitadores de cédulas, validadores de moedas, monitores touch, hoppers e módulos de pagamento sem contato — em estoque e enviados em até 24 horas."
+    },
+    "breadcrumb": "Produtos",
+    "title": "Todos os produtos",
+    "description": "O catálogo completo da Unique Technology Solution s.r.o. — validadores, trocadores, displays e peças sobressalentes das principais marcas.",
+    "filters": {
+      "title": "Filtros",
+      "reset": "Redefinir",
+      "category": "Categoria",
+      "price": "Preço",
+      "priceFrom": "De",
+      "priceTo": "Até",
+      "priceFromAria": "Preço de",
+      "priceToAria": "Preço até",
+      "applyPrice": "Aplicar faixa de preço"
+    },
+    "toolbar": {
+      "searchPlaceholder": "Buscar nos resultados…",
+      "resultCount": "{count} produtos"
+    },
+    "pagination": {
+      "label": "Paginação",
+      "previous": "Página anterior",
+      "next": "Próxima página"
+    }
+  },
+  "productPage": {
+    "breadcrumbProducts": "Produtos",
+    "vatNote": "com IVA · descontos por volume disponíveis",
+    "buyViaEbay": "Comprar via Ebay",
+    "bulkInquiry": "Precisa de quantidades maiores ou de outra versão? Fale conosco diretamente.",
+    "compatibilityHelp": "Não tem certeza se encaixa no seu equipamento? <link>Fale conosco</link> — responderemos o mais rápido possível.",
+    "description": "Descrição",
+    "keyFeatures": "Principais recursos",
+    "relatedTitle": "Você também pode precisar",
+    "viewCategory": "Ver categoria",
+    "assurances": {
+      "shipping": {
+        "title": "Envio internacional",
+        "text": "FedEx international shipping"
+      },
+      "warranty": {
+        "title": "Garantia de 3 meses",
+        "text": "Produto verificado"
+      },
+      "returns": {
+        "title": "30 dias para devolução",
+        "text": "Insatisfeito? Devolva em até 30 dias"
+      }
+    }
+  },
+  "category": {
+    "meta": {
+      "title": "Categorias",
+      "description": "Navegue por aceitadores de cédulas, validadores de moedas, monitores touch, hoppers e módulos de pagamento sem contato — em estoque e enviados em até 24 horas."
+    },
+    "breadcrumb": "Categorias",
+    "title": "Categorias",
+    "description": "Navegue por aceitadores de cédulas, validadores de moedas, monitores touch, hoppers e módulos de pagamento sem contato — em estoque e enviados em até 24 horas."
+  },
+  "contact": {
+    "meta": {
+      "title": "Contato",
+      "description": "Fale com a equipe da UT Slovakia — vendas, suporte técnico e assistência. Respondemos em até um dia útil."
+    },
+    "breadcrumb": "Contato",
+    "title": "Fale conosco!",
+    "description": "Dúvidas sobre equipamentos ou orientação na compra. Respondemos o mais rápido possível.",
+    "cards": {
+      "visit": {
+        "title": "Visite-nos",
+        "line1": "Trojičné námestie 191/11",
+        "line2": "Tvrdošín, Žilinski, Slovakia 02744"
+      },
+      "call": {
+        "title": "Ligue para nós",
+        "line1": "+42123456789 (celular)"
+      },
+      "write": {
+        "title": "Escreva para nós",
+        "line1": "uts@uts.pl",
+        "line2": "contact@uts.pl"
+      },
+      "hours": {
+        "title": "Horário de funcionamento",
+        "line1": "seg–sex: 8:00 – 16:00"
+      }
+    },
+    "vatNumber": "NIF: {number}",
+    "faqTitle": "Perguntas frequentes",
+    "faqs": {
+      "1": {
+        "question": "Pergunta 1",
+        "answer": "Resposta 1"
+      },
+      "2": {
+        "question": "Pergunta 2",
+        "answer": "Resposta 2"
+      },
+      "3": {
+        "question": "Pergunta 3",
+        "answer": "Resposta 3"
+      },
+      "4": {
+        "question": "Pergunta 4",
+        "answer": "Resposta 4"
+      }
+    }
   }
 }

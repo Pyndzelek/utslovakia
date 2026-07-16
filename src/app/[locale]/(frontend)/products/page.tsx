@@ -1,6 +1,6 @@
 import React from 'react'
 import type { Metadata } from 'next'
-import { setRequestLocale } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import type { Locale } from '@/i18n/routing'
 import { Container } from '@/components/ui/container'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
@@ -10,33 +10,35 @@ import { Pagination } from '@/components/catalog/pagination'
 import { ProductGrid } from '@/components/product/product-grid'
 import { products } from '@/lib/mock-data'
 
-export const metadata: Metadata = {
-  title: 'Produkty',
-  description:
-    'Przeglądaj akceptory banknotów, walidatory monet, monitory dotykowe, hoppery i moduły płatności bezgotówkowych – w magazynie i wysyłane w ciągu 24 godzin.',
-}
-
 interface PageProps {
   params: Promise<{ locale: Locale }>
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'products.meta' })
+
+  return {
+    title: t('title'),
+    description: t('description'),
+  }
 }
 
 export default async function ProductsPage({ params }: PageProps) {
   const { locale } = await params
   setRequestLocale(locale)
+  const t = await getTranslations('products')
 
   return (
     <>
       {/* Page header */}
       <div className="border-b border-line bg-white">
         <Container className="py-8 lg:py-10">
-          <Breadcrumbs items={[{ label: 'Produkty' }]} />
+          <Breadcrumbs items={[{ label: t('breadcrumb') }]} />
           <h1 className="font-display mt-4 text-3xl font-semibold tracking-tight text-navy-900 sm:text-4xl">
-            Wszystkie produkty
+            {t('title')}
           </h1>
-          <p className="mt-2 max-w-2xl text-[15px] text-slate-500">
-            Pełny katalog unique Technology Solution s.r.o. — walidatory, zmieniacze, wyświetlacze i
-            części zamienne z najlepszych marek.
-          </p>
+          <p className="mt-2 max-w-2xl text-[15px] text-slate-500">{t('description')}</p>
         </Container>
       </div>
 

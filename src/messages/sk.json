@@ -24,6 +24,15 @@
     "hours": "po–pia, 8:00 – 16:30",
     "rights": "Všetky práva vyhradené."
   },
+  "category": {
+    "meta": {
+      "title": "Kategórie",
+      "description": "Prehliadajte akceptory bankoviek, validátory mincí, dotykové monitory, hoppery a bezhotovostné platobné moduly — skladom a expedované do 24 hodín."
+    },
+    "breadcrumb": "Kategórie",
+    "title": "Kategórie",
+    "description": "Prehliadajte akceptory bankoviek, validátory mincí, dotykové monitory, hoppery a bezhotovostné platobné moduly — skladom a expedované do 24 hodín."
+  },
   "home": {
     "viewAll": "Zobraziť všetky",
     "industries": {
@@ -102,6 +111,109 @@
     "stock": {
       "inStock": "Na sklade",
       "onOrder": "Na objednávku"
+    }
+  },
+  "products": {
+    "meta": {
+      "title": "Produkty",
+      "description": "Prehliadajte akceptory bankoviek, validátory mincí, dotykové monitory, hoppery a bezhotovostné platobné moduly — skladom a expedované do 24 hodín."
+    },
+    "breadcrumb": "Produkty",
+    "title": "Všetky produkty",
+    "description": "Kompletný katalóg Unique Technology Solution s.r.o. — validátory, meniče, displeje a náhradné diely od popredných značiek.",
+    "filters": {
+      "title": "Filtre",
+      "reset": "Resetovať",
+      "category": "Kategória",
+      "price": "Cena",
+      "priceFrom": "Od",
+      "priceTo": "Do",
+      "priceFromAria": "Cena od",
+      "priceToAria": "Cena do",
+      "applyPrice": "Použiť cenový rozsah"
+    },
+    "toolbar": {
+      "searchPlaceholder": "Hľadať vo výsledkoch…",
+      "resultCount": "{count} produktov"
+    },
+    "pagination": {
+      "label": "Stránkovanie",
+      "previous": "Predchádzajúca stránka",
+      "next": "Nasledujúca stránka"
+    }
+  },
+  "productPage": {
+    "breadcrumbProducts": "Produkty",
+    "vatNote": "vrátane DPH · dostupné množstevné zľavy",
+    "buyViaEbay": "Kúpiť cez Ebay",
+    "bulkInquiry": "Potrebujete väčšie množstvá alebo inú verziu? Kontaktujte nás priamo.",
+    "compatibilityHelp": "Nie ste si istí, či sedí k vášmu zariadeniu? <link>Kontaktujte nás</link> — odpovieme čo najskôr.",
+    "description": "Popis",
+    "keyFeatures": "Kľúčové vlastnosti",
+    "relatedTitle": "Mohli by ste potrebovať aj",
+    "viewCategory": "Zobraziť kategóriu",
+    "assurances": {
+      "shipping": {
+        "title": "Medzinárodná doprava",
+        "text": "FedEx international shipping"
+      },
+      "warranty": {
+        "title": "3-mesačná záruka",
+        "text": "Overený produkt"
+      },
+      "returns": {
+        "title": "30 dní na vrátenie",
+        "text": "Nie ste spokojní? Vráťte do 30 dní"
+      }
+    }
+  },
+  "contact": {
+    "meta": {
+      "title": "Kontakt",
+      "description": "Kontaktujte tím UT Slovakia — predaj, technická podpora a servis. Odpovedáme do jedného pracovného dňa."
+    },
+    "breadcrumb": "Kontakt",
+    "title": "Porozprávajte sa s nami!",
+    "description": "Otázky o zariadení alebo rada pred nákupom. Odpovedáme čo najskôr.",
+    "cards": {
+      "visit": {
+        "title": "Navštívte nás",
+        "line1": "Trojičné námestie 191/11",
+        "line2": "Tvrdošín, Žilinski, Slovakia 02744"
+      },
+      "call": {
+        "title": "Zavolajte nám",
+        "line1": "+42123456789 (mobil)"
+      },
+      "write": {
+        "title": "Napíšte nám",
+        "line1": "uts@uts.pl",
+        "line2": "contact@uts.pl"
+      },
+      "hours": {
+        "title": "Otváracie hodiny",
+        "line1": "po–pia: 8:00 – 16:00"
+      }
+    },
+    "vatNumber": "IČ DPH: {number}",
+    "faqTitle": "Často kladené otázky",
+    "faqs": {
+      "1": {
+        "question": "Otázka 1",
+        "answer": "Odpoveď 1"
+      },
+      "2": {
+        "question": "Otázka 2",
+        "answer": "Odpoveď 2"
+      },
+      "3": {
+        "question": "Otázka 3",
+        "answer": "Odpoveď 3"
+      },
+      "4": {
+        "question": "Otázka 4",
+        "answer": "Odpoveď 4"
+      }
     }
   }
 }

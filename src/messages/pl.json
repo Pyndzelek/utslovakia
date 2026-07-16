@@ -103,5 +103,117 @@
       "inStock": "W magazynie",
       "onOrder": "Na zamówienie"
     }
+  },
+  "products": {
+    "meta": {
+      "title": "Produkty",
+      "description": "Przeglądaj akceptory banknotów, walidatory monet, monitory dotykowe, hoppery i moduły płatności bezgotówkowych – w magazynie i wysyłane w ciągu 24 godzin."
+    },
+    "breadcrumb": "Produkty",
+    "title": "Wszystkie produkty",
+    "description": "Pełny katalog Unique Technology Solution s.r.o. — walidatory, zmieniacze, wyświetlacze i części zamienne z najlepszych marek.",
+    "filters": {
+      "title": "Filtry",
+      "reset": "Resetuj",
+      "category": "Kategoria",
+      "price": "Cena",
+      "priceFrom": "Od",
+      "priceTo": "Do",
+      "priceFromAria": "Cena od",
+      "priceToAria": "Cena do",
+      "applyPrice": "Zastosuj zakres cenowy"
+    },
+    "toolbar": {
+      "searchPlaceholder": "Szukaj w wynikach…",
+      "resultCount": "{count} produktów"
+    },
+    "pagination": {
+      "label": "Paginacja",
+      "previous": "Poprzednia strona",
+      "next": "Następna strona"
+    }
+  },
+  "productPage": {
+    "breadcrumbProducts": "Produkty",
+    "vatNote": "w tym VAT · dostępne rabaty ilościowe",
+    "buyViaEbay": "Kup poprzez Ebay",
+    "bulkInquiry": "Potrzebujesz większych ilości lub innej wersji? Skontaktuj się z nami bezpośrednio.",
+    "compatibilityHelp": "Nie jesteś pewny, czy pasuje do Twojego sprzętu? <link>Skontaktuj się z nami</link> — odpowiemy najszybciej jak to możliwe.",
+    "description": "Opis",
+    "keyFeatures": "Kluczowe cechy",
+    "relatedTitle": "Możesz potrzebować również",
+    "viewCategory": "Zobacz kategorię",
+    "assurances": {
+      "shipping": {
+        "title": "Wysyłka międzynarodowa",
+        "text": "FedEx international shipping"
+      },
+      "warranty": {
+        "title": "Gwarancja 3 miesiące",
+        "text": "Sprawdzony produkt"
+      },
+      "returns": {
+        "title": "30 dni na zwrot",
+        "text": "Niezadowolony? Zwróć w ciągu 30 dni"
+      }
+    }
+  },
+  "category": {
+    "meta": {
+      "title": "Kategorie",
+      "description": "Przeglądaj akceptory banknotów, walidatory monet, monitory dotykowe, hoppery i moduły płatności bezgotówkowych – w magazynie i wysyłane w ciągu 24 godzin."
+    },
+    "breadcrumb": "Kategorie",
+    "title": "Kategorie",
+    "description": "Przeglądaj akceptory banknotów, walidatory monet, monitory dotykowe, hoppery i moduły płatności bezgotówkowych – w magazynie i wysyłane w ciągu 24 godzin."
+  },
+  "contact": {
+    "meta": {
+      "title": "Kontakt",
+      "description": "Porozmawiaj z zespołem UT Slovakia — sprzedaż, wsparcie techniczne i serwis. Odpowiadamy w ciągu jednego dnia roboczego."
+    },
+    "breadcrumb": "Kontakt",
+    "title": "Porozmawiaj z nami!",
+    "description": "Pytania dotyczące sprzętu czy porady przy zakupie. Odpowiadamy najszybciej jak to możliwe.",
+    "cards": {
+      "visit": {
+        "title": "Odwiedź nas",
+        "line1": "Trojičné námestie 191/11",
+        "line2": "Tvrdošín, Žilinski, Slovakia 02744"
+      },
+      "call": {
+        "title": "Zadzwoń do nas",
+        "line1": "+42123456789 (mobile)"
+      },
+      "write": {
+        "title": "Napisz do nas",
+        "line1": "uts@uts.pl",
+        "line2": "contact@uts.pl"
+      },
+      "hours": {
+        "title": "Godziny otwarcia",
+        "line1": "pon.–pt.: 8:00 – 16:00"
+      }
+    },
+    "vatNumber": "NIP: {number}",
+    "faqTitle": "Najczęściej zadawane pytania",
+    "faqs": {
+      "1": {
+        "question": "Pytanie 1",
+        "answer": "Odpowiedź 1"
+      },
+      "2": {
+        "question": "Pytanie 2",
+        "answer": "Odpowiedź 2"
+      },
+      "3": {
+        "question": "Pytanie 3",
+        "answer": "Odpowiedź 3"
+      },
+      "4": {
+        "question": "Pytanie 4",
+        "answer": "Odpowiedź 4"
+      }
+    }
   }
 }
