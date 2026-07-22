@@ -5,6 +5,7 @@ export const Category: CollectionConfig = {
   labels: { singular: 'Kategoria', plural: 'Kategorie' },
   admin: {
     useAsTitle: 'name',
+    defaultColumns: ['name', 'parent', 'order', 'status', 'updatedAt'],
     description: 'Kategorie produktów',
   },
   access: {
@@ -15,6 +16,7 @@ export const Category: CollectionConfig = {
       name: 'name',
       label: 'Nazwa',
       type: 'text',
+      localized: true,
       required: true,
     },
     {
@@ -29,9 +31,36 @@ export const Category: CollectionConfig = {
       },
     },
     {
+      name: 'order',
+      label: 'Kolejność wyświetlania',
+      type: 'number',
+      defaultValue: 0,
+      admin: {
+        position: 'sidebar',
+        description: 'Mniejsze liczby wyświetlają się jako pierwsze.',
+      },
+    },
+    {
+      name: 'status',
+      label: 'Status',
+      type: 'select',
+      defaultValue: 'active',
+      required: true,
+      options: [
+        { label: 'Aktywna', value: 'active' },
+        { label: 'Ukryta', value: 'hidden' },
+      ],
+      admin: {
+        position: 'sidebar',
+        description:
+          'Ukryj kategorię zmieniając status zamiast ją usuwać — usunięcie mogłoby zerwać powiązania z istniejącymi produktami.',
+      },
+    },
+    {
       name: 'description',
       label: 'Opis',
       type: 'textarea',
+      localized: true,
     },
   ],
 }

@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     categories: Category;
     products: Product;
+    brands: Brand;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +83,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
+    brands: BrandsSelect<false> | BrandsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -90,10 +92,11 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('pl' | 'en') | ('pl' | 'en')[];
+  fallbackLocale:
+    ('false' | 'none' | 'null') | false | null | ('pl' | 'en' | 'sk' | 'pt-br') | ('pl' | 'en' | 'sk' | 'pt-br')[];
   globals: {};
   globalsSelect: {};
-  locale: 'pl' | 'en';
+  locale: 'pl' | 'en' | 'sk' | 'pt-br';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -178,6 +181,14 @@ export interface Category {
    * Używane w adresie URL kategorii, np. /categories/twoj-slug
    */
   slug: string;
+  /**
+   * Mniejsze liczby wyświetlają się jako pierwsze.
+   */
+  order?: number | null;
+  /**
+   * Ukryj kategorię zmieniając status zamiast ją usuwać — usunięcie mogłoby zerwać powiązania z istniejącymi produktami.
+   */
+  status: 'active' | 'hidden';
   description?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -195,16 +206,47 @@ export interface Product {
    * Używane w adresie URL produktu, np. /products/twoj-slug
    */
   slug: string;
-  category: number | Category;
-  images: (number | Media)[];
+  /**
+   * Stabilny identyfikator produktu, niezależny od nazwy i slugu. Potrzebny gdy pojawią się zamówienia, magazyn i integracje.
+   */
+  sku?: string | null;
+  /**
+   * Wycofaj produkt zmieniając status na "Wycofany" zamiast go usuwać.
+   */
+  status: 'published' | 'draft' | 'archived';
+  /**
+   * Opcjonalna plakietka wyświetlana na zdjęciu produktu (np. "NEW").
+   */
+  badge?: ('new' | 'bestseller') | null;
+  brand?: (number | null) | Brand;
+  /**
+   * Produkt może należeć do kilku kategorii (np. własna kategoria + "Promocje").
+   */
+  category: (number | Category)[];
+  images: {
+    image: number | Media;
+    alt?: string | null;
+    id?: string | null;
+  }[];
   description?: string | null;
-  specifications?:
+  /**
+   * Lista wyświetlana jako checklista ("Key features") na stronie produktu.
+   */
+  keyFeatures?:
     | {
-        label: string;
-        value: string;
+        text: string;
         id?: string | null;
       }[]
     | null;
+  warranty?: {
+    length?: number | null;
+  };
+  price?: {
+    amount?: number | null;
+    currency?: ('PLN' | 'EUR' | 'USD' | 'BRL') | null;
+  };
+  stockStatus?: ('in_stock' | 'out_of_stock' | 'preorder') | null;
+  link?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -213,6 +255,18 @@ export interface Product {
      */
     image?: (number | null) | Media;
   };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Marki / producenci — używane jako opcja filtrowania na stronie /products
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "brands".
+ */
+export interface Brand {
+  id: number;
+  name: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -255,6 +309,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'products';
         value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'brands';
+        value: number | Brand;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -345,6 +403,8 @@ export interface MediaSelect<T extends boolean = true> {
 export interface CategoriesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
+  order?: T;
+  status?: T;
   description?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -356,16 +416,38 @@ export interface CategoriesSelect<T extends boolean = true> {
 export interface ProductsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  sku?: T;
+  status?: T;
+  badge?: T;
+  brand?: T;
   category?: T;
-  images?: T;
-  description?: T;
-  specifications?:
+  images?:
     | T
     | {
-        label?: T;
-        value?: T;
+        image?: T;
+        alt?: T;
         id?: T;
       };
+  description?: T;
+  keyFeatures?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  warranty?:
+    | T
+    | {
+        length?: T;
+      };
+  price?:
+    | T
+    | {
+        amount?: T;
+        currency?: T;
+      };
+  stockStatus?: T;
+  link?: T;
   meta?:
     | T
     | {
@@ -373,6 +455,15 @@ export interface ProductsSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "brands_select".
+ */
+export interface BrandsSelect<T extends boolean = true> {
+  name?: T;
   updatedAt?: T;
   createdAt?: T;
 }
