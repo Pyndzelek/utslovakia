@@ -178,18 +178,22 @@ export interface Category {
   id: number;
   name: string;
   /**
-   * Używane w adresie URL kategorii, np. /categories/twoj-slug
+   * Używane w adresie URL kategorii, np. /kategoria/slug-kategorii
    */
   slug: string;
+  description?: string | null;
+  /**
+   * Zdjęcie kategorii wyświetlane na karcie kategorii w katalogu.
+   */
+  image: number | Media;
   /**
    * Mniejsze liczby wyświetlają się jako pierwsze.
    */
   order?: number | null;
   /**
-   * Ukryj kategorię zmieniając status zamiast ją usuwać — usunięcie mogłoby zerwać powiązania z istniejącymi produktami.
+   * Ukryj kategorię zmieniając status zamiast ją usuwać (może to zerwać powiązania z istniejącymi produktami)
    */
   status: 'active' | 'hidden';
-  description?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -403,9 +407,10 @@ export interface MediaSelect<T extends boolean = true> {
 export interface CategoriesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
+  description?: T;
+  image?: T;
   order?: T;
   status?: T;
-  description?: T;
   updatedAt?: T;
   createdAt?: T;
 }

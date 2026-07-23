@@ -25,9 +25,25 @@ export const Category: CollectionConfig = {
       type: 'text',
       required: true,
       unique: true,
+      localized: true,
       admin: {
-        position: 'sidebar',
-        description: 'Używane w adresie URL kategorii, np. /categories/twoj-slug',
+        description: 'Używane w adresie URL kategorii, np. /kategoria/slug-kategorii',
+      },
+    },
+    {
+      name: 'description',
+      label: 'Opis',
+      type: 'textarea',
+      localized: true,
+    },
+    {
+      name: 'image',
+      label: 'Zdjęcie',
+      type: 'upload',
+      relationTo: 'media',
+      required: true,
+      admin: {
+        description: 'Zdjęcie kategorii wyświetlane na karcie kategorii w katalogu.',
       },
     },
     {
@@ -53,14 +69,8 @@ export const Category: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description:
-          'Ukryj kategorię zmieniając status zamiast ją usuwać — usunięcie mogłoby zerwać powiązania z istniejącymi produktami.',
+          'Ukryj kategorię zmieniając status zamiast ją usuwać (może to zerwać powiązania z istniejącymi produktami)',
       },
-    },
-    {
-      name: 'description',
-      label: 'Opis',
-      type: 'textarea',
-      localized: true,
     },
   ],
 }
