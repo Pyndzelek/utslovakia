@@ -6,6 +6,7 @@ import type { Locale } from '@/i18n/routing'
 import { Container } from '@/components/ui/container'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { Logo } from '@/components/layout/logo'
+import PageHeader from '@/components/layout/page-header'
 
 interface PageProps {
   params: Promise<{ locale: Locale }>
@@ -39,15 +40,11 @@ export default async function ContactPage({ params }: PageProps) {
   return (
     <>
       {/* Page header */}
-      <div className="border-b border-line bg-white">
-        <Container className="py-8 lg:py-10">
-          <Breadcrumbs items={[{ label: t('breadcrumb') }]} />
-          <h1 className="font-display mt-4 text-3xl font-semibold tracking-tight text-navy-900 sm:text-4xl">
-            {t('title')}
-          </h1>
-          <p className="mt-2 max-w-2xl text-[15px] text-slate-500">{t('description')}</p>
-        </Container>
-      </div>
+      <PageHeader
+        title={t('title')}
+        description={t('description')}
+        breadcrumbs={[{ label: t('breadcrumb'), href: '/contact' }]}
+      />
 
       <Container className="py-10 lg:py-14">
         {/* Contact cards */}

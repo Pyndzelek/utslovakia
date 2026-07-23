@@ -9,7 +9,7 @@ export interface BreadcrumbItem {
   label: string
   href?: LinkHref
 }
-type BreadcrumbEntry = BreadcrumbItem | null | false | undefined
+export type BreadcrumbEntry = BreadcrumbItem | null | false | undefined
 
 export function Breadcrumbs({
   items,

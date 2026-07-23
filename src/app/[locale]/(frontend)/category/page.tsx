@@ -10,6 +10,7 @@ import { CtaBanner } from '@/components/home/cta-banner'
 import { categories } from '@/lib/mock-data'
 import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
+import PageHeader from '@/components/layout/page-header'
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params
@@ -31,15 +32,11 @@ export default async function CategoryIndexPage({ params }: PageProps) {
   const t = await getTranslations('category')
   return (
     <>
-      <div className="border-b border-line bg-white">
-        <Container className="py-8 lg:py-10">
-          <Breadcrumbs items={[{ label: t('breadcrumb') }]} />
-          <h1 className="font-display mt-4 text-3xl font-semibold tracking-tight text-navy-900 sm:text-4xl">
-            {t('title')}
-          </h1>
-          <p className="mt-2 max-w-2xl text-[15px] text-slate-500">{t('description')}</p>
-        </Container>
-      </div>
+      <PageHeader
+        title={t('title')}
+        description={t('description')}
+        breadcrumbs={[{ label: t('breadcrumb'), href: '/category' }]}
+      />
 
       <Container className="py-10 lg:py-14">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
