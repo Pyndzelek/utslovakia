@@ -5,11 +5,12 @@ import Image from 'next/image'
 
 interface CategoryCardProps {
   category: Category
+  productCount: number
 }
 
-export default function CategoryCard({ category }: CategoryCardProps) {
-  const productCount = 0 // TODO: get product count from API
-  const image = '/maszynka.png' // TODO: get image from API
+export default function CategoryCard({ category, productCount }: CategoryCardProps) {
+  const image = typeof category.image === 'object' ? category.image : null
+
   return (
     <Link
       key={category.slug}
@@ -33,13 +34,15 @@ export default function CategoryCard({ category }: CategoryCardProps) {
       </p>
 
       <div className="relative mt-6 h-40 rounded-2xl bg-linear-to-br from-slate-50 to-slate-100">
-        <Image
-          src={image}
-          alt=""
-          fill
-          sizes="(max-width: 640px) 90vw, 380px"
-          className="object-contain p-5 transition-transform duration-500 group-hover:scale-105"
-        />
+        {image?.url && (
+          <Image
+            src={image.url}
+            alt=""
+            fill
+            sizes="(max-width: 640px) 90vw, 380px"
+            className="object-contain p-5 transition-transform duration-500 group-hover:scale-105"
+          />
+        )}
       </div>
     </Link>
   )

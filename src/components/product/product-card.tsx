@@ -15,7 +15,7 @@ export function ProductCard({ product, className }: { product: Product; classNam
       )}
     >
       {/* Image */}
-      <div className="relative m-3 mb-0 aspect-square overflow-hidden rounded-xl bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="relative m-3 mb-0 aspect-square overflow-hidden rounded-xl bg-linear-to-br from-slate-50 to-slate-100">
         <div className="absolute top-3 left-3 z-10 flex flex-col items-start gap-1.5">
           {/* {product.badge && <ProductBadgeTag badge={product.badge} />} */}
           {product.oldPrice && (

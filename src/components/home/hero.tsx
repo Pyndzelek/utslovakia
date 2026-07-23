@@ -70,7 +70,7 @@ export async function Hero() {
         <div className="relative mx-auto w-full max-w-md lg:max-w-none">
           <div className="relative aspect-square">
             <div
-              className="absolute inset-6 rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-white/10 to-white/[0.02] backdrop-blur-sm"
+              className="absolute inset-6 rounded-[2.5rem] border border-white/10 bg-linear-to-br from-white/10 to-white/2 backdrop-blur-sm"
               aria-hidden
             />
             <Image
