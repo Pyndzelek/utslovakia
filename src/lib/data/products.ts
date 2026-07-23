@@ -1,6 +1,7 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Locale } from '@/i18n/routing'
+import { Product } from '@/payload-types'
 
 /**
  * Data access for the `products` Payload collection.
@@ -9,6 +10,22 @@ import type { Locale } from '@/i18n/routing'
  * page). Add more `get*` functions to this file the same way `getCategories`
  * was written, following the same Local API + typed-return shape.
  */
+
+export async function getProductsByCategory(
+  categoryId: number,
+  locale: Locale,
+): Promise<Product[]> {
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'products',
+    locale,
+    where: {
+      category: { equals: categoryId }, // <-- Now safely passes an integer ID
+    },
+    depth: 1,
+  })
+  return docs
+}
 
 /**
  * Counts published products per category in a single query, instead of one

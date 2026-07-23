@@ -42,7 +42,7 @@ export default async function ProductsPage({ params }: PageProps) {
 
           <div>
             <CatalogToolbar resultCount={products.length} />
-            <ProductGrid products={products} className="mt-6" />
+            {/* <ProductGrid products={products} className="mt-6" /> */}
             <div className="mt-10">
               <Pagination />
             </div>

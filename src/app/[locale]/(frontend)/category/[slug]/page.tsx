@@ -10,7 +10,7 @@ import { ProductGrid } from '@/components/product/product-grid'
 import { CategoryHero } from '@/components/catalog/category-hero'
 import { CategoryNavigation } from '@/components/catalog/category-navigation'
 import { getCategories, getCategoryBySlug, getCategorySlugsByLocale } from '@/lib/data/categories'
-import { getProductsByCategory } from '@/lib/mock-data'
+import { getProductsByCategory } from '@/lib/data/products'
 import { SITE_URL } from '@/lib/site'
 import type { Category } from '@/payload-types'
 
@@ -75,9 +75,8 @@ export default async function CategoryPage({ params }: PageProps) {
   if (!category) notFound()
   const allCategories = await getCategories(locale, 0)
 
-  // TODO: swap for real Payload `products` data once that collection's data
-  const categoryProducts = getProductsByCategory(category.slug)
-  const pageCount = Math.max(1, Math.ceil(categoryProducts.length / PRODUCTS_PER_PAGE))
+  const categoryProducts = await getProductsByCategory(category.id, locale)
+  const pageCount = categoryProducts.length / PRODUCTS_PER_PAGE
 
   return (
     <main>

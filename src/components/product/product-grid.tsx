@@ -1,6 +1,6 @@
 import React from 'react'
 import { ProductCard } from '@/components/product/product-card'
-import type { Product } from '@/lib/mock-data'
+import type { Product } from '@/payload-types'
 import { cn } from '@/lib/utils'
 
 export function ProductGrid({ products, className }: { products: Product[]; className?: string }) {

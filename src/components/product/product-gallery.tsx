@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { ProductBadgeTag } from '@/components/product/product-badge'
-import { cn } from '@/lib/utils'
+import { cn, getMediaUrl } from '@/lib/utils'
 import { Product } from '@/payload-types'
 
 interface ProductGalleryProps {
@@ -89,11 +89,4 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
       )}
     </div>
   )
-}
-
-function getMediaUrl(imageField: any): string | null {
-  if (typeof imageField === 'object' && imageField !== null && 'url' in imageField) {
-    return imageField.url
-  }
-  return null
 }
