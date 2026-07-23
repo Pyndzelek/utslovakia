@@ -228,7 +228,7 @@ export interface Product {
     alt?: string | null;
     id?: string | null;
   }[];
-  description?: string | null;
+  description: string;
   /**
    * Lista wyświetlana jako checklista ("Key features") na stronie produktu.
    */

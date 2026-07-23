@@ -9,8 +9,16 @@ export interface BreadcrumbItem {
   label: string
   href?: LinkHref
 }
+type BreadcrumbEntry = BreadcrumbItem | null | false | undefined
 
-export function Breadcrumbs({ items, className }: { items: BreadcrumbItem[]; className?: string }) {
+export function Breadcrumbs({
+  items,
+  className,
+}: {
+  items: BreadcrumbEntry[]
+  className?: string
+}) {
+  const breadcrumbs = items?.filter(Boolean) as BreadcrumbItem[]
   return (
     <nav aria-label="Breadcrumb" className={cn('text-sm', className)}>
       <ol className="flex flex-wrap items-center gap-1.5">
@@ -23,17 +31,23 @@ export function Breadcrumbs({ items, className }: { items: BreadcrumbItem[]; cla
             <span className="sr-only">Home</span>
           </Link>
         </li>
-        {items.map((item, index) => {
-          const isLast = index === items.length - 1
+        {breadcrumbs.map((item, index) => {
+          const isLast = index === breadcrumbs.length - 1
           return (
             <li key={item.label} className="flex items-center gap-1.5">
               <ChevronRight className="size-3.5 text-slate-300" aria-hidden />
               {item.href && !isLast ? (
-                <Link href={item.href} className="text-slate-500 transition-colors hover:text-brand-600">
+                <Link
+                  href={item.href}
+                  className="text-slate-500 transition-colors hover:text-brand-600"
+                >
                   {item.label}
                 </Link>
               ) : (
-                <span aria-current={isLast ? 'page' : undefined} className="font-medium text-navy-900">
+                <span
+                  aria-current={isLast ? 'page' : undefined}
+                  className="font-medium text-navy-900"
+                >
                   {item.label}
                 </span>
               )}

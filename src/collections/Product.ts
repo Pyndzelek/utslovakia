@@ -124,6 +124,7 @@ export const Product: CollectionConfig = {
       type: 'textarea',
       label: 'Opis',
       localized: true,
+      required: true,
     },
     {
       name: 'keyFeatures',

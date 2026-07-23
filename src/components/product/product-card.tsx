@@ -1,8 +1,5 @@
-import React from 'react'
 import Image from 'next/image'
-import { ShoppingCart } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
-import { ProductBadgeTag } from '@/components/ui/badge'
 import { Price } from '@/components/ui/price'
 import type { Product } from '@/lib/mock-data'
 import { discountPercent } from '@/lib/format'
@@ -20,7 +17,7 @@ export function ProductCard({ product, className }: { product: Product; classNam
       {/* Image */}
       <div className="relative m-3 mb-0 aspect-square overflow-hidden rounded-xl bg-gradient-to-br from-slate-50 to-slate-100">
         <div className="absolute top-3 left-3 z-10 flex flex-col items-start gap-1.5">
-          {product.badge && <ProductBadgeTag badge={product.badge} />}
+          {/* {product.badge && <ProductBadgeTag badge={product.badge} />} */}
           {product.oldPrice && (
             <span className="rounded-full bg-white/90 px-2 py-0.5 text-[11px] font-bold text-rose-600 shadow-sm">
               −{discountPercent(product.price, product.oldPrice)}%

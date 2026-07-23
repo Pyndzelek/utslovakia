@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 import { formatPrice } from '@/lib/format'
 
 interface PriceProps {
-  price: number
+  price?: number
   oldPrice?: number
   /** Lowest price in the 30 days before the discount (EU Omnibus directive) */
   lowestPriceNote?: number
@@ -22,7 +22,7 @@ export function Price({ price, oldPrice, lowestPriceNote, size = 'md', className
     <div className={className}>
       <div className="flex flex-wrap items-baseline gap-x-2">
         <span className={cn('font-display font-semibold text-navy-900', sizes[size].current)}>
-          {formatPrice(price)}
+          {price ? formatPrice(price) : 'N/A'}
         </span>
         {/* {oldPrice && (
           <span className={cn('text-slate-400 line-through', sizes[size].old)}>

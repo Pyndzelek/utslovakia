@@ -1,10 +1,6 @@
-'use client'
-
 import React from 'react'
-import { useTranslations } from 'next-intl'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import type { ProductBadge } from '@/lib/mock-data'
 
 export const badgeVariants = cva(
   'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase',
@@ -31,37 +27,4 @@ export interface BadgeProps
 
 export function Badge({ className, variant, ...props }: BadgeProps) {
   return <span className={cn(badgeVariants({ variant }), className)} {...props} />
-}
-
-const productBadgeVariants: Record<ProductBadge, BadgeProps['variant']> = {
-  new: 'brand',
-  sale: 'sale',
-  bestseller: 'navy',
-}
-
-export function ProductBadgeTag({ badge, className }: { badge: ProductBadge; className?: string }) {
-  const t = useTranslations('product.badge')
-
-  return (
-    <Badge variant={productBadgeVariants[badge]} className={className}>
-      {t(badge)}
-    </Badge>
-  )
-}
-
-export function StockBadge({ inStock, className }: { inStock: boolean; className?: string }) {
-  const t = useTranslations('product.stock')
-
-  return (
-    <Badge
-      variant={inStock ? 'success' : 'warning'}
-      className={cn('normal-case tracking-normal', className)}
-    >
-      <span
-        className={cn('size-1.5 rounded-full', inStock ? 'bg-emerald-500' : 'bg-amber-500')}
-        aria-hidden
-      />
-      {inStock ? t('inStock') : t('onOrder')}
-    </Badge>
-  )
 }
