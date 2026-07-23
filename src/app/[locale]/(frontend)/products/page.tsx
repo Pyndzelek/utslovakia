@@ -8,9 +8,17 @@ import { Pagination } from '@/components/catalog/pagination'
 import { ProductGrid } from '@/components/product/product-grid'
 import { products } from '@/lib/mock-data'
 import PageHeader from '@/components/layout/page-header'
+import { getFilteredProducts } from '@/lib/data/products'
 
 interface PageProps {
   params: Promise<{ locale: Locale }>
+  searchParams: Promise<{
+    page?: string
+    minPrice?: string
+    maxPrice?: string
+    category?: string
+    sort?: string
+  }>
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -23,10 +31,38 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function ProductsPage({ params }: PageProps) {
+export default async function ProductsPage({ params, searchParams }: PageProps) {
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations('products')
+
+  // Parse URL string parameters cleanly into numbers
+  const query = await searchParams
+  const page = query.page ? parseInt(query.page, 10) : 1
+  const minPrice = query.minPrice ? parseFloat(query.minPrice) : undefined
+  const maxPrice = query.maxPrice ? parseFloat(query.maxPrice) : undefined
+
+  // Supports comma-separated category IDs in the URL (e.g., "?category=1,4")
+  const categoryIds = query.category
+    ? query.category
+        .split(',')
+        .map((id) => parseInt(id.trim(), 10))
+        .filter((id) => !isNaN(id))
+    : undefined
+
+  // Fetch paginated & filtered data
+  const {
+    docs: products,
+    totalPages,
+    totalDocs,
+  } = await getFilteredProducts(locale, {
+    page,
+    limit: 12,
+    minPrice,
+    maxPrice,
+    categoryIds,
+    sort: query.sort || '-createdAt',
+  })
 
   return (
     <>
@@ -41,10 +77,10 @@ export default async function ProductsPage({ params }: PageProps) {
           <FilterSidebar className="hidden self-start lg:block" />
 
           <div>
-            <CatalogToolbar resultCount={products.length} />
-            {/* <ProductGrid products={products} className="mt-6" /> */}
+            <CatalogToolbar resultCount={totalDocs} />
+            <ProductGrid products={products} className="mt-6" />
             <div className="mt-10">
-              <Pagination />
+              <Pagination pages={totalPages} />
             </div>
           </div>
         </div>

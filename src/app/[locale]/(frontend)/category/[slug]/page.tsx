@@ -67,6 +67,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+//Todo: pagination and fix changing language on this page - switching from one to another does not change the slug causing an error
 export default async function CategoryPage({ params }: PageProps) {
   const { locale, slug } = await params
   setRequestLocale(locale)
