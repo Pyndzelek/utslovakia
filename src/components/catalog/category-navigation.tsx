@@ -1,8 +1,7 @@
-import React from 'react'
 import { Link } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
-import type { Category } from '@/lib/mock-data'
 import { cn } from '@/lib/utils'
+import { Category } from '@/payload-types'
 
 interface CategoryNavigationProps {
   categories: Category[]

@@ -1,14 +1,15 @@
-import React from 'react'
 import Image from 'next/image'
 import { Container } from '@/components/ui/container'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
-import type { Category } from '@/lib/mock-data'
+import { Category } from '@/payload-types'
 
 interface CategoryHeroProps {
   category: Category
 }
 
 export function CategoryHero({ category }: CategoryHeroProps) {
+  const image = typeof category.image === 'object' ? category.image : null
+
   return (
     <div className="relative overflow-hidden bg-navy-950">
       <div className="pattern-chevron-dark absolute inset-0" aria-hidden />
@@ -30,13 +31,15 @@ export function CategoryHero({ category }: CategoryHeroProps) {
           </p>
         </div>
         <div className="relative hidden h-52 lg:block">
-          <Image
-            src={category.image}
-            alt={category.name}
-            fill
-            sizes="300px"
-            className="object-contain drop-shadow-[0_24px_32px_rgba(0,0,0,0.5)]"
-          />
+          {image?.url && (
+            <Image
+              src={image.url}
+              alt={category.name}
+              fill
+              sizes="300px"
+              className="object-contain drop-shadow-[0_24px_32px_rgba(0,0,0,0.5)]"
+            />
+          )}
         </div>
       </Container>
     </div>

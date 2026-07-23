@@ -7,6 +7,7 @@ import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server
 import { routing, type Locale } from '@/i18n/routing'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
+import { SITE_URL } from '@/lib/site'
 import './styles.css'
 
 const inter = Inter({
@@ -34,6 +35,9 @@ export async function generateMetadata({ params }: RootLayoutProps): Promise<Met
   const t = await getTranslations({ locale, namespace: 'Metadata' })
 
   return {
+    // Lets child pages set relative `openGraph.images`/`alternates.canonical`
+    // and have them resolve to real absolute URLs.
+    metadataBase: new URL(SITE_URL),
     title: {
       template: '%s | UTSlovakia',
       default: t('title'),
