@@ -11,6 +11,17 @@ import { Product } from '@/payload-types'
  * was written, following the same Local API + typed-return shape.
  */
 
+export async function getProductBySlug(slug: string, locale: Locale): Promise<Product | undefined> {
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'products',
+    locale,
+    where: { slug: { equals: slug } },
+    depth: 1,
+  })
+  return docs[0] ?? undefined
+}
+
 export async function getProductsByCategory(
   categoryId: number,
   locale: Locale,

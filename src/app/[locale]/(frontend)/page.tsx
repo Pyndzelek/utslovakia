@@ -50,7 +50,7 @@ export default async function HomePage({ params }: PageProps) {
             action={<ViewAllLink />}
             className="mb-8"
           />
-          <ProductRail products={bestsellers} />
+          {/* <ProductRail products={bestsellers} /> */}
         </Container>
       </section>
 
@@ -91,7 +91,7 @@ export default async function HomePage({ params }: PageProps) {
             action={<ViewAllLink />}
             className="mb-8"
           />
-          <ProductRail products={newArrivals} />
+          {/* <ProductRail products={newArrivals} /> */}
         </Container>
       </section>
 

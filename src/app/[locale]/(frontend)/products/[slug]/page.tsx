@@ -13,6 +13,7 @@ import ProductView from '@/components/product/product-view'
 // import { getPayloadClient } from '@/lib/payload'
 import { Category, Product } from '@/payload-types'
 import { useTranslations } from 'next-intl'
+import { getProductBySlug, getProductsByCategory } from '@/lib/data/products'
 
 interface PageProps {
   params: Promise<{ locale: Locale; slug: string }>
@@ -40,26 +41,14 @@ export default async function ProductPage({ params }: PageProps) {
   const { locale, slug } = await params
   setRequestLocale(locale)
 
-  // const payload = await getPayloadClient()
-  // const payloadProduct = await payload
-  //   .find({
-  //     collection: 'products',
-  //     where: {
-  //       slug: { equals: slug },
-  //       status: { equals: 'published' },
-  //     },
-  //     locale,
-  //     depth: 1, // Ensures category and brand relationships are populated
-  //   })
-  //   .then((res) => res.docs[0] as Product | undefined)
-
-  // if (!payloadProduct) {
-  //   notFound()
-  // }
+  const payloadProduct = await getProductBySlug(slug, locale)
+  if (!payloadProduct) {
+    notFound()
+  }
 
   return (
     <>
-      {/* <BreadcrumbsHeader productTitle={payloadProduct.title} category={payloadProduct.category} />
+      <BreadcrumbsHeader productTitle={payloadProduct.title} category={payloadProduct.category} />
 
       <ProductView product={payloadProduct} />
 
@@ -67,7 +56,7 @@ export default async function ProductPage({ params }: PageProps) {
         category={payloadProduct.category}
         currentProductId={payloadProduct.id}
         locale={locale}
-      /> */}
+      />
     </>
   )
 }
@@ -126,39 +115,8 @@ async function RelatedProducts({
 
   if (!categoryData) return null
 
-  // const payload = await getPayloadClient()
-
-  // Fetch products sharing the same category ID, excluding the current one
-  // const { docs: relatedProducts } = await payload.find({
-  //   collection: 'products',
-  //   locale,
-  //   where: {
-  //     and: [
-  //       {
-  //         category: {
-  //           contains: categoryData.id,
-  //         },
-  //       },
-  //       {
-  //         id: {
-  //           not_equals: currentProductId,
-  //         },
-  //       },
-  //       {
-  //         status: {
-  //           equals: 'published',
-  //         },
-  //       },
-  //     ],
-  //   },
-  //   depth: 1, // Populate relationships needed for ProductRail
-  //   limit: 4, // Max amount of related items to show
-  // })
-
-  // Hide the section entirely if no related products exist
-  // if (!relatedProducts || relatedProducts.length === 0) {
-  //   return null
-  // }
+  //:TODO: Add logic to exclude the current product from the related products
+  const relatedProducts = await getProductsByCategory(categoryData.id, locale)
 
   return (
     <section className="border-t border-line bg-white py-16">
@@ -176,7 +134,7 @@ async function RelatedProducts({
           }
           className="mb-8"
         />
-        {/* <ProductRail products={relatedProducts as Product[]} /> */}
+        <ProductRail products={relatedProducts} />
       </Container>
     </section>
   )

@@ -101,7 +101,8 @@
     },
     "stock": {
       "inStock": "Em estoque",
-      "onOrder": "Sob encomenda"
+      "onOrder": "Sob encomenda",
+      "outOfStock": "Fora de estoque"
     }
   },
   "products": {

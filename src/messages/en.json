@@ -101,7 +101,8 @@
     },
     "stock": {
       "inStock": "In stock",
-      "onOrder": "Made to order"
+      "onOrder": "Made to order",
+      "outOfStock": "Out of stock"
     }
   },
   "products": {

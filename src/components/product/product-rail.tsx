@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { ProductCard } from '@/components/product/product-card'
-import type { Product } from '@/lib/mock-data'
+import type { Product } from '@/payload-types'
 import { cn } from '@/lib/utils'
 
 /**
