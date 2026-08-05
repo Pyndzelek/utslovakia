@@ -59,7 +59,6 @@ export const Product: CollectionConfig = {
       ],
       admin: {
         position: 'sidebar',
-        description: 'Wycofaj produkt zmieniając status na "Wycofany" zamiast go usuwać.',
       },
     },
     {
@@ -72,7 +71,6 @@ export const Product: CollectionConfig = {
       ],
       admin: {
         position: 'sidebar',
-        description: 'Opcjonalna plakietka wyświetlana na zdjęciu produktu (np. "NEW").',
       },
     },
     {
@@ -93,9 +91,6 @@ export const Product: CollectionConfig = {
       required: true,
       hasMany: true,
       minRows: 1,
-      admin: {
-        description: 'Produkt może należeć do kilku kategorii (np. własna kategoria + "Promocje").',
-      },
     },
     {
       name: 'images',
@@ -131,9 +126,6 @@ export const Product: CollectionConfig = {
       type: 'array',
       label: 'Kluczowe cechy',
       labels: { singular: 'Cecha', plural: 'Cechy' },
-      admin: {
-        description: 'Lista wyświetlana jako checklista ("Key features") na stronie produktu.',
-      },
       fields: [
         {
           name: 'text',
@@ -146,21 +138,18 @@ export const Product: CollectionConfig = {
     },
     {
       name: 'warranty',
-      type: 'group',
-      label: 'Gwarancja',
-      fields: [
-        {
-          name: 'length',
-          type: 'number',
-          label: 'Okres gwarancji (miesiące)',
-          min: 0,
-        },
-      ],
+      type: 'number',
+      label: 'Gwarancja (miesiące)',
+      localized: false,
+      min: 0,
     },
     {
       name: 'price',
       type: 'group',
       label: 'Cena',
+      admin: {
+        description: 'Domyślna cena produktu. Możesz ją nadpisać dla konkretnych modeli poniżej.',
+      },
       fields: [
         {
           name: 'amount',
@@ -196,7 +185,54 @@ export const Product: CollectionConfig = {
       type: 'text',
       label: 'Link do zakupu (ebay)',
       localized: false,
-      required: false,
+    },
+    // --- NEW VARIANTS SECTION ---
+    {
+      name: 'variants',
+      type: 'array',
+      label: 'Modele / Warianty',
+      labels: { singular: 'Model', plural: 'Modele' },
+      admin: {
+        description: 'Dodaj różne wersje tego produktu (np. inne parametry, kolory).',
+      },
+      fields: [
+        {
+          name: 'modelName',
+          type: 'text',
+          label: 'Nazwa modelu (np. 16GB RAM, Kolor Czerwony)',
+          required: true,
+          localized: true,
+        },
+        {
+          name: 'sku',
+          type: 'text',
+          label: 'SKU (opcjonalne)',
+          admin: {
+            description: 'Unikalny kod dla tego konkretnego modelu.',
+          },
+        },
+        {
+          name: 'priceOverride',
+          type: 'number',
+          label: 'Nadpisana cena (opcjonalnie)',
+          min: 0,
+          admin: {
+            description: 'Wpisz kwotę, jeśli ten model ma inną cenę niż główna.',
+          },
+        },
+        {
+          name: 'stockStatus',
+          type: 'select',
+          label: 'Dostępność modelu',
+          defaultValue: 'inherit',
+          options: [
+            { label: 'Dziedzicz z głównego statusu', value: 'inherit' },
+            { label: 'Dostępny', value: 'in_stock' },
+            { label: 'Niedostępny', value: 'out_of_stock' },
+            { label: 'Na zamówienie', value: 'preorder' },
+          ],
+        },
+      ],
     },
   ],
 }

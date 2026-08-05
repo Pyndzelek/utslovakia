@@ -214,18 +214,9 @@ export interface Product {
    * Stabilny identyfikator produktu, niezależny od nazwy i slugu. Potrzebny gdy pojawią się zamówienia, magazyn i integracje.
    */
   sku?: string | null;
-  /**
-   * Wycofaj produkt zmieniając status na "Wycofany" zamiast go usuwać.
-   */
   status: 'published' | 'draft' | 'archived';
-  /**
-   * Opcjonalna plakietka wyświetlana na zdjęciu produktu (np. "NEW").
-   */
   badge?: ('new' | 'bestseller') | null;
   brand?: (number | null) | Brand;
-  /**
-   * Produkt może należeć do kilku kategorii (np. własna kategoria + "Promocje").
-   */
   category: (number | Category)[];
   images: {
     image: number | Media;
@@ -233,24 +224,40 @@ export interface Product {
     id?: string | null;
   }[];
   description: string;
-  /**
-   * Lista wyświetlana jako checklista ("Key features") na stronie produktu.
-   */
   keyFeatures?:
     | {
         text: string;
         id?: string | null;
       }[]
     | null;
-  warranty?: {
-    length?: number | null;
-  };
+  warranty?: number | null;
+  /**
+   * Domyślna cena produktu. Możesz ją nadpisać dla konkretnych modeli poniżej.
+   */
   price?: {
     amount?: number | null;
     currency?: ('PLN' | 'EUR' | 'USD' | 'BRL') | null;
   };
   stockStatus?: ('in_stock' | 'out_of_stock' | 'preorder') | null;
   link?: string | null;
+  /**
+   * Dodaj różne wersje tego produktu (np. inne parametry, kolory).
+   */
+  variants?:
+    | {
+        modelName: string;
+        /**
+         * Unikalny kod dla tego konkretnego modelu.
+         */
+        sku?: string | null;
+        /**
+         * Wpisz kwotę, jeśli ten model ma inną cenę niż główna.
+         */
+        priceOverride?: number | null;
+        stockStatus?: ('inherit' | 'in_stock' | 'out_of_stock' | 'preorder') | null;
+        id?: string | null;
+      }[]
+    | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -440,11 +447,7 @@ export interface ProductsSelect<T extends boolean = true> {
         text?: T;
         id?: T;
       };
-  warranty?:
-    | T
-    | {
-        length?: T;
-      };
+  warranty?: T;
   price?:
     | T
     | {
@@ -453,6 +456,15 @@ export interface ProductsSelect<T extends boolean = true> {
       };
   stockStatus?: T;
   link?: T;
+  variants?:
+    | T
+    | {
+        modelName?: T;
+        sku?: T;
+        priceOverride?: T;
+        stockStatus?: T;
+        id?: T;
+      };
   meta?:
     | T
     | {
