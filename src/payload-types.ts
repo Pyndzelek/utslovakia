@@ -205,19 +205,21 @@ export interface Category {
  */
 export interface Product {
   id: number;
-  title: string;
   /**
    * Używane w adresie URL produktu, np. /products/twoj-slug
    */
   slug: string;
   /**
-   * Stabilny identyfikator produktu, niezależny od nazwy i slugu. Potrzebny gdy pojawią się zamówienia, magazyn i integracje.
+   * Identyfikator produktu, niezależny od nazwy i slugu.
    */
   sku?: string | null;
   status: 'published' | 'draft' | 'archived';
   badge?: ('new' | 'bestseller') | null;
+  stockStatus: 'in_stock' | 'out_of_stock' | 'preorder';
   brand?: (number | null) | Brand;
-  category: (number | Category)[];
+  link?: string | null;
+  title: string;
+  categories: (number | Category)[];
   images: {
     image: number | Media;
     alt?: string | null;
@@ -232,35 +234,31 @@ export interface Product {
     | null;
   warranty?: number | null;
   /**
-   * Dodaj ceny dla różnych walut.
+   * PLN jest wymagane. Pozostałe waluty opcjonalnie.
    */
-  prices?:
-    | {
-        currency: 'PLN' | 'EUR' | 'USD' | 'BRL';
-        amount: number;
-        id?: string | null;
-      }[]
-    | null;
-  stockStatus?: ('in_stock' | 'out_of_stock' | 'preorder') | null;
-  link?: string | null;
+  prices: {
+    PLN: number;
+    EUR?: number | null;
+    USD?: number | null;
+    BRL?: number | null;
+  };
   /**
-   * Dodaj różne wersje tego produktu (np. inne parametry, kolory).
+   * Dodaj różne wersje tego produktu.
    */
   variants?:
     | {
         modelName: string;
         sku?: string | null;
-        /**
-         * Jeśli ten wariant ma inną cenę w danej walucie, dodaj ją tutaj. W przeciwnym razie użyje ceny głównej.
-         */
-        priceOverrides?:
-          | {
-              currency: 'PLN' | 'EUR' | 'USD' | 'BRL';
-              amount: number;
-              id?: string | null;
-            }[]
-          | null;
         stockStatus?: ('inherit' | 'in_stock' | 'out_of_stock' | 'preorder') | null;
+        /**
+         * Wypełnij tylko te waluty, które różnią się od ceny głównej. Pozostaw puste, aby dziedziczyć.
+         */
+        priceOverrides?: {
+          PLN?: number | null;
+          EUR?: number | null;
+          USD?: number | null;
+          BRL?: number | null;
+        };
         id?: string | null;
       }[]
     | null;
@@ -432,13 +430,15 @@ export interface CategoriesSelect<T extends boolean = true> {
  * via the `definition` "products_select".
  */
 export interface ProductsSelect<T extends boolean = true> {
-  title?: T;
   slug?: T;
   sku?: T;
   status?: T;
   badge?: T;
+  stockStatus?: T;
   brand?: T;
-  category?: T;
+  link?: T;
+  title?: T;
+  categories?: T;
   images?:
     | T
     | {
@@ -457,25 +457,25 @@ export interface ProductsSelect<T extends boolean = true> {
   prices?:
     | T
     | {
-        currency?: T;
-        amount?: T;
-        id?: T;
+        PLN?: T;
+        EUR?: T;
+        USD?: T;
+        BRL?: T;
       };
-  stockStatus?: T;
-  link?: T;
   variants?:
     | T
     | {
         modelName?: T;
         sku?: T;
+        stockStatus?: T;
         priceOverrides?:
           | T
           | {
-              currency?: T;
-              amount?: T;
-              id?: T;
+              PLN?: T;
+              EUR?: T;
+              USD?: T;
+              BRL?: T;
             };
-        stockStatus?: T;
         id?: T;
       };
   meta?:
