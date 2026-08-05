@@ -144,32 +144,41 @@ export const Product: CollectionConfig = {
       min: 0,
     },
     {
-      name: 'price',
-      type: 'group',
+      name: 'prices',
+      type: 'array',
       label: 'Cena',
+      labels: { singular: 'Cena', plural: 'Ceny' },
       admin: {
-        description: 'Domyślna cena produktu. Możesz ją nadpisać dla konkretnych modeli poniżej.',
+        description: 'Dodaj ceny dla różnych walut.',
       },
       fields: [
         {
-          name: 'amount',
-          type: 'number',
-          label: 'Kwota',
-          min: 0,
-        },
-        {
-          name: 'currency',
-          type: 'select',
-          label: 'Waluta',
-          defaultValue: 'PLN',
-          options: ['PLN', 'EUR', 'USD', 'BRL'],
+          type: 'row', // Places currency and amount side-by-side in Payload UI
+          fields: [
+            {
+              name: 'currency',
+              type: 'select',
+              label: 'Waluta',
+              required: true,
+              options: ['PLN', 'EUR', 'USD', 'BRL'],
+              admin: { width: '50%' },
+            },
+            {
+              name: 'amount',
+              type: 'number',
+              label: 'Kwota',
+              required: true,
+              min: 0,
+              admin: { width: '50%' },
+            },
+          ],
         },
       ],
     },
     {
       name: 'stockStatus',
       type: 'select',
-      label: 'Dostępność',
+      label: 'Domyślna Dostępność',
       defaultValue: 'in_stock',
       options: [
         { label: 'Dostępny', value: 'in_stock' },
@@ -186,7 +195,6 @@ export const Product: CollectionConfig = {
       label: 'Link do zakupu (ebay)',
       localized: false,
     },
-    // --- NEW VARIANTS SECTION ---
     {
       name: 'variants',
       type: 'array',
@@ -207,18 +215,39 @@ export const Product: CollectionConfig = {
           name: 'sku',
           type: 'text',
           label: 'SKU (opcjonalne)',
-          admin: {
-            description: 'Unikalny kod dla tego konkretnego modelu.',
-          },
         },
         {
-          name: 'priceOverride',
-          type: 'number',
-          label: 'Nadpisana cena (opcjonalnie)',
-          min: 0,
+          name: 'priceOverrides',
+          type: 'array',
+          label: 'Nadpisane Ceny (opcjonalnie)',
+          labels: { singular: 'Nadpisana Cena', plural: 'Nadpisane Ceny' },
           admin: {
-            description: 'Wpisz kwotę, jeśli ten model ma inną cenę niż główna.',
+            description:
+              'Jeśli ten wariant ma inną cenę w danej walucie, dodaj ją tutaj. W przeciwnym razie użyje ceny głównej.',
           },
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'currency',
+                  type: 'select',
+                  label: 'Waluta',
+                  required: true,
+                  options: ['PLN', 'EUR', 'USD', 'BRL'],
+                  admin: { width: '50%' },
+                },
+                {
+                  name: 'amount',
+                  type: 'number',
+                  label: 'Kwota',
+                  required: true,
+                  min: 0,
+                  admin: { width: '50%' },
+                },
+              ],
+            },
+          ],
         },
         {
           name: 'stockStatus',

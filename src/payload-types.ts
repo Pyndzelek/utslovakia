@@ -232,12 +232,15 @@ export interface Product {
     | null;
   warranty?: number | null;
   /**
-   * Domyślna cena produktu. Możesz ją nadpisać dla konkretnych modeli poniżej.
+   * Dodaj ceny dla różnych walut.
    */
-  price?: {
-    amount?: number | null;
-    currency?: ('PLN' | 'EUR' | 'USD' | 'BRL') | null;
-  };
+  prices?:
+    | {
+        currency: 'PLN' | 'EUR' | 'USD' | 'BRL';
+        amount: number;
+        id?: string | null;
+      }[]
+    | null;
   stockStatus?: ('in_stock' | 'out_of_stock' | 'preorder') | null;
   link?: string | null;
   /**
@@ -246,14 +249,17 @@ export interface Product {
   variants?:
     | {
         modelName: string;
-        /**
-         * Unikalny kod dla tego konkretnego modelu.
-         */
         sku?: string | null;
         /**
-         * Wpisz kwotę, jeśli ten model ma inną cenę niż główna.
+         * Jeśli ten wariant ma inną cenę w danej walucie, dodaj ją tutaj. W przeciwnym razie użyje ceny głównej.
          */
-        priceOverride?: number | null;
+        priceOverrides?:
+          | {
+              currency: 'PLN' | 'EUR' | 'USD' | 'BRL';
+              amount: number;
+              id?: string | null;
+            }[]
+          | null;
         stockStatus?: ('inherit' | 'in_stock' | 'out_of_stock' | 'preorder') | null;
         id?: string | null;
       }[]
@@ -448,11 +454,12 @@ export interface ProductsSelect<T extends boolean = true> {
         id?: T;
       };
   warranty?: T;
-  price?:
+  prices?:
     | T
     | {
-        amount?: T;
         currency?: T;
+        amount?: T;
+        id?: T;
       };
   stockStatus?: T;
   link?: T;
@@ -461,7 +468,13 @@ export interface ProductsSelect<T extends boolean = true> {
     | {
         modelName?: T;
         sku?: T;
-        priceOverride?: T;
+        priceOverrides?:
+          | T
+          | {
+              currency?: T;
+              amount?: T;
+              id?: T;
+            };
         stockStatus?: T;
         id?: T;
       };
