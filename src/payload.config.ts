@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { pl } from '@payloadcms/translations/languages/pl'
 import { seoPlugin } from '@payloadcms/plugin-seo'
+import { s3Storage } from '@payloadcms/storage-s3'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -56,6 +57,11 @@ export default buildConfig({
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
+      // Small per-instance pool: on Vercel many concurrent serverless
+      // invocations each hold their own pool, so this should stay small and
+      // DATABASE_URL should point at Neon's pooled ("-pooler") connection
+      // string — a large max here just defeats the pooler.
+      max: 5,
     },
   }),
   sharp,
@@ -65,6 +71,27 @@ export default buildConfig({
       uploadsCollection: 'media',
       generateTitle: ({ doc }) => `${doc?.title} | UTSlovakia`,
       generateDescription: ({ doc }) => doc?.description ?? '',
+    }),
+    s3Storage({
+      collections: {
+        media: {
+          disableLocalStorage: true,
+          prefix: 'media',
+        },
+      },
+      bucket: process.env.S3_BUCKET || '',
+      config: {
+        region: 'auto',
+        endpoint: process.env.S3_ENDPOINT,
+        forcePathStyle: true,
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+        },
+      },
+      // Uploads go straight from the admin's browser to the bucket, bypassing
+      // Vercel's ~4.5MB serverless function request-body limit.
+      clientUploads: true,
     }),
   ],
 })
