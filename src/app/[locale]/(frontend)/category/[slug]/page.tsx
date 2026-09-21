@@ -11,8 +11,8 @@ import { CategoryHero } from '@/components/catalog/category-hero'
 import { CategoryNavigation } from '@/components/catalog/category-navigation'
 import { getCategories, getCategoryBySlug, getCategorySlugsByLocale } from '@/lib/data/categories'
 import { getProductsByCategory } from '@/lib/data/products'
-import { SITE_URL } from '@/lib/site'
-import type { Category } from '@/payload-types'
+import { buildDynamicLanguageAlternates } from '@/lib/seo/alternates'
+import { breadcrumbJsonLd } from '@/lib/seo/json-ld'
 
 const PRODUCTS_PER_PAGE = 12
 export const revalidate = 600
@@ -83,8 +83,21 @@ export default async function CategoryPage({ params }: PageProps) {
     <main>
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd(locale, category)) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd([
+              { name: 'Home', path: getPathname({ locale, href: '/' }) },
+              { name: 'Categories', path: getPathname({ locale, href: '/category' }) },
+              {
+                name: category.name,
+                path: getPathname({
+                  locale,
+                  href: { pathname: '/category/[slug]', params: { slug: category.slug } },
+                }),
+              },
+            ]),
+          ),
+        }}
       />
 
       <CategoryHero category={category} />
@@ -105,50 +118,5 @@ export default async function CategoryPage({ params }: PageProps) {
 /** Builds `alternates.languages` from this category's per-locale slugs. */
 async function buildLanguageAlternates(categoryId: number) {
   const slugsByLocale = await getCategorySlugsByLocale(categoryId)
-
-  return Object.fromEntries(
-    (Object.entries(slugsByLocale) as [Locale, string | undefined][])
-      .filter((entry): entry is [Locale, string] => Boolean(entry[1]))
-      .map(([entryLocale, entrySlug]) => [
-        entryLocale,
-        getPathname({
-          locale: entryLocale,
-          href: { pathname: '/category/[slug]', params: { slug: entrySlug } },
-        }),
-      ]),
-  )
-}
-
-function breadcrumbJsonLd(locale: Locale, category: Category) {
-  const absoluteUrl = (path: string) => `${SITE_URL}${path}`
-
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: absoluteUrl(getPathname({ locale, href: '/' })),
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Categories',
-        item: absoluteUrl(getPathname({ locale, href: '/category' })),
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: category.name,
-        item: absoluteUrl(
-          getPathname({
-            locale,
-            href: { pathname: '/category/[slug]', params: { slug: category.slug } },
-          }),
-        ),
-      },
-    ],
-  }
+  return buildDynamicLanguageAlternates('/category/[slug]', slugsByLocale)
 }

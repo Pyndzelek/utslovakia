@@ -1,18 +1,27 @@
 import { ImageResponse } from 'next/og'
-import { getProduct } from '@/lib/mock-data'
+import { getProductBySlug } from '@/lib/data/products'
 import { formatPrice } from '@/lib/format'
+import type { Locale } from '@/i18n/routing'
 
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 export const alt = 'UT Slovakia product'
 
-export default async function OpengraphImage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  const product = getProduct(slug)
+export default async function OpengraphImage({
+  params,
+}: {
+  params: Promise<{ locale: Locale; slug: string }>
+}) {
+  const { locale, slug } = await params
+  const product = await getProductBySlug(slug, locale)
 
-  const name = product?.name ?? 'UT Slovakia'
-  const brand = product?.brand ?? 'Payment systems & components'
-  const price = product ? formatPrice(product.price) : null
+  const brandDoc = typeof product?.brand === 'object' ? product.brand : null
+
+  const name = product?.title ?? 'UT Slovakia'
+  const brand = brandDoc?.name ?? 'Payment systems & components'
+  // formatPrice renders EUR (sk-SK locale); prefer the EUR price when set, PLN otherwise
+  const displayPrice = product?.prices?.EUR ?? product?.prices?.PLN
+  const price = displayPrice ? formatPrice(displayPrice) : null
 
   return new ImageResponse(
     (

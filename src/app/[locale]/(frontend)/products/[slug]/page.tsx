@@ -2,38 +2,81 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { routing, type Locale } from '@/i18n/routing'
-import { Link } from '@/i18n/navigation'
+import { Link, getPathname } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { buttonVariants } from '@/components/ui/button'
 import { SectionHeading } from '@/components/ui/section-heading'
 import { ProductRail } from '@/components/product/product-rail'
-import { getCategory, getProduct, getRelatedProducts, products } from '@/lib/mock-data'
 import ProductView from '@/components/product/product-view'
-// import { getPayloadClient } from '@/lib/payload'
-import { Category, Product } from '@/payload-types'
+import { Product } from '@/payload-types'
 import { useTranslations } from 'next-intl'
-import { getProductBySlug, getProductsByCategory } from '@/lib/data/products'
+import {
+  getAllProductSlugs,
+  getProductBySlug,
+  getProductSlugsByLocale,
+  getProductsByCategory,
+} from '@/lib/data/products'
+import { buildDynamicLanguageAlternates } from '@/lib/seo/alternates'
+import { breadcrumbJsonLd, productJsonLd } from '@/lib/seo/json-ld'
+import { getMediaUrl } from '@/lib/utils'
+
+export const revalidate = 3600
 
 interface PageProps {
   params: Promise<{ locale: Locale; slug: string }>
 }
 
-//:TODO GENERATE STATIC PARAMS FROM PAYLOAD
-
-export function generateStaticParams() {
-  return routing.locales.flatMap((locale) =>
-    products.map((product) => ({ locale, slug: product.slug })),
+export async function generateStaticParams() {
+  const paramsByLocale = await Promise.all(
+    routing.locales.map(async (locale) => {
+      const slugs = await getAllProductSlugs(locale)
+      return slugs.map((slug) => ({ locale, slug }))
+    }),
   )
+
+  return paramsByLocale.flat()
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params
-  const product = getProduct(slug)
+  const { locale, slug } = await params
+  const product = await getProductBySlug(slug, locale)
   if (!product) return {}
+
+  const brand = typeof product.brand === 'object' ? product.brand : null
+  const firstCategory = typeof product.categories?.[0] === 'object' ? product.categories[0] : null
+
+  const title =
+    product.meta?.title ??
+    [product.title, brand?.name, firstCategory?.name, 'UTSlovakia'].filter(Boolean).join(' | ')
+  const description = product.meta?.description ?? product.description
+
+  const canonicalPath = getPathname({ locale, href: { pathname: '/products/[slug]', params: { slug } } })
+  const languages = await buildLanguageAlternates(product.id)
+
+  const image = typeof product.images?.[0]?.image === 'object' ? product.images[0].image : null
+  const imageUrl = getMediaUrl(image)
+
   return {
-    title: product.name,
-    description: product.excerpt,
+    title,
+    description,
+    alternates: {
+      canonical: canonicalPath,
+      languages,
+    },
+    openGraph: {
+      type: 'website',
+      url: canonicalPath,
+      title,
+      description,
+      images: imageUrl ? [{ url: imageUrl, alt: product.images?.[0]?.alt ?? product.title }] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: imageUrl ? [imageUrl] : undefined,
+    },
   }
 }
 
@@ -46,14 +89,45 @@ export default async function ProductPage({ params }: PageProps) {
     notFound()
   }
 
+  const canonicalPath = getPathname({
+    locale,
+    href: { pathname: '/products/[slug]', params: { slug } },
+  })
+  const image =
+    typeof payloadProduct.images?.[0]?.image === 'object' ? payloadProduct.images[0].image : null
+
   return (
     <>
-      <BreadcrumbsHeader productTitle={payloadProduct.title} category={payloadProduct.category} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd([
+              { name: 'Home', path: getPathname({ locale, href: '/' }) },
+              { name: 'Products', path: getPathname({ locale, href: '/products' }) },
+              { name: payloadProduct.title, path: canonicalPath },
+            ]),
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            productJsonLd({ product: payloadProduct, canonicalPath, imageUrl: getMediaUrl(image) }),
+          ),
+        }}
+      />
+
+      <BreadcrumbsHeader
+        productTitle={payloadProduct.title}
+        categories={payloadProduct.categories}
+      />
 
       <ProductView product={payloadProduct} />
 
       <RelatedProducts
-        category={payloadProduct.category}
+        categories={payloadProduct.categories}
         currentProductId={payloadProduct.id}
         locale={locale}
       />
@@ -61,18 +135,24 @@ export default async function ProductPage({ params }: PageProps) {
   )
 }
 
+/** Builds `alternates.languages` from this product's per-locale slugs. */
+async function buildLanguageAlternates(productId: number) {
+  const slugsByLocale = await getProductSlugsByLocale(productId)
+  return buildDynamicLanguageAlternates('/products/[slug]', slugsByLocale)
+}
+
 // 3. Inject actual category data into Breadcrumbs
 function BreadcrumbsHeader({
   productTitle,
-  category,
+  categories,
 }: {
   productTitle: string
-  category: Product['category']
+  categories: Product['categories']
 }) {
   const t = useTranslations('productPage')
 
   // Safely extract the first category from the array
-  const firstCategory = category?.[0]
+  const firstCategory = categories?.[0]
   const categoryData =
     typeof firstCategory === 'object' && firstCategory !== null ? firstCategory : null
 
@@ -99,17 +179,17 @@ function BreadcrumbsHeader({
 
 // 4. Query Payload for Related Products
 async function RelatedProducts({
-  category,
+  categories,
   currentProductId,
   locale,
 }: {
-  category: Product['category']
+  categories: Product['categories']
   currentProductId: string | number
   locale: Locale
 }) {
   const t = await getTranslations('productPage') // Use await inside async Server Components
 
-  const firstCategory = category?.[0]
+  const firstCategory = categories?.[0]
   const categoryData =
     typeof firstCategory === 'object' && firstCategory !== null ? firstCategory : null
 

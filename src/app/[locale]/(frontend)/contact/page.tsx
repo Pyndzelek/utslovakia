@@ -3,10 +3,12 @@ import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ChevronDown, Clock, Mail, MapPin, Phone } from 'lucide-react'
 import type { Locale } from '@/i18n/routing'
+import { getPathname } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { Logo } from '@/components/layout/logo'
 import PageHeader from '@/components/layout/page-header'
+import { buildStaticLanguageAlternates } from '@/lib/seo/alternates'
 
 interface PageProps {
   params: Promise<{ locale: Locale }>
@@ -25,10 +27,15 @@ const faqKeys = ['1', '2', '3', '4'] as const
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'contact.meta' })
+  const canonicalPath = getPathname({ locale, href: '/contact' })
 
   return {
     title: t('title'),
     description: t('description'),
+    alternates: {
+      canonical: canonicalPath,
+      languages: buildStaticLanguageAlternates('/contact'),
+    },
   }
 }
 

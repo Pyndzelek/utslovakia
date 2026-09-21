@@ -1,14 +1,17 @@
 import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import type { Locale } from '@/i18n/routing'
+import { getPathname } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
 import { FilterSidebar } from '@/components/catalog/filter-sidebar'
 import { CatalogToolbar } from '@/components/catalog/catalog-toolbar'
 import { Pagination } from '@/components/catalog/pagination'
 import { ProductGrid } from '@/components/product/product-grid'
-import { products } from '@/lib/mock-data'
 import PageHeader from '@/components/layout/page-header'
 import { getFilteredProducts } from '@/lib/data/products'
+import { buildStaticLanguageAlternates } from '@/lib/seo/alternates'
+
+export const revalidate = 300
 
 interface PageProps {
   params: Promise<{ locale: Locale }>
@@ -24,10 +27,15 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'products.meta' })
+  const canonicalPath = getPathname({ locale, href: '/products' })
 
   return {
     title: t('title'),
     description: t('description'),
+    alternates: {
+      canonical: canonicalPath,
+      languages: buildStaticLanguageAlternates('/products'),
+    },
   }
 }
 

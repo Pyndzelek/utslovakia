@@ -10,6 +10,8 @@ import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import PageHeader from '@/components/layout/page-header'
 import CategoryCard from '@/components/catalog/category-card'
+import { getPathname } from '@/i18n/navigation'
+import { buildStaticLanguageAlternates } from '@/lib/seo/alternates'
 
 // Pages are pre-rendered per locale at build time (locales come from the
 // layout's generateStaticParams); ISR keeps them fresh when categories change.
@@ -18,10 +20,15 @@ export const revalidate = 600
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'category.meta' })
+  const canonicalPath = getPathname({ locale, href: '/category' })
 
   return {
     title: t('title'),
     description: t('description'),
+    alternates: {
+      canonical: canonicalPath,
+      languages: buildStaticLanguageAlternates('/category'),
+    },
   }
 }
 
