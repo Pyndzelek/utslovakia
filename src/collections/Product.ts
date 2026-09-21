@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateTag } from 'next/cache'
 
 export const Product: CollectionConfig = {
   slug: 'products',
@@ -24,6 +25,16 @@ export const Product: CollectionConfig = {
           data.sku = undefined
         }
         return data
+      },
+    ],
+    afterChange: [
+      () => {
+        revalidateTag('products', 'max')
+      },
+    ],
+    afterDelete: [
+      () => {
+        revalidateTag('products', 'max')
       },
     ],
   },

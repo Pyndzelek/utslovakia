@@ -4,22 +4,18 @@ import { Link } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
 import { buttonVariants } from '@/components/ui/button'
 import { ProductRail } from '@/components/product/product-rail'
-import { bestsellers } from '@/lib/mock-data'
+import type { Product } from '@/payload-types'
 
 interface NotFoundViewProps {
   code?: string
   title: string
   description: string
-  /** Show a rail of bestsellers as a recovery path */
-  showSuggestions?: boolean
+  /** Bestsellers to show as a recovery path; omit to hide the section. */
+  suggestions?: Product[]
 }
 
-export function NotFoundView({
-  code = '404',
-  title,
-  description,
-  showSuggestions = true,
-}: NotFoundViewProps) {
+export function NotFoundView({ code = '404', title, description, suggestions }: NotFoundViewProps) {
+  const showSuggestions = Boolean(suggestions && suggestions.length > 0)
   return (
     <>
       <section className="relative overflow-hidden bg-navy-950">
@@ -61,7 +57,7 @@ export function NotFoundView({
                 <ArrowRight aria-hidden />
               </Link>
             </div>
-            <ProductRail products={bestsellers} />
+            <ProductRail products={suggestions ?? []} />
           </Container>
         </section>
       )}

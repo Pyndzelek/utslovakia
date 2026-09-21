@@ -11,7 +11,9 @@ import { CategoryShowcase } from '@/components/home/category-showcase'
 import { Industries } from '@/components/home/industries'
 import { CtaBanner } from '@/components/home/cta-banner'
 import { ProductRail } from '@/components/product/product-rail'
-import { bestsellers, newArrivals } from '@/lib/mock-data'
+import { getBestsellers, getNewArrivals } from '@/lib/data/products'
+
+export const revalidate = 600
 
 interface PageProps {
   params: Promise<{ locale: Locale }>
@@ -21,6 +23,10 @@ export default async function HomePage({ params }: PageProps) {
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations('home')
+  const [bestsellers, newArrivals] = await Promise.all([
+    getBestsellers(locale),
+    getNewArrivals(locale),
+  ])
 
   return (
     <>
@@ -50,7 +56,7 @@ export default async function HomePage({ params }: PageProps) {
             action={<ViewAllLink />}
             className="mb-8"
           />
-          {/* <ProductRail products={bestsellers} /> */}
+          <ProductRail products={bestsellers} />
         </Container>
       </section>
 
@@ -91,7 +97,7 @@ export default async function HomePage({ params }: PageProps) {
             action={<ViewAllLink />}
             className="mb-8"
           />
-          {/* <ProductRail products={newArrivals} /> */}
+          <ProductRail products={newArrivals} />
         </Container>
       </section>
 

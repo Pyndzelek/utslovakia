@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateTag } from 'next/cache'
 
 export const Category: CollectionConfig = {
   slug: 'categories',
@@ -10,6 +11,21 @@ export const Category: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: ({ req }) => Boolean(req.user),
+    update: ({ req }) => Boolean(req.user),
+    delete: ({ req }) => Boolean(req.user),
+  },
+  hooks: {
+    afterChange: [
+      () => {
+        revalidateTag('categories', 'max')
+      },
+    ],
+    afterDelete: [
+      () => {
+        revalidateTag('categories', 'max')
+      },
+    ],
   },
   fields: [
     {
