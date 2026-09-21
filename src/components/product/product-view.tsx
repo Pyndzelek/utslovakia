@@ -33,7 +33,7 @@ export default function ProductView({ product }: { product: Product }) {
           </div>
 
           <div className="mt-6 rounded-2xl border border-line bg-white p-6 shadow-card">
-            <Price price={product.price?.amount ?? undefined} size="lg" />
+            <Price price={product.prices.EUR ?? product.prices.PLN} size="lg" />
             <p className="mt-1 text-xs text-slate-400">{t('vatNote')}</p>
 
             <div className="mt-5 flex flex-wrap items-center gap-3">

@@ -49,11 +49,7 @@ export function ProductCard({ product, className }: { product: Product; classNam
           </Link>
         </h3>
         <div className="mt-auto pt-3">
-          <Price
-            price={product.price?.amount ?? undefined}
-
-            size="sm"
-          />
+          <Price price={product.prices.EUR ?? product.prices.PLN} size="sm" />
           <InStock inStock={inStock} />
         </div>
       </div>
