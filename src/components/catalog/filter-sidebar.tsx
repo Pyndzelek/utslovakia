@@ -7,7 +7,10 @@ import { ChevronDown, RotateCcw } from 'lucide-react'
 import { Checkbox, Input } from '@/components/ui/field'
 import { cn } from '@/lib/utils'
 import { currencyForLocale } from '@/lib/currency'
-import type { Category } from '@/payload-types'
+import type { Category, Product } from '@/payload-types'
+
+/** Badge filter options, most useful first; values are the `badge` select's options. */
+const BADGES = ['bestseller', 'new'] as const satisfies NonNullable<Product['badge']>[]
 
 function FilterGroup({
   title,
@@ -73,6 +76,7 @@ export function FilterSidebar({
   className?: string
 }) {
   const t = useTranslations('products.filters')
+  const tBadge = useTranslations('product.badge')
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -83,6 +87,8 @@ export function FilterSidebar({
       .map((id) => parseInt(id, 10))
       .filter((id) => !isNaN(id)),
   )
+
+  const activeBadges = new Set((searchParams.get('badge') ?? '').split(',').filter(Boolean))
 
   // Filters apply to the currency shown for this locale (see getFilteredProducts).
   const currency = currencyForLocale(useLocale())
@@ -115,6 +121,17 @@ export function FilterSidebar({
 
       if (next.size > 0) params.set('category', Array.from(next).join(','))
       else params.delete('category')
+    })
+  }
+
+  function toggleBadge(badge: string) {
+    pushParams((params) => {
+      const next = new Set(activeBadges)
+      if (next.has(badge)) next.delete(badge)
+      else next.add(badge)
+
+      if (next.size > 0) params.set('badge', Array.from(next).join(','))
+      else params.delete('badge')
     })
   }
 
@@ -172,6 +189,19 @@ export function FilterSidebar({
           </div>
         </FilterGroup>
       )}
+
+      <FilterGroup title={t('badge')}>
+        <div className="flex flex-col">
+          {BADGES.map((badge) => (
+            <CheckRow
+              key={badge}
+              label={tBadge(badge)}
+              checked={activeBadges.has(badge)}
+              onChange={() => toggleBadge(badge)}
+            />
+          ))}
+        </div>
+      </FilterGroup>
 
       <FilterGroup title={`${t('price')} (${currency})`}>
         <div className="flex items-center gap-2">

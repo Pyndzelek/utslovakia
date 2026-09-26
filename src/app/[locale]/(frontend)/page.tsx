@@ -68,7 +68,9 @@ export default async function HomePage({ params }: PageProps) {
             eyebrow={t('bestsellers.eyebrow')}
             title={t('bestsellers.title')}
             description={t('bestsellers.description')}
-            action={<ViewAllLink />}
+            action={
+              <ViewAllLink href={{ pathname: '/products', query: { badge: 'bestseller' } }} />
+            }
             className="mb-8"
           />
           <ProductRail products={bestsellers} />
@@ -95,7 +97,7 @@ export default async function HomePage({ params }: PageProps) {
             eyebrow={t('newArrivals.eyebrow')}
             title={t('newArrivals.title')}
             description={t('newArrivals.description')}
-            action={<ViewAllLink />}
+            action={<ViewAllLink href="/products" />}
             className="mb-8"
           />
           <ProductRail products={newArrivals} />
@@ -112,11 +114,11 @@ export default async function HomePage({ params }: PageProps) {
   )
 }
 
-async function ViewAllLink() {
+async function ViewAllLink({ href }: { href: React.ComponentProps<typeof Link>['href'] }) {
   const t = await getTranslations('home')
 
   return (
-    <Link href="/products" className={buttonVariants({ variant: 'ghost', size: 'sm' })}>
+    <Link href={href} className={buttonVariants({ variant: 'ghost', size: 'sm' })}>
       {t('viewAll')}
       <ArrowRight aria-hidden />
     </Link>

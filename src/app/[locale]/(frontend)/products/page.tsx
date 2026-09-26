@@ -26,6 +26,7 @@ interface PageProps {
     category?: string
     sort?: string
     q?: string
+    badge?: string
   }>
 }
 
@@ -48,6 +49,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations('products')
+  const tHome = await getTranslations('home')
 
   // Parse URL string parameters cleanly into numbers
   const query = await searchParams
@@ -62,6 +64,10 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
         .map((id) => parseInt(id.trim(), 10))
         .filter((id) => !isNaN(id))
     : undefined
+  // Comma-separated too (e.g. "?badge=bestseller,new"); the data layer drops unknown values.
+  const badges = query.badge?.split(',')
+  // The home page's Bestsellers "View all" lands here — title the page to match.
+  const bestsellersOnly = query.badge === 'bestseller'
 
   // Fetch paginated & filtered data
   const [{ docs: products, totalPages, totalDocs }, categories, productCounts] = await Promise.all([
@@ -73,6 +79,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
       categoryIds,
       sort: query.sort || '-createdAt',
       search: query.q,
+      badges,
     }),
     getCategories(locale, 0),
     getProductCountsByCategory(locale),
@@ -80,7 +87,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
 
   const basePath = getPathname({ locale, href: '/products' })
   const hasFilters = Boolean(
-    query.q || query.category || query.minPrice || query.maxPrice || page > 1,
+    query.q || query.category || query.badge || query.minPrice || query.maxPrice || page > 1,
   )
 
   return (
@@ -103,8 +110,8 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
       />
 
       <PageHeader
-        title={t('title')}
-        description={t('description')}
+        title={bestsellersOnly ? tHome('bestsellers.title') : t('title')}
+        description={bestsellersOnly ? tHome('bestsellers.description') : t('description')}
         breadcrumbs={[{ label: t('breadcrumb'), href: '/products' }]}
       />
 

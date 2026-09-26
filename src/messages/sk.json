@@ -130,7 +130,8 @@
       "applyPrice": "Použiť cenový rozsah",
       "open": "Filtre",
       "showResults": "Zobraziť výsledky",
-      "close": "Zavrieť filtre"
+      "close": "Zavrieť filtre",
+      "badge": "Štítok"
     },
     "toolbar": {
       "searchPlaceholder": "Hľadať podľa názvu alebo SKU…",

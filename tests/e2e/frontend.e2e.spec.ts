@@ -73,6 +73,26 @@ test.describe('Frontend', () => {
     await expect(preview).toBeHidden()
   })
 
+  test("bestsellers' View all lists only bestsellers", async ({ page }) => {
+    await page.goto('/en')
+    const bestsellers = page.locator('section', {
+      has: page.getByRole('heading', { name: 'Bestsellers' }),
+    })
+    test.skip(
+      (await bestsellers.locator('article').count()) === 0,
+      'no bestsellers in this database',
+    )
+    await bestsellers.getByRole('link', { name: 'View all' }).click()
+
+    await expect(page).toHaveURL(/\/en\/products\?badge=bestseller$/)
+    await expect(page.getByRole('heading', { level: 1, name: 'Bestsellers' })).toBeVisible()
+    await expect(page.getByRole('checkbox', { name: 'Bestseller' }).first()).toBeChecked()
+
+    const cards = page.locator('main article')
+    await expect(cards.first()).toBeVisible()
+    await expect(cards.filter({ hasText: 'Bestseller' })).toHaveCount(await cards.count())
+  })
+
   test('switching language on a category page lands on the localized category', async ({
     page,
   }) => {

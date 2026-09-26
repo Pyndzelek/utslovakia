@@ -121,7 +121,8 @@
       "applyPrice": "Zastosuj zakres cenowy",
       "open": "Filtry",
       "showResults": "Pokaż wyniki",
-      "close": "Zamknij filtry"
+      "close": "Zamknij filtry",
+      "badge": "Etykieta"
     },
     "toolbar": {
       "searchPlaceholder": "Szukaj po nazwie lub SKU…",

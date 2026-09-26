@@ -4,7 +4,7 @@ import { Search } from 'lucide-react'
 import { AnimatedResultCount } from '@/components/catalog/animated-result-count'
 
 /** Filter params kept when a new search is submitted (pagination restarts at page 1). */
-const PRESERVED_PARAMS = ['category', 'minPrice', 'maxPrice', 'sort'] as const
+const PRESERVED_PARAMS = ['category', 'badge', 'minPrice', 'maxPrice', 'sort'] as const
 
 interface CatalogToolbarProps {
   resultCount: number

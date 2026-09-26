@@ -121,7 +121,8 @@
       "applyPrice": "Aplicar faixa de preço",
       "open": "Filtros",
       "showResults": "Ver resultados",
-      "close": "Fechar filtros"
+      "close": "Fechar filtros",
+      "badge": "Etiqueta"
     },
     "toolbar": {
       "searchPlaceholder": "Buscar por nome ou SKU…",

@@ -193,6 +193,8 @@ export interface GetFilteredProductsOptions {
   limit?: number
   /** Free-text search on the (localized) title and the SKU. */
   search?: string
+  /** Only products carrying one of these badges (values straight from the URL; unknown ones are ignored). */
+  badges?: string[]
   /** One of `SORT_OPTIONS`; anything else falls back to newest first. */
   sort?: string
   /** Filter by publication status */
@@ -212,6 +214,11 @@ export interface PaginatedProductsResult {
 /** Sort orders accepted from the `?sort=` query param. */
 export const SORT_OPTIONS = ['-createdAt', 'createdAt', 'title', '-title'] as const
 
+/** Badge values accepted from the `?badge=` query param (the `badge` select's options). */
+const BADGE_OPTIONS: readonly string[] = ['new', 'bestseller'] satisfies NonNullable<
+  Product['badge']
+>[]
+
 export const getFilteredProducts = cache(
   unstable_cache(
     async (
@@ -227,6 +234,7 @@ export const getFilteredProducts = cache(
         sort = '-createdAt',
         status = 'published',
         search,
+        badges,
       } = options
 
       const payload = await getPayload({ config })
@@ -250,6 +258,12 @@ export const getFilteredProducts = cache(
         }
       }
 
+      // `badge` is a Postgres enum: an unknown value would throw rather than match nothing.
+      const validBadges = badges?.filter((badge) => BADGE_OPTIONS.includes(badge))
+      if (validBadges?.length) {
+        where.badge = { in: validBadges }
+      }
+
       const conditions: Where[] = []
 
       // Filter on the price the visitor actually sees: the locale's currency
@@ -263,10 +277,7 @@ export const getFilteredProducts = cache(
               or: [
                 { [`prices.${currency}`]: range },
                 {
-                  and: [
-                    { [`prices.${currency}`]: { exists: false } },
-                    { 'prices.PLN': range },
-                  ],
+                  and: [{ [`prices.${currency}`]: { exists: false } }, { 'prices.PLN': range }],
                 },
               ],
             }

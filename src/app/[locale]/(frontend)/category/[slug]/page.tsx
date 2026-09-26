@@ -35,6 +35,7 @@ interface PageProps {
     maxPrice?: string
     sort?: string
     q?: string
+    badge?: string
   }>
 }
 
@@ -113,13 +114,14 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
     maxPrice,
     sort: query.sort || '-createdAt',
     search: query.q,
+    badges: query.badge?.split(','),
   })
 
   const basePath = getPathname({
     locale,
     href: { pathname: '/category/[slug]', params: { slug: category.slug } },
   })
-  const hasFilters = Boolean(query.q || query.minPrice || query.maxPrice || page > 1)
+  const hasFilters = Boolean(query.q || query.badge || query.minPrice || query.maxPrice || page > 1)
 
   return (
     <>

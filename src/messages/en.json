@@ -121,7 +121,8 @@
       "applyPrice": "Apply price range",
       "open": "Filters",
       "showResults": "Show results",
-      "close": "Close filters"
+      "close": "Close filters",
+      "badge": "Label"
     },
     "toolbar": {
       "searchPlaceholder": "Search by name or SKU…",
