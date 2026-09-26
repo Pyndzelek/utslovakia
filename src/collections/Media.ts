@@ -39,6 +39,42 @@ export const Media: CollectionConfig = {
         }
       },
     ],
+    // Product and category images are required columns, so Postgres can't null them out on
+    // delete: the transaction aborts with an opaque error. Name the documents instead.
+    beforeDelete: [
+      async ({ id, req }) => {
+        const [products, categories] = await Promise.all([
+          req.payload.find({
+            collection: 'products',
+            where: { 'images.image': { equals: id } },
+            depth: 0,
+            limit: 5,
+            overrideAccess: true,
+            req,
+          }),
+          req.payload.find({
+            collection: 'categories',
+            where: { image: { equals: id } },
+            depth: 0,
+            limit: 5,
+            overrideAccess: true,
+            req,
+          }),
+        ])
+        const usedBy = [
+          ...products.docs.map((doc) => `produkt „${doc.title || doc.id}”`),
+          ...categories.docs.map((doc) => `kategoria „${doc.name || doc.id}”`),
+        ]
+        if (usedBy.length > 0) {
+          throw new APIError(
+            `Nie można usunąć zdjęcia — jest używane przez: ${usedBy.join(', ')}. Najpierw usuń je z tych miejsc lub podmień na inne.`,
+            409,
+            undefined,
+            true,
+          )
+        }
+      },
+    ],
   },
   fields: [
     {
