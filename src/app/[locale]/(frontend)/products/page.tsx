@@ -8,8 +8,10 @@ import { CatalogToolbar } from '@/components/catalog/catalog-toolbar'
 import { Pagination } from '@/components/catalog/pagination'
 import { ProductGrid } from '@/components/product/product-grid'
 import PageHeader from '@/components/layout/page-header'
-import { getFilteredProducts } from '@/lib/data/products'
+import { getFilteredProducts, getProductCountsByCategory } from '@/lib/data/products'
+import { getCategories } from '@/lib/data/categories'
 import { buildStaticLanguageAlternates } from '@/lib/seo/alternates'
+import { itemListJsonLd } from '@/lib/seo/json-ld'
 
 export const revalidate = 300
 
@@ -59,21 +61,39 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
     : undefined
 
   // Fetch paginated & filtered data
-  const {
-    docs: products,
-    totalPages,
-    totalDocs,
-  } = await getFilteredProducts(locale, {
-    page,
-    limit: 12,
-    minPrice,
-    maxPrice,
-    categoryIds,
-    sort: query.sort || '-createdAt',
-  })
+  const [{ docs: products, totalPages, totalDocs }, categories, productCounts] =
+    await Promise.all([
+      getFilteredProducts(locale, {
+        page,
+        limit: 12,
+        minPrice,
+        maxPrice,
+        categoryIds,
+        sort: query.sort || '-createdAt',
+      }),
+      getCategories(locale, 0),
+      getProductCountsByCategory(locale),
+    ])
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            itemListJsonLd({
+              items: products.map((product) => ({
+                name: product.title,
+                path: getPathname({
+                  locale,
+                  href: { pathname: '/products/[slug]', params: { slug: product.slug } },
+                }),
+              })),
+            }),
+          ),
+        }}
+      />
+
       <PageHeader
         title={t('title')}
         description={t('description')}
@@ -82,13 +102,22 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
 
       <Container className="py-8 lg:py-10">
         <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
-          <FilterSidebar className="hidden self-start lg:block" />
+          <FilterSidebar
+            categories={categories}
+            productCounts={productCounts}
+            className="hidden self-start lg:block"
+          />
 
           <div>
             <CatalogToolbar resultCount={totalDocs} />
             <ProductGrid products={products} className="mt-6" />
             <div className="mt-10">
-              <Pagination pages={totalPages} />
+              <Pagination
+                basePath={getPathname({ locale, href: '/products' })}
+                searchParams={query}
+                pages={totalPages}
+                current={page}
+              />
             </div>
           </div>
         </div>

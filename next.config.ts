@@ -10,6 +10,14 @@ const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
   images: {
+    // Media are pre-resized server-side into named variants (thumbnail 200w /
+    // card 480w / gallery 960w / og 1200w — see src/collections/Media.ts), and
+    // nothing in the frontend renders wider than that, so the Next.js default
+    // deviceSizes (up to 3840w) would only ever generate breakpoints nothing
+    // requests. Trimmed to match real usage; minimumCacheTTL raised since
+    // Media uploads are immutable per-URL (new upload = new filename).
+    deviceSizes: [384, 480, 640, 750, 960, 1200, 1440],
+    minimumCacheTTL: 2678400, // 31 days
     localPatterns: [
       {
         pathname: '/api/media/file/**',

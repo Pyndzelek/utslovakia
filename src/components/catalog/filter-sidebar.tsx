@@ -1,11 +1,12 @@
-import React from 'react'
-import { getTranslations } from 'next-intl/server'
+'use client'
+
+import React, { useState } from 'react'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { ChevronDown, RotateCcw } from 'lucide-react'
 import { Checkbox, Input } from '@/components/ui/field'
-import { categories } from '@/lib/mock-data'
 import { cn } from '@/lib/utils'
-
-/** Visual-only filter panel — no filtering logic is wired up yet. */
+import type { Category } from '@/payload-types'
 
 function FilterGroup({
   title,
@@ -36,29 +37,87 @@ function FilterGroup({
 function CheckRow({
   label,
   count,
-  defaultChecked,
+  checked,
+  onChange,
 }: {
   label: string
   count?: number
-  defaultChecked?: boolean
+  checked: boolean
+  onChange: () => void
 }) {
   return (
     <label className="flex cursor-pointer items-center gap-2.5 py-1 text-sm text-slate-600 transition-colors hover:text-navy-900">
-      <Checkbox defaultChecked={defaultChecked} />
+      <Checkbox checked={checked} onChange={onChange} />
       <span className="flex-1">{label}</span>
       {count !== undefined && <span className="text-xs text-slate-400">{count}</span>}
     </label>
   )
 }
 
-export async function FilterSidebar({
-  activeCategorySlug,
+export function FilterSidebar({
+  categories = [],
+  productCounts,
+  showCategoryFilter = true,
   className,
 }: {
-  activeCategorySlug?: string
+  categories?: Category[]
+  productCounts?: Map<number, number>
+  /** Hide the category checkbox group — e.g. on a category detail page, where
+   *  the category is already fixed by the URL and re-listing all categories
+   *  to filter by would be redundant. */
+  showCategoryFilter?: boolean
   className?: string
 }) {
-  const t = await getTranslations('products.filters')
+  const t = useTranslations('products.filters')
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  const activeCategoryIds = new Set(
+    (searchParams.get('category') ?? '')
+      .split(',')
+      .map((id) => parseInt(id, 10))
+      .filter((id) => !isNaN(id)),
+  )
+
+  const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') ?? '')
+  const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') ?? '')
+
+  function pushParams(mutate: (params: URLSearchParams) => void) {
+    const params = new URLSearchParams(searchParams.toString())
+    mutate(params)
+    params.delete('page') // any filter change resets pagination
+    router.push(`${pathname}${params.toString() ? `?${params.toString()}` : ''}`, {
+      scroll: false,
+    })
+  }
+
+  function toggleCategory(id: number) {
+    pushParams((params) => {
+      const next = new Set(activeCategoryIds)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+
+      if (next.size > 0) params.set('category', Array.from(next).join(','))
+      else params.delete('category')
+    })
+  }
+
+  function applyPrice() {
+    pushParams((params) => {
+      if (minPrice) params.set('minPrice', minPrice)
+      else params.delete('minPrice')
+
+      if (maxPrice) params.set('maxPrice', maxPrice)
+      else params.delete('maxPrice')
+    })
+  }
+
+  function reset() {
+    setMinPrice('')
+    setMaxPrice('')
+    router.push(pathname, { scroll: false })
+  }
 
   return (
     <aside className={cn('rounded-2xl border border-line bg-white p-5 shadow-card', className)}>
@@ -66,6 +125,7 @@ export async function FilterSidebar({
         <h2 className="font-display text-base font-semibold text-navy-900">{t('title')}</h2>
         <button
           type="button"
+          onClick={reset}
           className="flex cursor-pointer items-center gap-1.5 text-xs font-medium text-slate-400 transition-colors hover:text-brand-600"
         >
           <RotateCcw className="size-3" aria-hidden />
@@ -73,25 +133,29 @@ export async function FilterSidebar({
         </button>
       </div>
 
-      <FilterGroup title={t('category')}>
-        <div className="flex flex-col">
-          {categories.map((category) => (
-            <CheckRow
-              key={category.slug}
-              label={category.name}
-              count={category.productCount}
-              defaultChecked={category.slug === activeCategorySlug}
-            />
-          ))}
-        </div>
-      </FilterGroup>
+      {showCategoryFilter && (
+        <FilterGroup title={t('category')}>
+          <div className="flex flex-col">
+            {categories.map((category) => (
+              <CheckRow
+                key={category.id}
+                label={category.name}
+                count={productCounts?.get(category.id)}
+                checked={activeCategoryIds.has(category.id)}
+                onChange={() => toggleCategory(category.id)}
+              />
+            ))}
+          </div>
+        </FilterGroup>
+      )}
 
       <FilterGroup title={t('price')}>
         <div className="flex items-center gap-2">
           <Input
             type="number"
             placeholder={t('priceFrom')}
-            defaultValue={0}
+            value={minPrice}
+            onChange={(event) => setMinPrice(event.target.value)}
             className="h-10"
             aria-label={t('priceFromAria')}
           />
@@ -99,13 +163,15 @@ export async function FilterSidebar({
           <Input
             type="number"
             placeholder={t('priceTo')}
-            defaultValue={1500}
+            value={maxPrice}
+            onChange={(event) => setMaxPrice(event.target.value)}
             className="h-10"
             aria-label={t('priceToAria')}
           />
         </div>
         <button
           type="button"
+          onClick={applyPrice}
           className="mt-3 w-full cursor-pointer rounded-full border border-line py-2 text-xs font-semibold text-navy-900 transition-colors hover:border-brand-400 hover:text-brand-700"
         >
           {t('applyPrice')}

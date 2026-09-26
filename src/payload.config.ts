@@ -67,9 +67,12 @@ export default buildConfig({
   sharp,
   plugins: [
     seoPlugin({
-      collections: ['products'],
+      collections: ['products', 'categories'],
       uploadsCollection: 'media',
-      generateTitle: ({ doc }) => `${doc?.title} | UTSlovakia`,
+      generateTitle: ({ doc, collectionConfig }) => {
+        const name = collectionConfig?.slug === 'categories' ? doc?.name : doc?.title
+        return `${name} | UTSlovakia`
+      },
       generateDescription: ({ doc }) => doc?.description ?? '',
     }),
     s3Storage({

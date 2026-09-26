@@ -1,5 +1,5 @@
 import React from 'react'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { notFound } from 'next/navigation'
 import { Inter, Sora } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
@@ -44,6 +44,11 @@ export async function generateMetadata({ params }: RootLayoutProps): Promise<Met
     },
     description: t('description'),
   }
+}
+
+export const viewport: Viewport = {
+  themeColor: '#080e21',
+  colorScheme: 'light',
 }
 
 // this tells Next.js to pre-render layouts for all supported languages at build

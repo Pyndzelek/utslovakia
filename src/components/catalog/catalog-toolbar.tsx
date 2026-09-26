@@ -1,6 +1,7 @@
 import React from 'react'
 import { getTranslations } from 'next-intl/server'
 import { Search } from 'lucide-react'
+import { AnimatedResultCount } from '@/components/catalog/animated-result-count'
 
 /** Search + sort toolbar above product listings — visual only. */
 export async function CatalogToolbar({ resultCount }: { resultCount: number }) {
@@ -20,9 +21,7 @@ export async function CatalogToolbar({ resultCount }: { resultCount: number }) {
         />
       </div>
 
-      <p className="hidden text-sm whitespace-nowrap text-slate-400 md:block">
-        {t('resultCount', { count: resultCount })}
-      </p>
+      <AnimatedResultCount text={t('resultCount', { count: resultCount })} count={resultCount} />
     </div>
   )
 }

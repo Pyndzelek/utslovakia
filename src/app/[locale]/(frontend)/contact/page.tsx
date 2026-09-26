@@ -9,6 +9,7 @@ import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { Logo } from '@/components/layout/logo'
 import PageHeader from '@/components/layout/page-header'
 import { buildStaticLanguageAlternates } from '@/lib/seo/alternates'
+import { faqJsonLd } from '@/lib/seo/json-ld'
 
 interface PageProps {
   params: Promise<{ locale: Locale }>
@@ -43,9 +44,18 @@ export default async function ContactPage({ params }: PageProps) {
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations('contact')
+  const faqs = faqKeys.map((key) => ({
+    question: t(`faqs.${key}.question`),
+    answer: t(`faqs.${key}.answer`),
+  }))
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(faqs)) }}
+      />
+
       {/* Page header */}
       <PageHeader
         title={t('title')}

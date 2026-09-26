@@ -10,8 +10,10 @@ import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import PageHeader from '@/components/layout/page-header'
 import CategoryCard from '@/components/catalog/category-card'
+import { RevealOnScroll } from '@/components/ui/reveal'
 import { getPathname } from '@/i18n/navigation'
 import { buildStaticLanguageAlternates } from '@/lib/seo/alternates'
+import { itemListJsonLd } from '@/lib/seo/json-ld'
 
 // Pages are pre-rendered per locale at build time (locales come from the
 // layout's generateStaticParams); ISR keeps them fresh when categories change.
@@ -40,9 +42,27 @@ export default async function CategoryIndexPage({ params }: PageProps) {
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations('category')
+  const categories = await getCategories(locale)
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            itemListJsonLd({
+              items: categories.map((category) => ({
+                name: category.name,
+                path: getPathname({
+                  locale,
+                  href: { pathname: '/category/[slug]', params: { slug: category.slug } },
+                }),
+              })),
+            }),
+          ),
+        }}
+      />
+
       <PageHeader
         title={t('title')}
         description={t('description')}
@@ -70,12 +90,10 @@ async function CategoryGrid({ locale }: { locale: Locale }) {
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5 mb-14">
-      {categories.map((category) => (
-        <CategoryCard
-          key={category.slug}
-          category={category}
-          productCount={productCounts.get(category.id) ?? 0}
-        />
+      {categories.map((category, index) => (
+        <RevealOnScroll key={category.slug} index={index}>
+          <CategoryCard category={category} productCount={productCounts.get(category.id) ?? 0} />
+        </RevealOnScroll>
       ))}
     </div>
   )

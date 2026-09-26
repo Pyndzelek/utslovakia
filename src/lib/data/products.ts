@@ -61,6 +61,30 @@ export const getAllProductSlugs = cache(
 )
 
 /**
+ * Same as `getAllProductSlugs`, but also carries `updatedAt` for the sitemap's
+ * `lastModified` — kept separate so `generateStaticParams` (which doesn't need
+ * dates) isn't paying for the extra selected field.
+ */
+export const getAllProductSlugsWithDates = cache(
+  unstable_cache(
+    async (locale: Locale): Promise<{ slug: string; updatedAt: string }[]> => {
+      const payload = await getPayload({ config })
+      const { docs } = await payload.find({
+        collection: 'products',
+        locale,
+        where: { status: { equals: 'published' } },
+        select: { slug: true, updatedAt: true },
+        depth: 0,
+        pagination: false,
+      })
+      return docs.map((doc) => ({ slug: doc.slug, updatedAt: doc.updatedAt }))
+    },
+    ['product-slugs-with-dates'],
+    { tags: [PRODUCTS_TAG], revalidate: 3600 },
+  ),
+)
+
+/**
  * Maps every locale to this product's slug in that locale (the `slug` field
  * is localized). Used only to build hreflang alternate links.
  */
@@ -236,12 +260,15 @@ export const getFilteredProducts = cache(
 
       const priceConditions: Where[] = []
 
+      // `prices.PLN` is the only required currency on every product, so it's
+      // the one field guaranteed to exist to filter on (display price prefers
+      // EUR when set, same as `productJsonLd`'s `resolveBasePrice`).
       if (typeof minPrice === 'number' && !isNaN(minPrice) && minPrice >= 0) {
-        priceConditions.push({ price: { greater_than_equal: minPrice } })
+        priceConditions.push({ 'prices.PLN': { greater_than_equal: minPrice } })
       }
 
       if (typeof maxPrice === 'number' && !isNaN(maxPrice) && maxPrice >= 0) {
-        priceConditions.push({ price: { less_than_equal: maxPrice } })
+        priceConditions.push({ 'prices.PLN': { less_than_equal: maxPrice } })
       }
 
       if (priceConditions.length > 0) {

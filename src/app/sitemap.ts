@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { routing } from '@/i18n/routing'
 import { getPathname } from '@/i18n/navigation'
-import { getAllProductSlugs } from '@/lib/data/products'
+import { getAllProductSlugsWithDates } from '@/lib/data/products'
 import { getCategories } from '@/lib/data/categories'
 import { SITE_URL } from '@/lib/site'
 
@@ -19,14 +19,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     const [productSlugs, categories] = await Promise.all([
-      getAllProductSlugs(locale),
+      getAllProductSlugsWithDates(locale),
       getCategories(locale, 0),
     ])
 
-    for (const slug of productSlugs) {
+    for (const { slug, updatedAt } of productSlugs) {
       entries.push({
         url: `${SITE_URL}${getPathname({ locale, href: { pathname: '/products/[slug]', params: { slug } } })}`,
-        lastModified: new Date(),
+        lastModified: updatedAt ? new Date(updatedAt) : new Date(),
       })
     }
 

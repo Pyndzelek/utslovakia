@@ -4,21 +4,28 @@ import { setRequestLocale } from 'next-intl/server'
 import { routing, type Locale } from '@/i18n/routing'
 import { getPathname } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
+import { FilterSidebar } from '@/components/catalog/filter-sidebar'
 import { CatalogToolbar } from '@/components/catalog/catalog-toolbar'
 import { Pagination } from '@/components/catalog/pagination'
 import { ProductGrid } from '@/components/product/product-grid'
 import { CategoryHero } from '@/components/catalog/category-hero'
 import { CategoryNavigation } from '@/components/catalog/category-navigation'
 import { getCategories, getCategoryBySlug, getCategorySlugsByLocale } from '@/lib/data/categories'
-import { getProductsByCategory } from '@/lib/data/products'
+import { getFilteredProducts } from '@/lib/data/products'
 import { buildDynamicLanguageAlternates } from '@/lib/seo/alternates'
-import { breadcrumbJsonLd } from '@/lib/seo/json-ld'
+import { breadcrumbJsonLd, itemListJsonLd } from '@/lib/seo/json-ld'
 
 const PRODUCTS_PER_PAGE = 12
 export const revalidate = 600
 
 interface PageProps {
   params: Promise<{ locale: Locale; slug: string }>
+  searchParams: Promise<{
+    page?: string
+    minPrice?: string
+    maxPrice?: string
+    sort?: string
+  }>
 }
 
 export async function generateStaticParams() {
@@ -37,7 +44,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const category = await getCategoryBySlug(slug, locale)
   if (!category) return {}
 
-  const image = typeof category.image === 'object' ? category.image : null
+  const seoImage = typeof category.meta?.image === 'object' ? category.meta.image : null
+  const fallbackImage = typeof category.image === 'object' ? category.image : null
+  const image = seoImage ?? fallbackImage
+  const title = category.meta?.title ?? category.name
+  const description = category.meta?.description ?? category.description ?? undefined
   const canonicalPath = getPathname({
     locale,
     href: { pathname: '/category/[slug]', params: { slug } },
@@ -45,8 +56,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const languages = await buildLanguageAlternates(category.id)
 
   return {
-    title: category.name,
-    description: category.description ?? undefined,
+    title,
+    description,
     alternates: {
       canonical: canonicalPath,
       languages,
@@ -54,21 +65,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       type: 'website',
       url: canonicalPath,
-      title: category.name,
-      description: category.description ?? undefined,
+      title,
+      description,
       images: image?.url ? [{ url: image.url, alt: category.name }] : undefined,
     },
     twitter: {
       card: 'summary_large_image',
-      title: category.name,
-      description: category.description ?? undefined,
+      title,
+      description,
       images: image?.url ? [image.url] : undefined,
     },
   }
 }
 
-//Todo: pagination and fix changing language on this page - switching from one to another does not change the slug causing an error
-export default async function CategoryPage({ params }: PageProps) {
+//Todo: fix changing language on this page - switching from one to another does not change the slug causing an error
+export default async function CategoryPage({ params, searchParams }: PageProps) {
   const { locale, slug } = await params
   setRequestLocale(locale)
 
@@ -76,8 +87,23 @@ export default async function CategoryPage({ params }: PageProps) {
   if (!category) notFound()
   const allCategories = await getCategories(locale, 0)
 
-  const categoryProducts = await getProductsByCategory(category.id, locale)
-  const pageCount = categoryProducts.length / PRODUCTS_PER_PAGE
+  const query = await searchParams
+  const page = query.page ? parseInt(query.page, 10) : 1
+  const minPrice = query.minPrice ? parseFloat(query.minPrice) : undefined
+  const maxPrice = query.maxPrice ? parseFloat(query.maxPrice) : undefined
+
+  const {
+    docs: categoryProducts,
+    totalPages,
+    totalDocs,
+  } = await getFilteredProducts(locale, {
+    categoryIds: category.id,
+    page,
+    limit: PRODUCTS_PER_PAGE,
+    minPrice,
+    maxPrice,
+    sort: query.sort || '-createdAt',
+  })
 
   return (
     <main>
@@ -99,16 +125,46 @@ export default async function CategoryPage({ params }: PageProps) {
           ),
         }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            itemListJsonLd({
+              items: categoryProducts.map((product) => ({
+                name: product.title,
+                path: getPathname({
+                  locale,
+                  href: { pathname: '/products/[slug]', params: { slug: product.slug } },
+                }),
+              })),
+            }),
+          ),
+        }}
+      />
 
       <CategoryHero category={category} />
 
       <CategoryNavigation categories={allCategories} currentSlug={category.slug} />
 
       <Container className="py-6 lg:py-12">
-        <CatalogToolbar resultCount={categoryProducts.length} />
-        <ProductGrid products={categoryProducts} className="mt-6 md:grid-cols-4" />
-        <div className="mt-10">
-          <Pagination pages={pageCount} />
+        <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
+          <FilterSidebar showCategoryFilter={false} className="hidden self-start lg:block" />
+
+          <div>
+            <CatalogToolbar resultCount={totalDocs} />
+            <ProductGrid products={categoryProducts} className="mt-6" />
+            <div className="mt-10">
+              <Pagination
+                basePath={getPathname({
+                  locale,
+                  href: { pathname: '/category/[slug]', params: { slug: category.slug } },
+                })}
+                searchParams={query}
+                pages={totalPages}
+                current={page}
+              />
+            </div>
+          </div>
         </div>
       </Container>
     </main>

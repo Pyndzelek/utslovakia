@@ -10,7 +10,7 @@ export function ProductCard({ product, className }: { product: Product; classNam
   const inStock = product.stockStatus === 'in_stock'
   const brand = typeof product.brand === 'object' ? product.brand : null
   const image = typeof product.images?.[0] === 'object' ? product.images?.[0] : null
-  const imageUrl = getMediaUrl(image?.image)
+  const imageUrl = getMediaUrl(image?.image, 'card')
 
   return (
     <article

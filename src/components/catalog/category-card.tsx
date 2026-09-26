@@ -2,6 +2,7 @@ import { Link } from '@/i18n/navigation'
 import { Category } from '@/payload-types'
 import { ArrowRight } from 'lucide-react'
 import Image from 'next/image'
+import { getMediaUrl } from '@/lib/utils'
 
 interface CategoryCardProps {
   category: Category
@@ -10,6 +11,7 @@ interface CategoryCardProps {
 
 export default function CategoryCard({ category, productCount }: CategoryCardProps) {
   const image = typeof category.image === 'object' ? category.image : null
+  const imageUrl = getMediaUrl(image, 'card')
 
   return (
     <Link
@@ -34,9 +36,9 @@ export default function CategoryCard({ category, productCount }: CategoryCardPro
       </p>
 
       <div className="relative mt-6 h-40 rounded-2xl bg-linear-to-br from-slate-50 to-slate-100">
-        {image?.url && (
+        {imageUrl && (
           <Image
-            src={image.url}
+            src={imageUrl}
             alt=""
             fill
             sizes="(max-width: 640px) 90vw, 380px"

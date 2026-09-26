@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { Container } from '@/components/ui/container'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { Category } from '@/payload-types'
+import { getMediaUrl } from '@/lib/utils'
 
 interface CategoryHeroProps {
   category: Category
@@ -9,6 +10,7 @@ interface CategoryHeroProps {
 
 export function CategoryHero({ category }: CategoryHeroProps) {
   const image = typeof category.image === 'object' ? category.image : null
+  const imageUrl = getMediaUrl(image, 'gallery')
 
   return (
     <div className="relative overflow-hidden bg-navy-950">
@@ -31,9 +33,9 @@ export function CategoryHero({ category }: CategoryHeroProps) {
           </p>
         </div>
         <div className="relative hidden h-52 lg:block">
-          {image?.url && (
+          {imageUrl && (
             <Image
-              src={image.url}
+              src={imageUrl}
               alt={category.name}
               fill
               sizes="300px"

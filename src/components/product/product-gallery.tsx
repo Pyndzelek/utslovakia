@@ -26,7 +26,7 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
 
   // Safely get the active image URL
   const activeImageField = images[active]?.image
-  const activeImageUrl = getMediaUrl(activeImageField)
+  const activeImageUrl = getMediaUrl(activeImageField, 'gallery')
 
   return (
     <div>
@@ -55,7 +55,7 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
       {images.length > 1 && (
         <div className="mt-3 grid grid-cols-4 gap-3">
           {images.map((item, index) => {
-            const thumbnailUrl = getMediaUrl(item.image)
+            const thumbnailUrl = getMediaUrl(item.image, 'thumbnail')
             const altText = item.alt || `${title} thumbnail ${index + 1}`
 
             // Skip rendering if thumbnail URL is missing
