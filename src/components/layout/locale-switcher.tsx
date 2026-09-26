@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Check, ChevronDown, Globe } from 'lucide-react'
 import { Link, usePathname } from '@/i18n/navigation'
 import { routing, type Locale } from '@/i18n/routing'
@@ -22,6 +22,7 @@ interface LocaleSwitcherProps {
 
 export function LocaleSwitcher({ onDark = false, variant = 'dropdown' }: LocaleSwitcherProps) {
   const locale = useLocale()
+  const t = useTranslations('a11y')
   const pathname = usePathname()
   const params = useParams()
   const [open, setOpen] = useState(false)
@@ -32,8 +33,15 @@ export function LocaleSwitcher({ onDark = false, variant = 'dropdown' }: LocaleS
     const onPointerDown = (event: PointerEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) setOpen(false)
     }
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false)
+    }
     document.addEventListener('pointerdown', onPointerDown)
-    return () => document.removeEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
   }, [open])
 
   const isInline = variant === 'inline'
@@ -43,6 +51,8 @@ export function LocaleSwitcher({ onDark = false, variant = 'dropdown' }: LocaleS
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
+        aria-label={`${t('changeLanguage')}: ${localeNames[locale as Locale] ?? locale}`}
+        aria-haspopup="true"
         aria-expanded={open}
         className={cn(
           'flex cursor-pointer items-center transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500',
@@ -85,6 +95,9 @@ export function LocaleSwitcher({ onDark = false, variant = 'dropdown' }: LocaleS
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               href={{ pathname, params } as any}
               locale={l}
+              lang={l}
+              hrefLang={l}
+              aria-current={l === locale ? 'true' : undefined}
               onClick={() => setOpen(false)}
               className={cn(
                 'flex items-center justify-between px-3.5 py-2 text-sm transition-colors hover:bg-brand-50',

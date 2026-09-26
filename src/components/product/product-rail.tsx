@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { ProductCard } from '@/components/product/product-card'
 import type { Product } from '@/payload-types'
@@ -13,6 +14,7 @@ import { cn } from '@/lib/utils'
  * - Cards fade/slide into view the first time they enter the rail.
  */
 export function ProductRail({ products }: { products: Product[] }) {
+  const t = useTranslations('a11y')
   const scrollerRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<Array<HTMLDivElement | null>>([])
   const [canScroll, setCanScroll] = useState({ left: false, right: false })
@@ -126,7 +128,7 @@ export function ProductRail({ products }: { products: Product[] }) {
             <button
               key={index}
               type="button"
-              aria-label={`Go to product ${index + 1}`}
+              aria-label={t('goToProduct', { index: index + 1 })}
               onClick={() => scrollToIndex(index)}
               className={cn(
                 'h-1.5 rounded-full transition-all duration-300 ease-out',
@@ -145,12 +147,14 @@ export function ProductRail({ products }: { products: Product[] }) {
           <button
             key={side}
             type="button"
-            aria-label={side === 'left' ? 'Scroll back' : 'Scroll forward'}
+            aria-label={side === 'left' ? t('scrollBack') : t('scrollForward')}
             onClick={() => scrollBy(side === 'left' ? -1 : 1)}
             className={cn(
               'absolute top-1/2 z-20 hidden size-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-line bg-white text-navy-900 shadow-lift transition-all hover:bg-navy-900 hover:text-white lg:flex',
               side === 'left' ? '-left-5' : '-right-5',
-              enabled ? 'opacity-0 group-hover/rail:opacity-100' : 'pointer-events-none opacity-0',
+              enabled
+                ? 'opacity-0 group-hover/rail:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none'
+                : 'pointer-events-none opacity-0',
             )}
           >
             {side === 'left' ? (

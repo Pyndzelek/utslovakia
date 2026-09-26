@@ -14,7 +14,11 @@ interface CatalogEmptyStateProps {
 }
 
 /** Shown in place of the product grid when a listing returns no products. */
-export async function CatalogEmptyState({ basePath, hasFilters, className }: CatalogEmptyStateProps) {
+export async function CatalogEmptyState({
+  basePath,
+  hasFilters,
+  className,
+}: CatalogEmptyStateProps) {
   const t = await getTranslations('products.empty')
 
   return (

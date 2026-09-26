@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
 import { cn } from '@/lib/utils'
@@ -9,8 +10,9 @@ interface CategoryNavigationProps {
 }
 
 export function CategoryNavigation({ categories, currentSlug }: CategoryNavigationProps) {
+  const t = useTranslations('a11y')
   return (
-    <nav aria-label="Catalog Categories" className="border-b border-line bg-white">
+    <nav aria-label={t('categoriesNav')} className="border-b border-line bg-white">
       <Container className="py-4">
         {/* 
           Mobile/Tablet: flex-nowrap + overflow-x-auto for smooth touch swiping.

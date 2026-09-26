@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import { ProductBadgeTag } from '@/components/product/product-badge'
 import { cn, getMediaUrl } from '@/lib/utils'
 import { Product } from '@/payload-types'
@@ -14,12 +15,13 @@ interface ProductGalleryProps {
 
 export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
   const [active, setActive] = useState(0)
+  const t = useTranslations('gallery')
 
   // Fallback if the product has no images assigned
   if (!images || images.length === 0) {
     return (
       <div className="flex aspect-square items-center justify-center rounded-3xl border border-line bg-slate-50 text-slate-400">
-        Brak zdjęcia
+        {t('noImage')}
       </div>
     )
   }
@@ -38,7 +40,7 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
           <Image
             key={activeImageUrl} // React key triggers animation on change
             src={activeImageUrl}
-            alt={`${title} — zdjęcie ${active + 1}`}
+            alt={images[active]?.alt || t('imageAlt', { title, index: active + 1 })}
             fill
             priority
             sizes="(max-width: 1024px) 90vw, 560px"
@@ -46,7 +48,7 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-slate-400">
-            Błąd ładowania zdjęcia
+            {t('loadError')}
           </div>
         )}
       </div>
@@ -56,7 +58,7 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
         <div className="mt-3 grid grid-cols-4 gap-3">
           {images.map((item, index) => {
             const thumbnailUrl = getMediaUrl(item.image, 'thumbnail')
-            const altText = item.alt || `${title} thumbnail ${index + 1}`
+            const altText = item.alt || t('imageAlt', { title, index: index + 1 })
 
             // Skip rendering if thumbnail URL is missing
             if (!thumbnailUrl) return null
@@ -66,7 +68,7 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
                 key={item.id || index}
                 type="button"
                 onClick={() => setActive(index)}
-                aria-label={`Zobacz zdjęcie ${index + 1}`}
+                aria-label={t('viewImage', { index: index + 1 })}
                 aria-pressed={active === index}
                 className={cn(
                   'relative aspect-square cursor-pointer overflow-hidden rounded-xl border bg-linear-to-br from-slate-50 to-slate-100 transition-all',

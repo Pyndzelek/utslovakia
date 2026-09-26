@@ -10,6 +10,10 @@ export const alt = 'UT Slovakia categories'
 export default async function OpengraphImage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'category.meta' })
+  const tOg = await getTranslations({ locale, namespace: 'og' })
 
-  return new ImageResponse(<BrandOgImage eyebrow="UT Slovakia" title={t('title')} />, size)
+  return new ImageResponse(
+    <BrandOgImage tagline={tOg('tagline')} eyebrow="UT Slovakia" title={t('title')} />,
+    size,
+  )
 }

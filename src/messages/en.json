@@ -1,29 +1,25 @@
 {
   "Metadata": {
     "title": "UT Slovakia — Payment systems & components",
-    "description": "Bill acceptors, coin validators, touch monitors and cashless payment modules for gaming, vending and amusement. Shipped across Europe from Bratislava."
+    "description": "Bill acceptors, coin validators, touch monitors and cashless payment modules for gaming, vending and amusement. Shipped across Europe."
   },
   "nav": {
     "home": "Home",
     "products": "Products",
     "category": "Categories",
-    "about": "About us",
     "contact": "Contact"
   },
   "header": {
-    "announcement": "Free shipping on orders over €500 — dispatched within 24 hours",
-    "searchPlaceholder": "Search products, brands, SKU…",
-    "cart": "Cart",
-    "menu": "Menu"
+    "searchPlaceholder": "Search products, brands, SKU…"
   },
   "footer": {
-    "tagline": "Payment systems and components for gaming, vending and amusement",
+    "tagline": "Payment systems and components for the gaming, vending and amusement industries.",
     "categories": "Categories",
     "pages": "Pages",
     "contact": "Contact",
     "rights": "All rights reserved.",
     "companyId": "Company ID (IČO)",
-    "vatId": "VAT ID"
+    "vatId": "IČ DPH / VAT ID"
   },
   "home": {
     "viewAll": "View all",
@@ -80,7 +76,7 @@
       "imageAlt": "Payment system component"
     },
     "categoryShowcase": {
-      "productCount": "{count} products",
+      "productCount": "{count, plural, one {# product} other {# products}}",
       "view": "View",
       "viewAllCategories": "View all categories"
     },
@@ -179,7 +175,7 @@
   "contact": {
     "meta": {
       "title": "Contact",
-      "description": "Talk to the UT Slovakia team — sales, technical support and service centre in Bratislava. We answer within one business day."
+      "description": "Talk to the UT Slovakia team — sales, technical support and service. We answer within one business day."
     },
     "breadcrumb": "Contact",
     "title": "Talk to us!",
@@ -198,7 +194,56 @@
         "title": "Opening hours"
       }
     },
-    "vatNumber": "VAT ID (IČ DPH): {number}",
+    "vatNumber": "IČ DPH / VAT ID: {number}",
     "faqTitle": "Frequently asked questions"
+  },
+  "a11y": {
+    "mainNav": "Main navigation",
+    "mobileNav": "Mobile navigation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "breadcrumb": "Breadcrumb",
+    "categoriesNav": "Catalogue categories",
+    "changeLanguage": "Change language",
+    "goToProduct": "Go to product {index}",
+    "scrollBack": "Scroll back",
+    "scrollForward": "Scroll forward"
+  },
+  "gallery": {
+    "noImage": "No image",
+    "loadError": "The image could not be loaded",
+    "imageAlt": "{title} — image {index}",
+    "viewImage": "Show image {index}"
+  },
+  "price": {
+    "onRequest": "Price on request"
+  },
+  "errorPage": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred while loading this page. You can try again, or head back to the homepage.",
+    "retry": "Try again",
+    "backHome": "Back to homepage"
+  },
+  "notFound": {
+    "code": "Error {code}",
+    "backHome": "Back to homepage",
+    "browseProducts": "Browse all products",
+    "suggestionsTitle": "Perhaps you were looking for one of these",
+    "viewAll": "View all",
+    "page": {
+      "title": "We couldn't find that page",
+      "description": "The address may be mistyped, or the page has moved. Use the navigation above, or start from one of the links below."
+    },
+    "category": {
+      "title": "This category doesn't exist",
+      "description": "The category you're looking for may have been renamed or removed. Browse the full catalogue or go back to the homepage."
+    },
+    "product": {
+      "title": "This product is no longer available",
+      "description": "It may have been discontinued or replaced by a newer model. See our bestsellers below, or ask us about its successor."
+    }
+  },
+  "og": {
+    "tagline": "Payment systems & components"
   }
 }

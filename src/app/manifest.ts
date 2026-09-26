@@ -4,7 +4,9 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'UTSlovakia',
     short_name: 'UTSlovakia',
-    description: 'Katalog produktów UTSlovakia',
+    description: 'Systemy płatności i komponenty dla branży gamingowej, vendingowej i rozrywkowej.',
+    start_url: '/',
+    display: 'standalone',
     theme_color: '#080e21',
     background_color: '#080e21',
     icons: [

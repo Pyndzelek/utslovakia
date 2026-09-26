@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useCallback, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
+import { useTranslations } from 'next-intl'
 import { Mail, Menu, Phone, X } from 'lucide-react'
 import { Link, usePathname } from '@/i18n/navigation'
 import { LocaleSwitcher } from '@/components/layout/locale-switcher'
@@ -17,6 +18,7 @@ interface MobileMenuProps {
 const noopSubscribe = () => () => {}
 
 export function MobileMenu({ items, phone, email }: MobileMenuProps) {
+  const t = useTranslations('a11y')
   const [open, setOpen] = useState(false)
   // True on the client only, so the portal never renders during SSR.
   const mounted = useSyncExternalStore(
@@ -62,7 +64,7 @@ export function MobileMenu({ items, phone, email }: MobileMenuProps) {
       {/* Trigger Button inside Sticky Header */}
       <button
         type="button"
-        aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
+        aria-label={open ? t('closeMenu') : t('openMenu')}
         aria-expanded={open}
         aria-controls="mobile-navigation-menu"
         onClick={() => setOpen((prev) => !prev)}
@@ -94,7 +96,7 @@ export function MobileMenu({ items, phone, email }: MobileMenuProps) {
               id="mobile-navigation-menu"
               role="dialog"
               aria-modal="true"
-              aria-label="Mobile Navigation"
+              aria-label={t('mobileNav')}
               className={cn(
                 'fixed inset-x-0 top-[72px] z-999 flex flex-col border-b border-line bg-white shadow-2xl transition-all duration-200 ease-out origin-top',
                 'max-h-[calc(100vh-72px)] overflow-y-auto',
@@ -106,7 +108,7 @@ export function MobileMenu({ items, phone, email }: MobileMenuProps) {
               {/* Content Body */}
               <div className="p-5">
                 {/* Navigation Links */}
-                <nav aria-label="Mobile links" className="flex flex-col gap-1">
+                <nav aria-label={t('mainNav')} className="flex flex-col gap-1">
                   {items.map((item) => {
                     const active =
                       item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)

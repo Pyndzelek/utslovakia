@@ -49,7 +49,12 @@ export function SectionHeading({
           {title}
         </h2>
         {description && (
-          <p className={cn('mt-3 text-[15px] leading-relaxed', onDark ? 'text-slate-300' : 'text-slate-500')}>
+          <p
+            className={cn(
+              'mt-3 text-[15px] leading-relaxed',
+              onDark ? 'text-slate-300' : 'text-slate-500',
+            )}
+          >
             {description}
           </p>
         )}

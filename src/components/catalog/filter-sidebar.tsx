@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { ChevronDown, RotateCcw } from 'lucide-react'
 import { Checkbox, Input } from '@/components/ui/field'
 import { cn } from '@/lib/utils'
+import { currencyForLocale } from '@/lib/currency'
 import type { Category } from '@/payload-types'
 
 function FilterGroup({
@@ -80,6 +81,8 @@ export function FilterSidebar({
       .filter((id) => !isNaN(id)),
   )
 
+  // Filters apply to the currency shown for this locale (see getFilteredProducts).
+  const currency = currencyForLocale(useLocale())
   const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') ?? '')
   const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') ?? '')
 
@@ -158,7 +161,7 @@ export function FilterSidebar({
         </FilterGroup>
       )}
 
-      <FilterGroup title={t('price')}>
+      <FilterGroup title={`${t('price')} (${currency})`}>
         <div className="flex items-center gap-2">
           <Input
             type="number"

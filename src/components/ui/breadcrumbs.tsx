@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslations } from 'next-intl'
 import { ChevronRight, Home } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
@@ -18,9 +19,10 @@ export function Breadcrumbs({
   items: BreadcrumbEntry[]
   className?: string
 }) {
+  const t = useTranslations()
   const breadcrumbs = items?.filter(Boolean) as BreadcrumbItem[]
   return (
-    <nav aria-label="Breadcrumb" className={cn('text-sm', className)}>
+    <nav aria-label={t('a11y.breadcrumb')} className={cn('text-sm', className)}>
       <ol className="flex flex-wrap items-center gap-1.5">
         <li>
           <Link
@@ -28,7 +30,7 @@ export function Breadcrumbs({
             className="flex items-center gap-1 text-slate-400 transition-colors hover:text-brand-600"
           >
             <Home className="size-3.5" aria-hidden />
-            <span className="sr-only">Home</span>
+            <span className="sr-only">{t('nav.home')}</span>
           </Link>
         </li>
         {breadcrumbs.map((item, index) => {

@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og'
+import { getTranslations } from 'next-intl/server'
 import { getProductBySlug } from '@/lib/data/products'
 import { formatPrice, resolvePrice } from '@/lib/currency'
 import type { Locale } from '@/i18n/routing'
@@ -14,11 +15,12 @@ export default async function OpengraphImage({
 }) {
   const { locale, slug } = await params
   const product = await getProductBySlug(slug, locale)
+  const t = await getTranslations({ locale, namespace: 'og' })
 
   const brandDoc = typeof product?.brand === 'object' ? product.brand : null
 
   const name = product?.title ?? 'UT Slovakia'
-  const brand = brandDoc?.name ?? 'Payment systems & components'
+  const brand = brandDoc?.name ?? t('tagline')
   const displayPrice = product?.prices ? resolvePrice(product.prices, locale) : null
   const price = displayPrice?.amount
     ? formatPrice(displayPrice.amount, displayPrice.currency, locale)
@@ -61,7 +63,7 @@ export default async function OpengraphImage({
           <span
             style={{ fontSize: 16, color: '#94a3b8', letterSpacing: 2, textTransform: 'uppercase' }}
           >
-            Payment systems
+            {t('tagline')}
           </span>
         </div>
       </div>

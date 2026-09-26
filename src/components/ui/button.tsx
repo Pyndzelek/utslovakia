@@ -13,7 +13,8 @@ export const buttonVariants = cva(
           'border border-line bg-white text-navy-900 hover:border-brand-400 hover:text-brand-700',
         ghost: 'text-navy-800 hover:bg-navy-900/5',
         inverse: 'bg-white text-navy-900 hover:bg-brand-50',
-        'outline-inverse': 'border border-white/25 text-white hover:border-white/60 hover:bg-white/10',
+        'outline-inverse':
+          'border border-white/25 text-white hover:border-white/60 hover:bg-white/10',
       },
       size: {
         sm: 'h-9 rounded-full px-4 text-sm',
@@ -31,9 +32,10 @@ export const buttonVariants = cva(
 )
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {}
 
 export function Button({ className, variant, size, type = 'button', ...props }: ButtonProps) {
-  return <button type={type} className={cn(buttonVariants({ variant, size }), className)} {...props} />
+  return (
+    <button type={type} className={cn(buttonVariants({ variant, size }), className)} {...props} />
+  )
 }

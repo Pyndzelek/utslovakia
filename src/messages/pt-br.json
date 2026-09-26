@@ -1,29 +1,25 @@
 {
   "Metadata": {
     "title": "UT Slovakia — Sistemas de pagamento e componentes",
-    "description": "Aceitadores de cédulas, validadores de moedas, monitores touch e módulos de pagamento sem contato para gaming, vending e entretenimento. Envio para toda a Europa a partir de Bratislava."
+    "description": "Aceitadores de cédulas, validadores de moedas, monitores touch e módulos de pagamento sem contato para gaming, vending e entretenimento. Envio para toda a Europa."
   },
   "nav": {
     "home": "Início",
     "products": "Produtos",
     "category": "Categorias",
-    "about": "Sobre nós",
     "contact": "Contato"
   },
   "header": {
-    "announcement": "Frete grátis em pedidos acima de 500 € — despacho em 24 horas",
-    "searchPlaceholder": "Buscar produtos, marcas, SKU…",
-    "cart": "Carrinho",
-    "menu": "Menu"
+    "searchPlaceholder": "Buscar produtos, marcas, SKU…"
   },
   "footer": {
-    "tagline": "Sistemas de pagamento e componentes para gaming, vending e entretenimento — fornecidos e assistidos de Bratislava desde 2009.",
+    "tagline": "Sistemas de pagamento e componentes para os setores de gaming, vending e entretenimento.",
     "categories": "Categorias",
     "pages": "Páginas",
     "contact": "Contato",
     "rights": "Todos os direitos reservados.",
     "companyId": "ID da empresa (IČO)",
-    "vatId": "VAT ID"
+    "vatId": "IČ DPH / VAT ID"
   },
   "home": {
     "viewAll": "Ver todos",
@@ -80,7 +76,7 @@
       "imageAlt": "Componente de sistema de pagamento"
     },
     "categoryShowcase": {
-      "productCount": "{count} produtos",
+      "productCount": "{count, plural, one {# produto} other {# produtos}}",
       "view": "Ver",
       "viewAllCategories": "Ver todas as categorias"
     },
@@ -145,7 +141,7 @@
   "productPage": {
     "breadcrumbProducts": "Produtos",
     "vatNote": "com IVA · descontos por volume disponíveis",
-    "buyViaEbay": "Comprar via Ebay",
+    "buyViaEbay": "Comprar via eBay",
     "bulkInquiry": "Precisa de quantidades maiores ou de outra versão? Fale conosco diretamente.",
     "compatibilityHelp": "Não tem certeza se encaixa no seu equipamento? <link>Fale conosco</link> — responderemos o mais rápido possível.",
     "description": "Descrição",
@@ -155,7 +151,7 @@
     "assurances": {
       "shipping": {
         "title": "Envio internacional",
-        "text": "FedEx international shipping"
+        "text": "Envio internacional FedEx"
       },
       "warranty": {
         "title": "Garantia de 3 meses",
@@ -198,7 +194,56 @@
         "title": "Horário de funcionamento"
       }
     },
-    "vatNumber": "VAT ID (IČ DPH): {number}",
+    "vatNumber": "IČ DPH / VAT ID: {number}",
     "faqTitle": "Perguntas frequentes"
+  },
+  "a11y": {
+    "mainNav": "Navegação principal",
+    "mobileNav": "Menu móvel",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu",
+    "breadcrumb": "Trilha de navegação",
+    "categoriesNav": "Categorias do catálogo",
+    "changeLanguage": "Mudar idioma",
+    "goToProduct": "Ir para o produto {index}",
+    "scrollBack": "Rolar para trás",
+    "scrollForward": "Rolar para frente"
+  },
+  "gallery": {
+    "noImage": "Sem imagem",
+    "loadError": "Não foi possível carregar a imagem",
+    "imageAlt": "{title} — imagem {index}",
+    "viewImage": "Mostrar imagem {index}"
+  },
+  "price": {
+    "onRequest": "Preço sob consulta"
+  },
+  "errorPage": {
+    "title": "Algo deu errado",
+    "description": "Ocorreu um erro inesperado ao carregar esta página. Tente novamente ou volte para a página inicial.",
+    "retry": "Tentar novamente",
+    "backHome": "Voltar à página inicial"
+  },
+  "notFound": {
+    "code": "Erro {code}",
+    "backHome": "Voltar à página inicial",
+    "browseProducts": "Ver todos os produtos",
+    "suggestionsTitle": "Talvez você procure um destes produtos",
+    "viewAll": "Ver todos",
+    "page": {
+      "title": "Não encontramos esta página",
+      "description": "O endereço pode estar incorreto ou a página foi movida. Use o menu acima ou comece por um dos links abaixo."
+    },
+    "category": {
+      "title": "Esta categoria não existe",
+      "description": "A categoria pode ter sido renomeada ou removida. Veja o catálogo completo ou volte à página inicial."
+    },
+    "product": {
+      "title": "Este produto não está mais disponível",
+      "description": "Ele pode ter sido descontinuado ou substituído por um modelo mais novo. Veja os mais vendidos abaixo ou pergunte-nos sobre o sucessor."
+    }
+  },
+  "og": {
+    "tagline": "Sistemas de pagamento e componentes"
   }
 }

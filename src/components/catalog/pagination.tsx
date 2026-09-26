@@ -13,7 +13,11 @@ interface PaginationProps {
   current?: number
 }
 
-function hrefForPage(basePath: string, searchParams: Record<string, string | undefined>, page: number) {
+function hrefForPage(
+  basePath: string,
+  searchParams: Record<string, string | undefined>,
+  page: number,
+) {
   const params = new URLSearchParams()
   for (const [key, value] of Object.entries(searchParams)) {
     if (key === 'page' || !value) continue

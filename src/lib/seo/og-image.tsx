@@ -2,7 +2,16 @@ export const OG_IMAGE_SIZE = { width: 1200, height: 630 }
 export const OG_IMAGE_CONTENT_TYPE = 'image/png'
 
 /** Shared brand-styled OG image layout, reused by every `opengraph-image.tsx` route. */
-export function BrandOgImage({ eyebrow, title }: { eyebrow: string; title: string }) {
+/** `tagline` is the localized `og.tagline` message shown under the wordmark. */
+export function BrandOgImage({
+  eyebrow,
+  title,
+  tagline,
+}: {
+  eyebrow: string
+  title: string
+  tagline: string
+}) {
   return (
     <div
       style={{
@@ -40,7 +49,7 @@ export function BrandOgImage({ eyebrow, title }: { eyebrow: string; title: strin
           <span
             style={{ fontSize: 16, color: '#94a3b8', letterSpacing: 2, textTransform: 'uppercase' }}
           >
-            Payment systems
+            {tagline}
           </span>
         </div>
       </div>

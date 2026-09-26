@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import { Container } from '@/components/ui/container'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { Category } from '@/payload-types'
@@ -9,6 +10,7 @@ interface CategoryHeroProps {
 }
 
 export function CategoryHero({ category }: CategoryHeroProps) {
+  const t = useTranslations('nav')
   const image = typeof category.image === 'object' ? category.image : null
   const imageUrl = getMediaUrl(image, 'gallery')
 
@@ -22,7 +24,7 @@ export function CategoryHero({ category }: CategoryHeroProps) {
       <Container className="relative grid items-center gap-8 py-12 lg:grid-cols-[1fr_300px] lg:py-16">
         <div>
           <Breadcrumbs
-            items={[{ label: 'Categories', href: '/category' }, { label: category.name }]}
+            items={[{ label: t('category'), href: '/category' }, { label: category.name }]}
             className="[&_a]:text-slate-400 [&_a:hover]:text-white [&_span]:text-white"
           />
           <h1 className="font-display mt-5 text-3xl font-semibold tracking-tight text-white sm:text-4xl">

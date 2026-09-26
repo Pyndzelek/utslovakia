@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { Category } from '@/payload-types'
 import { ArrowRight } from 'lucide-react'
@@ -10,6 +11,7 @@ interface CategoryCardProps {
 }
 
 export default function CategoryCard({ category, productCount }: CategoryCardProps) {
+  const t = useTranslations('home.categoryShowcase')
   const image = typeof category.image === 'object' ? category.image : null
   const imageUrl = getMediaUrl(image, 'card')
 
@@ -21,7 +23,9 @@ export default function CategoryCard({ category, productCount }: CategoryCardPro
     >
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-medium text-slate-400">{productCount} products</p>
+          <p className="text-xs font-medium text-slate-500">
+            {t('productCount', { count: productCount })}
+          </p>
           <h2 className="font-display mt-1.5 text-xl font-semibold tracking-tight text-navy-900 transition-colors group-hover:text-brand-700">
             {category.name}
           </h2>
