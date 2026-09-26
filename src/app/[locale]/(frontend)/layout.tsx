@@ -1,6 +1,7 @@
 import React from 'react'
 import type { Metadata, Viewport } from 'next'
 import { notFound } from 'next/navigation'
+import { Analytics } from '@vercel/analytics/next'
 import { Inter, Sora } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server'
@@ -90,6 +91,7 @@ export default async function FrontendRootLayout({ children, params }: RootLayou
             </div>
           </MotionProvider>
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   )
