@@ -17,8 +17,6 @@ export const Product: CollectionConfig = {
     description: 'Zarządzaj katalogiem produktów',
     group: 'Katalog',
   },
-  // Undo history: "Wersje" tab on each product lets editors restore a previous save.
-  versions: { maxPerDoc: 10 },
   access: {
     // Anonymous API visitors only see published products; the site's data layer filters too.
     read: publicWhenStatus('published'),

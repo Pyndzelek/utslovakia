@@ -89,7 +89,7 @@ Production's schema was originally created by schema push, not by migrations. Be
    ```
 3. Try `pnpm migrate` on a Neon branch of production first, then deploy.
 
-The second migration adds user roles, version history and site settings. It makes every existing user an admin and pre-fills the company data.
+The second migration adds user roles, version history and site settings. It makes every existing user an admin and pre-fills the company data. The third migration (`remove_versions`) drops that version history again to save database space.
 
 ## Media (Cloudflare R2)
 

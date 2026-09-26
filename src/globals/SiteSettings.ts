@@ -17,7 +17,6 @@ export const SiteSettings: GlobalConfig = {
     description:
       'Dane widoczne w stopce, na stronie Kontakt i w menu mobilnym. Zmiany są widoczne na stronie od razu po zapisaniu.',
   },
-  versions: { max: 10 },
   access: {
     read: () => true,
     update: authenticated,

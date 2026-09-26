@@ -15,7 +15,6 @@ export const Category: CollectionConfig = {
     description: 'Kategorie produktów',
     group: 'Katalog',
   },
-  versions: { maxPerDoc: 10 },
   access: {
     read: publicWhenStatus('active'),
     create: authenticated,

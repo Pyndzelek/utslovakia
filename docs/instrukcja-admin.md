@@ -112,11 +112,7 @@ Tytuł i opis widoczne w wynikach Google oraz obraz przy udostępnianiu linku. W
 - **Strona główna:** liczby w sekcji powitalnej („Lat w branży”, „Sprzedanych urządzeń”). Puste pole ukrywa liczbę.
 - **FAQ:** pytania i odpowiedzi na stronie Kontakt, osobno dla każdego języka. Gdy lista jest pusta, sekcja FAQ jest ukryta.
 
-## 8. Cofanie zmian (wersje)
-
-Produkty, kategorie i dane firmy mają zakładkę **„Wersje”** (u góry formularza). Przechowywanych jest 10 ostatnich zapisów. Wybierz wersję, porównaj ją z obecną i kliknij **„Przywróć tę wersję”**.
-
-## 9. Najczęstsze pytania
+## 8. Najczęstsze pytania
 
 - **Produktu nie ma na stronie.** Sprawdź, czy ma status „Opublikowany” i przypisaną kategorię, i czy kategoria nie jest „Ukryta”.
 - **Na wersji angielskiej widać polski tekst.** Brakuje tłumaczenia: przełącz język na English i uzupełnij pola.
