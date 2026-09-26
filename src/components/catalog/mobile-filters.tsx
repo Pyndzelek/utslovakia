@@ -15,7 +15,7 @@ export function MobileFilters(props: React.ComponentProps<typeof FilterSidebar>)
 
   return (
     <Dialog.Root>
-      <Dialog.Trigger className="flex h-11 cursor-pointer items-center gap-2 rounded-xl border border-line px-4 text-sm font-semibold text-navy-900 transition-colors hover:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none">
+      <Dialog.Trigger className="flex h-11 shrink-0 cursor-pointer items-center gap-2 whitespace-nowrap rounded-xl border border-line px-4 text-sm font-semibold text-navy-900 transition-colors hover:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none">
         <SlidersHorizontal className="size-4" aria-hidden />
         {t('open')}
       </Dialog.Trigger>
@@ -34,7 +34,11 @@ export function MobileFilters(props: React.ComponentProps<typeof FilterSidebar>)
             </Dialog.Close>
           </div>
           <div className="flex-1 overflow-y-auto">
-            <FilterSidebar {...props} showTitle={false} className="rounded-none border-0 shadow-none" />
+            <FilterSidebar
+              {...props}
+              showTitle={false}
+              className="rounded-none border-0 shadow-none"
+            />
           </div>
           <div className="border-t border-line p-4">
             <Dialog.Close className="h-11 w-full cursor-pointer rounded-full bg-navy-900 text-sm font-semibold text-white transition-colors hover:bg-brand-600 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none">

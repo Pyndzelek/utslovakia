@@ -8,8 +8,8 @@ export function ProductGrid({ products, className }: { products: Product[]; clas
   return (
     <div className={cn('grid grid-cols-2 gap-4 md:grid-cols-3 lg:gap-5', className)}>
       {products.map((product, index) => (
-        <RevealOnScroll key={product.id} index={index}>
-          <ProductCard product={product} />
+        <RevealOnScroll key={product.id} index={index} className="h-full">
+          <ProductCard product={product} className="h-full" />
         </RevealOnScroll>
       ))}
     </div>

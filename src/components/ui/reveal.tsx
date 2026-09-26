@@ -9,9 +9,18 @@ import type { ReactNode } from 'react'
  * as server components — only this leaf carries the `'use client'` boundary
  * and the `motion` import.
  */
-export function RevealOnScroll({ index = 0, children }: { index?: number; children: ReactNode }) {
+export function RevealOnScroll({
+  index = 0,
+  className,
+  children,
+}: {
+  index?: number
+  className?: string
+  children: ReactNode
+}) {
   return (
     <motion.div
+      className={className}
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}

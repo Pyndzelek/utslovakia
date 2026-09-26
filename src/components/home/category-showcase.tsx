@@ -86,7 +86,12 @@ async function CategoryTile({ category, productCount, tone, className, large = f
           sizes={large ? '(max-width: 1024px) 55vw, 330px' : '(max-width: 1024px) 45vw, 130px'}
           className={cn(
             'pointer-events-none absolute object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-105',
-            large ? '-right-8 bottom-0 w-[55%]' : '-right-4 -bottom-3 w-[45%]',
+            // Single-column (below lg): vertically centred on the right. Bento (lg): tucked into
+            // the bottom-right corner, inset so the product isn't cropped by the tile edge.
+            'top-1/2 max-h-[85%] -translate-y-1/2 lg:top-auto lg:max-h-none lg:translate-y-0',
+            large
+              ? 'right-2 w-[55%] lg:right-4 lg:bottom-6'
+              : 'right-2 w-[45%] lg:right-3 lg:bottom-3',
           )}
         />
       )}
