@@ -29,14 +29,8 @@ const nextConfig: NextConfig = {
     // Media uploads are immutable per-URL (new upload = new filename).
     deviceSizes: [384, 480, 640, 750, 960, 1200, 1440],
     minimumCacheTTL: 2678400, // 31 days
-    localPatterns: [
-      {
-        pathname: '/api/media/file/**',
-      },
-      {
-        pathname: '/**',
-      },
-    ],
+    // Covers both `/api/media/file/**` (Payload-proxied R2 media) and `public/` assets.
+    localPatterns: [{ pathname: '/**' }],
     remotePatterns: process.env.S3_PUBLIC_HOSTNAME
       ? [
           {
@@ -67,6 +61,7 @@ const nextConfig: NextConfig = {
         source: '/:path*',
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
           {

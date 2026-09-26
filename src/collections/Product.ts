@@ -1,22 +1,30 @@
 import type { CollectionConfig } from 'payload'
-import { revalidateTag } from 'next/cache'
+import { authenticated, publicWhenStatus } from '@/access'
+import { slugField } from '@/fields/slug'
+import { revalidateCollection } from '@/hooks/revalidate'
+
+const { afterChange, afterDelete } = revalidateCollection('products')
 
 export const Product: CollectionConfig = {
   slug: 'products',
   labels: {
-    singular: 'produkt',
+    singular: 'Produkt',
     plural: 'Produkty',
   },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'sku', 'brand', 'categories', 'status', 'updatedAt'],
     description: 'Zarządzaj katalogiem produktów',
+    group: 'Katalog',
   },
+  // Undo history: "Wersje" tab on each product lets editors restore a previous save.
+  versions: { maxPerDoc: 10 },
   access: {
-    read: () => true,
-    create: ({ req }) => Boolean(req.user),
-    update: ({ req }) => Boolean(req.user),
-    delete: ({ req }) => Boolean(req.user),
+    // Anonymous API visitors only see published products; the site's data layer filters too.
+    read: publicWhenStatus('published'),
+    create: authenticated,
+    update: authenticated,
+    delete: authenticated,
   },
   hooks: {
     beforeValidate: [
@@ -27,30 +35,15 @@ export const Product: CollectionConfig = {
         return data
       },
     ],
-    afterChange: [
-      ({ context }) => {
-        if (!context.disableRevalidate) revalidateTag('products', 'max')
-      },
-    ],
-    afterDelete: [
-      ({ context }) => {
-        if (!context.disableRevalidate) revalidateTag('products', 'max')
-      },
-    ],
+    afterChange,
+    afterDelete,
   },
   fields: [
     // ---- Sidebar: identifiers, status, merchandising metadata ----
-    {
-      name: 'slug',
-      type: 'text',
-      label: 'Slug (adres URL)',
-      required: true,
-      unique: true,
-      admin: {
-        position: 'sidebar',
-        description: 'Używane w adresie URL produktu, np. /products/twoj-slug',
-      },
-    },
+    slugField({
+      from: 'title',
+      description: 'Używane w adresie URL produktu, np. /products/twoj-slug.',
+    }),
     {
       name: 'sku',
       type: 'text',
@@ -110,8 +103,20 @@ export const Product: CollectionConfig = {
     {
       name: 'link',
       type: 'text',
-      label: 'Link zewnętrzny do zakupy (ebay)',
-      admin: { position: 'sidebar' },
+      label: 'Link zewnętrzny do zakupu (eBay)',
+      admin: {
+        position: 'sidebar',
+        description:
+          'Pełny adres aukcji, np. https://www.ebay.com/itm/… Bez linku na stronie pojawi się przycisk „Zapytaj o ofertę”.',
+      },
+      validate: (value: string | null | undefined) => {
+        if (!value) return true
+        try {
+          return new URL(value).protocol === 'https:' || 'Link musi zaczynać się od https://'
+        } catch {
+          return 'Nieprawidłowy adres URL — wklej pełny link zaczynający się od https://'
+        }
+      },
     },
 
     // ---- Main column: tabs ----
@@ -154,8 +159,12 @@ export const Product: CollectionConfig = {
                 {
                   name: 'alt',
                   type: 'text',
-                  label: 'Opis zdjęcia (niewidoczny dla użytkownika, informacja dla Google)',
+                  label: 'Opis zdjęcia w tym produkcie (opcjonalnie)',
                   localized: true,
+                  admin: {
+                    description:
+                      'Nadpisuje opis (alt) z biblioteki mediów, osobno dla każdego języka. Zostaw puste, aby użyć opisu z pliku.',
+                  },
                 },
               ],
             },

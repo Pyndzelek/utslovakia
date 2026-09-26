@@ -1,10 +1,13 @@
 import React from 'react'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { Clock, Mail, MapPin, Phone } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
 import { Logo } from '@/components/layout/logo'
-import { categories } from '@/lib/mock-data'
+import type { Locale } from '@/i18n/routing'
+import { getCategories } from '@/lib/data/categories'
+import { addressLines, getSiteSettings } from '@/lib/data/site-settings'
+import { telHref } from '@/lib/utils'
 
 /* lucide-react no longer ships brand icons, so these are inlined */
 function FacebookIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -42,7 +45,23 @@ function LinkedInIcon(props: React.SVGProps<SVGSVGElement>) {
 
 export async function Footer() {
   const t = await getTranslations()
+  const locale = (await getLocale()) as Locale
+  const [settings, categories] = await Promise.all([
+    getSiteSettings(locale),
+    getCategories(locale, 0),
+  ])
   const year = new Date().getFullYear()
+  const phone = settings.phones?.[0]
+  const email = settings.emails?.[0]
+  const socials = [
+    { label: 'Facebook', href: settings.social?.facebook, Icon: FacebookIcon },
+    { label: 'Instagram', href: settings.social?.instagram, Icon: InstagramIcon },
+    { label: 'LinkedIn', href: settings.social?.linkedin, Icon: LinkedInIcon },
+  ].filter((social): social is typeof social & { href: string } => Boolean(social.href))
+  const companyIds = [
+    settings.companyId && `${t('footer.companyId')}: ${settings.companyId}`,
+    settings.vatId && `${t('footer.vatId')}: ${settings.vatId}`,
+  ].filter(Boolean)
 
   const pages = [
     { href: '/products', label: t('nav.products') },
@@ -60,34 +79,43 @@ export async function Footer() {
           <ul className="mt-6 space-y-3 text-sm">
             <li className="flex items-start gap-3">
               <MapPin className="mt-0.5 size-4 shrink-0 text-brand-400" aria-hidden />
-              <span>
-                Trojičné námestie 191/11
-                <br />
-                Tvrdošín, Žilinski, Slovakia 02744
-              </span>
+              <address className="not-italic">
+                {addressLines(settings.address).map((line) => (
+                  <React.Fragment key={line}>
+                    {line}
+                    <br />
+                  </React.Fragment>
+                ))}
+              </address>
             </li>
-            <li>
-              <a
-                href="tel:+421254789630"
-                className="flex items-center gap-3 transition-colors hover:text-white"
-              >
-                <Phone className="size-4 shrink-0 text-brand-400" aria-hidden />
-                +421235456789
-              </a>
-            </li>
-            <li>
-              <a
-                href="mailto:sales@utslovakia.sk"
-                className="flex items-center gap-3 transition-colors hover:text-white"
-              >
-                <Mail className="size-4 shrink-0 text-brand-400" aria-hidden />
-                sales@utslovakia.sk
-              </a>
-            </li>
-            <li className="flex items-center gap-3">
-              <Clock className="size-4 shrink-0 text-brand-400" aria-hidden />
-              {t('footer.hours')}
-            </li>
+            {phone && (
+              <li>
+                <a
+                  href={telHref(phone.number)}
+                  className="flex items-center gap-3 transition-colors hover:text-white"
+                >
+                  <Phone className="size-4 shrink-0 text-brand-400" aria-hidden />
+                  {phone.number}
+                </a>
+              </li>
+            )}
+            {email && (
+              <li>
+                <a
+                  href={`mailto:${email.email}`}
+                  className="flex items-center gap-3 transition-colors hover:text-white"
+                >
+                  <Mail className="size-4 shrink-0 text-brand-400" aria-hidden />
+                  {email.email}
+                </a>
+              </li>
+            )}
+            {settings.openingHours && (
+              <li className="flex items-center gap-3">
+                <Clock className="size-4 shrink-0 text-brand-400" aria-hidden />
+                {settings.openingHours}
+              </li>
+            )}
           </ul>
         </div>
 
@@ -98,7 +126,7 @@ export async function Footer() {
           </h3>
           <ul className="mt-5 grid grid-cols-1 gap-x-6 gap-y-2.5 text-sm sm:grid-cols-2">
             {categories.map((category) => (
-              <li key={category.slug}>
+              <li key={category.id}>
                 <Link
                   href={{ pathname: '/category/[slug]', params: { slug: category.slug } }}
                   className="transition-colors hover:text-white"
@@ -129,18 +157,23 @@ export async function Footer() {
 
       <div className="border-t border-white/10">
         <Container className="flex flex-col items-center justify-between gap-4 py-6 sm:flex-row">
-          <p className="text-xs">
-            © {year} unique Technology Solution s.r.o. {t('footer.rights')}
-          </p>
+          <div className="text-center text-xs sm:text-left">
+            <p>
+              © {year} {settings.companyName}. {t('footer.rights')}
+            </p>
+            {(companyIds.length > 0 || settings.registration) && (
+              <p className="mt-1 text-slate-500">
+                {[...companyIds, settings.registration].filter(Boolean).join(' · ')}
+              </p>
+            )}
+          </div>
           <div className="flex items-center gap-2">
-            {[
-              { label: 'Facebook', Icon: FacebookIcon },
-              { label: 'Instagram', Icon: InstagramIcon },
-              { label: 'LinkedIn', Icon: LinkedInIcon },
-            ].map(({ label, Icon }) => (
+            {socials.map(({ label, href, Icon }) => (
               <a
                 key={label}
-                href="#"
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label={label}
                 className="flex size-9 items-center justify-center rounded-full border border-white/10 text-slate-400 transition-colors hover:border-white/30 hover:text-white"
               >

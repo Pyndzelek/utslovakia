@@ -1,6 +1,7 @@
 import React from 'react'
-import { getTranslations } from 'next-intl/server'
-import { Mail, Phone, Search, ShoppingCart } from 'lucide-react'
+import { getLocale, getTranslations } from 'next-intl/server'
+import type { Locale } from '@/i18n/routing'
+import { getSiteSettings } from '@/lib/data/site-settings'
 import { Logo } from '@/components/layout/logo'
 import { NavLink, type NavItem } from '@/components/layout/nav-link'
 import { LocaleSwitcher } from '@/components/layout/locale-switcher'
@@ -8,6 +9,7 @@ import { MobileMenu } from '@/components/layout/mobile-menu'
 
 export async function Header() {
   const t = await getTranslations()
+  const settings = await getSiteSettings((await getLocale()) as Locale)
 
   const navItems: NavItem[] = [
     { href: '/', label: t('nav.home') },
@@ -34,7 +36,11 @@ export async function Header() {
               <LocaleSwitcher />
             </div>
 
-            <MobileMenu items={navItems} searchPlaceholder={t('header.searchPlaceholder')} />
+            <MobileMenu
+              items={navItems}
+              phone={settings.phones?.[0]?.number}
+              email={settings.emails?.[0]?.email}
+            />
           </div>
         </div>
       </div>

@@ -13,11 +13,28 @@ import { Media } from './collections/Media'
 import { Category } from './collections/Category'
 import { Product } from './collections/Product'
 import { Brand } from './collections/Brand'
+import { SiteSettings } from './globals/SiteSettings'
+import { SITE_URL } from './lib/site'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+/** Fail fast instead of booting with an empty secret / connection string. */
+function requiredEnv(name: string): string {
+  const value = process.env[name]
+  if (!value) throw new Error(`Missing required environment variable: ${name}`)
+  return value
+}
+
 export default buildConfig({
+  // Only accept cookie-authenticated requests from the site's own origins. (No `serverURL`:
+  // it would turn media URLs into absolute production URLs, breaking dev/preview images.)
+  csrf: [
+    SITE_URL,
+    process.env.VERCEL_URL && `https://${process.env.VERCEL_URL}`,
+    process.env.VERCEL_BRANCH_URL && `https://${process.env.VERCEL_BRANCH_URL}`,
+    process.env.NODE_ENV !== 'production' && 'http://localhost:3000',
+  ].filter((origin): origin is string => Boolean(origin)),
   admin: {
     user: Users.slug,
     importMap: {
@@ -48,15 +65,20 @@ export default buildConfig({
     defaultLocale: 'pl',
     fallback: true,
   },
-  collections: [Users, Media, Category, Product, Brand],
+  collections: [Product, Category, Brand, Media, Users],
+  globals: [SiteSettings],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: requiredEnv('PAYLOAD_SECRET'),
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: postgresAdapter({
+    // Schema changes go through migrations only (`pnpm migrate:create` → `pnpm migrate`),
+    // never dev-mode push — push and migrations must not be mixed on one database.
+    push: false,
+    migrationDir: path.resolve(dirname, 'migrations'),
     pool: {
-      connectionString: process.env.DATABASE_URL || '',
+      connectionString: requiredEnv('DATABASE_URL'),
       // Small per-instance pool: on Vercel many concurrent serverless
       // invocations each hold their own pool, so this should stay small and
       // DATABASE_URL should point at Neon's pooled ("-pooler") connection

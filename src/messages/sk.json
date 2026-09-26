@@ -21,8 +21,9 @@
     "categories": "Kategórie",
     "pages": "Stránky",
     "contact": "Kontakt",
-    "hours": "po–pia, 8:00 – 16:30",
-    "rights": "Všetky práva vyhradené."
+    "rights": "Všetky práva vyhradené.",
+    "companyId": "IČO",
+    "vatId": "IČ DPH"
   },
   "category": {
     "meta": {
@@ -185,43 +186,19 @@
     "description": "Otázky o zariadení alebo rada pred nákupom. Odpovedáme čo najskôr.",
     "cards": {
       "visit": {
-        "title": "Navštívte nás",
-        "line1": "Trojičné námestie 191/11",
-        "line2": "Tvrdošín, Žilinski, Slovakia 02744"
+        "title": "Navštívte nás"
       },
       "call": {
-        "title": "Zavolajte nám",
-        "line1": "+42123456789 (mobil)"
+        "title": "Zavolajte nám"
       },
       "write": {
-        "title": "Napíšte nám",
-        "line1": "uts@uts.pl",
-        "line2": "contact@uts.pl"
+        "title": "Napíšte nám"
       },
       "hours": {
-        "title": "Otváracie hodiny",
-        "line1": "po–pia: 8:00 – 16:00"
+        "title": "Otváracie hodiny"
       }
     },
     "vatNumber": "IČ DPH: {number}",
-    "faqTitle": "Často kladené otázky",
-    "faqs": {
-      "1": {
-        "question": "Otázka 1",
-        "answer": "Odpoveď 1"
-      },
-      "2": {
-        "question": "Otázka 2",
-        "answer": "Odpoveď 2"
-      },
-      "3": {
-        "question": "Otázka 3",
-        "answer": "Odpoveď 3"
-      },
-      "4": {
-        "question": "Otázka 4",
-        "answer": "Odpoveď 4"
-      }
-    }
+    "faqTitle": "Často kladené otázky"
   }
 }

@@ -1,33 +1,39 @@
 'use client'
 
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
-import { Mail, Menu, Phone, Search, X } from 'lucide-react'
+import { Mail, Menu, Phone, X } from 'lucide-react'
 import { Link, usePathname } from '@/i18n/navigation'
 import { LocaleSwitcher } from '@/components/layout/locale-switcher'
 import type { NavItem } from '@/components/layout/nav-link'
-import { cn } from '@/lib/utils'
+import { cn, telHref } from '@/lib/utils'
 
 interface MobileMenuProps {
   items: NavItem[]
-  searchPlaceholder: string
+  phone?: string
+  email?: string
 }
 
-export function MobileMenu({ items, searchPlaceholder }: MobileMenuProps) {
+const noopSubscribe = () => () => {}
+
+export function MobileMenu({ items, phone, email }: MobileMenuProps) {
   const [open, setOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  // True on the client only, so the portal never renders during SSR.
+  const mounted = useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false,
+  )
   const pathname = usePathname()
+  const [lastPathname, setLastPathname] = useState(pathname)
 
   const closeMenu = useCallback(() => setOpen(false), [])
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
   // Close automatically on route navigation
-  useEffect(() => {
-    closeMenu()
-  }, [pathname, closeMenu])
+  if (pathname !== lastPathname) {
+    setLastPathname(pathname)
+    setOpen(false)
+  }
 
   // Handle Escape key press for accessibility
   useEffect(() => {
@@ -128,20 +134,24 @@ export function MobileMenu({ items, searchPlaceholder }: MobileMenuProps) {
               {/* Footer with Contact info & Inline Locale Switcher */}
               <div className="border-t border-line bg-slate-50/60 px-5 py-4.5">
                 <div className="mb-4 flex flex-col gap-2.5 text-sm text-slate-600">
-                  <a
-                    href="tel:+421254789630"
-                    className="flex items-center gap-2.5 rounded-lg py-1 font-medium transition-colors hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
-                  >
-                    <Phone className="size-4 text-brand-600" aria-hidden />
-                    <span>+421 2 5478 9630</span>
-                  </a>
-                  <a
-                    href="mailto:sales@utslovakia.sk"
-                    className="flex items-center gap-2.5 rounded-lg py-1 font-medium transition-colors hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
-                  >
-                    <Mail className="size-4 text-brand-600" aria-hidden />
-                    <span>sales@utslovakia.sk</span>
-                  </a>
+                  {phone && (
+                    <a
+                      href={telHref(phone)}
+                      className="flex items-center gap-2.5 rounded-lg py-1 font-medium transition-colors hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                    >
+                      <Phone className="size-4 text-brand-600" aria-hidden />
+                      <span>{phone}</span>
+                    </a>
+                  )}
+                  {email && (
+                    <a
+                      href={`mailto:${email}`}
+                      className="flex items-center gap-2.5 rounded-lg py-1 font-medium transition-colors hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                    >
+                      <Mail className="size-4 text-brand-600" aria-hidden />
+                      <span>{email}</span>
+                    </a>
+                  )}
                 </div>
 
                 <LocaleSwitcher variant="inline" />

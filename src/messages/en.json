@@ -21,8 +21,9 @@
     "categories": "Categories",
     "pages": "Pages",
     "contact": "Contact",
-    "hours": "Mon–Fri, 8:00 – 16:30",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "companyId": "Company ID (IČO)",
+    "vatId": "VAT ID"
   },
   "home": {
     "viewAll": "View all",
@@ -185,43 +186,19 @@
     "description": "Questions about equipment or advice before you buy. We reply as soon as we can.",
     "cards": {
       "visit": {
-        "title": "Visit us",
-        "line1": "Trojičné námestie 191/11",
-        "line2": "Tvrdošín, Žilinski, Slovakia 02744"
+        "title": "Visit us"
       },
       "call": {
-        "title": "Call us",
-        "line1": "+42123456789 (mobile)"
+        "title": "Call us"
       },
       "write": {
-        "title": "Write to us",
-        "line1": "uts@uts.pl",
-        "line2": "contact@uts.pl"
+        "title": "Write to us"
       },
       "hours": {
-        "title": "Opening hours",
-        "line1": "Mon–Fri: 8:00 – 16:00"
+        "title": "Opening hours"
       }
     },
-    "vatNumber": "VAT number: {number}",
-    "faqTitle": "Frequently asked questions",
-    "faqs": {
-      "1": {
-        "question": "Question 1",
-        "answer": "Answer 1"
-      },
-      "2": {
-        "question": "Question 2",
-        "answer": "Answer 2"
-      },
-      "3": {
-        "question": "Question 3",
-        "answer": "Answer 3"
-      },
-      "4": {
-        "question": "Question 4",
-        "answer": "Answer 4"
-      }
-    }
+    "vatNumber": "VAT ID (IČ DPH): {number}",
+    "faqTitle": "Frequently asked questions"
   }
 }

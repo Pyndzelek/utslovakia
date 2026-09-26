@@ -1,19 +1,35 @@
 import type { CollectionConfig } from 'payload'
+import { authenticated } from '@/access'
+import { revalidateCollection } from '@/hooks/revalidate'
 
 export const Media: CollectionConfig = {
   slug: 'media',
+  labels: { singular: 'Zdjęcie', plural: 'Media' },
   admin: {
+    useAsTitle: 'alt',
+    defaultColumns: ['filename', 'alt', 'updatedAt'],
     description:
-      'Maksymalny rozmiar pliku ok. 4 MB. Zdjęcia są automatycznie konwertowane do WebP i zmniejszane.',
+      'Maksymalny rozmiar pliku ok. 4 MB (większe zdjęcia z telefonu najpierw zmniejsz). Zdjęcia są automatycznie konwertowane do WebP i zmniejszane.',
+    group: 'Treści',
   },
   access: {
     read: () => true,
+    create: authenticated,
+    update: authenticated,
+    delete: authenticated,
   },
+  // Images and their alt text are embedded in product/category pages.
+  hooks: revalidateCollection('products', 'categories', 'site-settings'),
   fields: [
     {
       name: 'alt',
       type: 'text',
+      label: 'Opis zdjęcia (alt)',
       required: true,
+      admin: {
+        description:
+          'Krótko opisz, co jest na zdjęciu, np. „Akceptor banknotów ICT A7 – widok z przodu”. Czytają to Google i czytniki ekranu.',
+      },
     },
   ],
   upload: {

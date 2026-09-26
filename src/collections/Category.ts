@@ -1,32 +1,28 @@
 import type { CollectionConfig } from 'payload'
-import { revalidateTag } from 'next/cache'
+import { authenticated, publicWhenStatus } from '@/access'
+import { slugField } from '@/fields/slug'
+import { revalidateCollection } from '@/hooks/revalidate'
+
+// Product listings embed category names/slugs, so both tags go stale on a category change.
+const { afterChange, afterDelete } = revalidateCollection('categories', 'products')
 
 export const Category: CollectionConfig = {
   slug: 'categories',
   labels: { singular: 'Kategoria', plural: 'Kategorie' },
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'parent', 'order', 'status', 'updatedAt'],
+    defaultColumns: ['name', 'order', 'status', 'updatedAt'],
     description: 'Kategorie produktów',
+    group: 'Katalog',
   },
+  versions: { maxPerDoc: 10 },
   access: {
-    read: () => true,
-    create: ({ req }) => Boolean(req.user),
-    update: ({ req }) => Boolean(req.user),
-    delete: ({ req }) => Boolean(req.user),
+    read: publicWhenStatus('active'),
+    create: authenticated,
+    update: authenticated,
+    delete: authenticated,
   },
-  hooks: {
-    afterChange: [
-      ({ context }) => {
-        if (!context.disableRevalidate) revalidateTag('categories', 'max')
-      },
-    ],
-    afterDelete: [
-      ({ context }) => {
-        if (!context.disableRevalidate) revalidateTag('categories', 'max')
-      },
-    ],
-  },
+  hooks: { afterChange, afterDelete },
   fields: [
     {
       name: 'name',
@@ -35,17 +31,11 @@ export const Category: CollectionConfig = {
       localized: true,
       required: true,
     },
-    {
-      name: 'slug',
-      label: 'Slug (adres URL)',
-      type: 'text',
-      required: true,
-      unique: true,
+    slugField({
+      from: 'name',
       localized: true,
-      admin: {
-        description: 'Używane w adresie URL kategorii, np. /kategoria/slug-kategorii',
-      },
-    },
+      description: 'Używane w adresie URL kategorii, osobno dla każdego języka.',
+    }),
     {
       name: 'description',
       label: 'Opis',

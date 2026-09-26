@@ -18,3 +18,6 @@ export function getMediaUrl(imageField: any, size?: MediaSize): string | null {
   if ('url' in imageField) return imageField.url
   return null
 }
+
+/** `+421 2 5478 9630` → `tel:+421254789630` */
+export const telHref = (number: string) => `tel:${number.replace(/[^\d+]/g, '')}`
