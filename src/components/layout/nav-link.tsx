@@ -5,7 +5,7 @@ import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
 export interface NavItem {
-  href: '/' | '/products' | '/category' | '/about' | '/contact'
+  href: '/' | '/products' | '/category' | '/contact'
   label: string
 }
 

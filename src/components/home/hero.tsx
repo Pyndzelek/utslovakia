@@ -6,10 +6,17 @@ import { Link } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
-import { PRODUCT_IMAGE } from '@/lib/mock-data'
+import type { Locale } from '@/i18n/routing'
+import { getSiteSettings } from '@/lib/data/site-settings'
+import { HERO_IMAGE } from '@/lib/site'
 
-export async function Hero() {
+export async function Hero({ locale }: { locale: Locale }) {
   const t = await getTranslations('home.hero')
+  const { heroStats } = await getSiteSettings(locale)
+  const stats = [
+    { label: t('statYears'), value: heroStats?.years },
+    { label: t('statDevices'), value: heroStats?.devicesSold },
+  ].filter((stat): stat is { label: string; value: string } => Boolean(stat.value))
 
   return (
     <section className="relative overflow-hidden bg-navy-950">
@@ -49,21 +56,18 @@ export async function Hero() {
             </Link>
           </div>
 
-          <dl className="mt-8 grid max-w-lg grid-cols-3 gap-6 border-t border-white/10 pt-4">
-            <div>
-              <dt className="order-2 mt-1 text-xs leading-snug text-slate-400">{t('statYears')}</dt>
-              <dd className="font-display order-1 text-2xl font-bold text-white sm:text-3xl">5+</dd>
-            </div>
-
-            <div>
-              <dt className="order-2 mt-1 text-xs leading-snug text-slate-400">
-                {t('statDevices')}
-              </dt>
-              <dd className="font-display order-1 text-2xl font-bold text-white sm:text-3xl">
-                1000+
-              </dd>
-            </div>
-          </dl>
+          {stats.length > 0 && (
+            <dl className="mt-8 grid max-w-sm grid-cols-2 gap-6 border-t border-white/10 pt-4">
+              {stats.map((stat) => (
+                <div key={stat.label} className="flex flex-col">
+                  <dt className="order-2 mt-1 text-xs leading-snug text-slate-400">{stat.label}</dt>
+                  <dd className="font-display order-1 text-2xl font-bold text-white sm:text-3xl">
+                    {stat.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          )}
         </div>
 
         {/* Product visual */}
@@ -74,7 +78,7 @@ export async function Hero() {
               aria-hidden
             />
             <Image
-              src={PRODUCT_IMAGE}
+              src={HERO_IMAGE}
               alt={t('imageAlt')}
               fill
               priority

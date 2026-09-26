@@ -213,7 +213,7 @@ export interface GetFilteredProductsOptions {
   page?: number
   /** Number of items per page */
   limit?: number
-  /** Field sorting (e.g., '-createdAt', 'price', '-price', 'title') */
+  /** One of `SORT_OPTIONS`; anything else falls back to newest first. */
   sort?: string
   /** Filter by publication status */
   status?: 'published' | 'draft'
@@ -228,6 +228,9 @@ export interface PaginatedProductsResult {
   hasNextPage: boolean
   hasPrevPage: boolean
 }
+
+/** Sort orders accepted from the `?sort=` query param. */
+export const SORT_OPTIONS = ['-createdAt', 'createdAt', 'title', '-title'] as const
 
 export const getFilteredProducts = cache(
   unstable_cache(
@@ -246,6 +249,8 @@ export const getFilteredProducts = cache(
       } = options
 
       const payload = await getPayload({ config })
+      // `sort` comes straight from the URL; never pass arbitrary field paths to the DB.
+      const safeSort = (SORT_OPTIONS as readonly string[]).includes(sort) ? sort : '-createdAt'
 
       const where: Where = {
         status: { equals: status },
@@ -303,7 +308,7 @@ export const getFilteredProducts = cache(
         where,
         page,
         limit,
-        sort,
+        sort: safeSort,
         depth: 1,
       })
 

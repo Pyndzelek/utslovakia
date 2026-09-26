@@ -4,13 +4,17 @@ import { getTranslations } from 'next-intl/server'
 import { ArrowUpRight } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { buttonVariants } from '@/components/ui/button'
-import { getCategory } from '@/lib/mock-data'
-import { cn } from '@/lib/utils'
+import type { Locale } from '@/i18n/routing'
+import type { Category } from '@/payload-types'
+import { getCategories } from '@/lib/data/categories'
+import { getProductCountsByCategory } from '@/lib/data/products'
+import { cn, getMediaUrl } from '@/lib/utils'
 
 type Tone = 'navy' | 'light' | 'brand'
 
 interface TileProps {
-  slug: string
+  category: Category
+  productCount: number
   tone: Tone
   className?: string
   large?: boolean
@@ -37,15 +41,14 @@ const toneStyles: Record<Tone, { tile: string; name: string; tagline: string; li
   },
 }
 
-async function CategoryTile({ slug, tone, className, large = false }: TileProps) {
-  const category = getCategory(slug)
-  if (!category) return null
+async function CategoryTile({ category, productCount, tone, className, large = false }: TileProps) {
+  const imageUrl = getMediaUrl(category.image, large ? 'gallery' : 'card')
   const styles = toneStyles[tone]
   const t = await getTranslations('home.categoryShowcase')
 
   return (
     <Link
-      href={{ pathname: '/category/[slug]', params: { slug } }}
+      href={{ pathname: '/category/[slug]', params: { slug: category.slug } }}
       className={cn(
         'group relative flex flex-col justify-between overflow-hidden rounded-3xl p-6 shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift sm:p-8',
         styles.tile,
@@ -54,7 +57,7 @@ async function CategoryTile({ slug, tone, className, large = false }: TileProps)
     >
       <div className="relative z-10 max-w-[65%]">
         <p className={cn('text-xs font-medium', styles.tagline)}>
-          {t('productCount', { count: category.productCount })}
+          {t('productCount', { count: productCount })}
         </p>
         <h3
           className={cn(
@@ -65,25 +68,28 @@ async function CategoryTile({ slug, tone, className, large = false }: TileProps)
         >
           {category.name}
         </h3>
-        {large && (
+        {large && category.description && (
           <p
             className={cn('mt-3 hidden max-w-xs text-sm leading-relaxed sm:block', styles.tagline)}
           >
-            {category.tagline}
+            {category.description}
           </p>
         )}
       </div>
 
-      <Image
-        src={category.image}
-        alt=""
-        width={large ? 420 : 220}
-        height={large ? 420 : 220}
-        className={cn(
-          'pointer-events-none absolute object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-105',
-          large ? '-right-8 bottom-0 w-[55%]' : '-right-4 -bottom-3 w-[45%]',
-        )}
-      />
+      {imageUrl && (
+        <Image
+          src={imageUrl}
+          alt=""
+          width={large ? 420 : 220}
+          height={large ? 420 : 220}
+          sizes={large ? '(max-width: 1024px) 55vw, 330px' : '(max-width: 1024px) 45vw, 130px'}
+          className={cn(
+            'pointer-events-none absolute object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-105',
+            large ? '-right-8 bottom-0 w-[55%]' : '-right-4 -bottom-3 w-[45%]',
+          )}
+        />
+      )}
 
       <span
         className={cn(
@@ -98,22 +104,37 @@ async function CategoryTile({ slug, tone, className, large = false }: TileProps)
   )
 }
 
-export async function CategoryShowcase() {
+/** Bento layout: the first (lowest `order`) category is the large tile, the next four follow. */
+const smallTileTones: Tone[] = ['light', 'navy', 'light', 'navy']
+
+export async function CategoryShowcase({ locale }: { locale: Locale }) {
   const t = await getTranslations('home.categoryShowcase')
+  const [categories, productCounts] = await Promise.all([
+    getCategories(locale),
+    getProductCountsByCategory(locale),
+  ])
+  if (categories.length === 0) return null
+  const [featured, ...rest] = categories.slice(0, 1 + smallTileTones.length)
 
   return (
     <div>
       <div className="grid gap-4 lg:grid-cols-4 lg:gap-5">
         <CategoryTile
-          slug="bill-acceptors"
+          category={featured}
+          productCount={productCounts[featured.id] ?? 0}
           tone="navy"
           large
           className="min-h-72 lg:col-span-2 lg:row-span-2 lg:min-h-[520px]"
         />
-        <CategoryTile slug="coin-acceptors" tone="light" className="min-h-60" />
-        <CategoryTile slug="monitors" tone="navy" className="min-h-60" />
-        <CategoryTile slug="cabinets" tone="light" className="min-h-60" />
-        <CategoryTile slug="printers" tone="navy" className="min-h-60" />
+        {rest.map((category, index) => (
+          <CategoryTile
+            key={category.id}
+            category={category}
+            productCount={productCounts[category.id] ?? 0}
+            tone={smallTileTones[index]}
+            className="min-h-60"
+          />
+        ))}
       </div>
 
       <div className="mt-8 text-center">

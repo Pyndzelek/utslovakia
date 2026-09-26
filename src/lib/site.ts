@@ -4,3 +4,6 @@
  * absolute URLs, and for JSON-LD, which always requires absolute URLs.
  */
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.utslovakia.sk').replace(/\/$/, '')
+
+/** Real bill-acceptor photo (public/) used as the hero and CTA visual. */
+export const HERO_IMAGE = '/maszynka.png'

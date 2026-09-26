@@ -30,7 +30,7 @@ export default async function HomePage({ params }: PageProps) {
 
   return (
     <>
-      <Hero />
+      <Hero locale={locale} />
 
       {/* Industries */}
       <section className="bg-white pt-16 lg:py-12">
@@ -69,23 +69,9 @@ export default async function HomePage({ params }: PageProps) {
             description={t('categories.description')}
             className="mb-10"
           />
-          <CategoryShowcase />
+          <CategoryShowcase locale={locale} />
         </Container>
       </section>
-
-      {/* Promotions */}
-      {/* <section className="py-16 lg:py-20">
-        <Container>
-          <SectionHeading
-            eyebrow="Czas ograniczony"
-            title="Promocje"
-            description="Zniżki na magazynie i sezonowe promocje – ceny obejmują gwarancję najniższej ceny z ostatnich 30 dni."
-            action={<ViewAllLink />}
-            className="mb-8"
-          />
-          <ProductRail products={promotions} />
-        </Container>
-      </section> */}
 
       {/* New arrivals */}
       <section className="py-12 lg:pt-16 lg:pb-20">

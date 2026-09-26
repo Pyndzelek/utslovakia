@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server'
 import { ArrowRight, Headset, PackageCheck, Wrench, type LucideIcon } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { buttonVariants } from '@/components/ui/button'
-import { PRODUCT_IMAGE } from '@/lib/mock-data'
+import { HERO_IMAGE } from '@/lib/site'
 
 const services: { Icon: LucideIcon; labelKey: 'serviceAdvice' | 'serviceSupport' | 'servicePrice' }[] =
   [
@@ -55,7 +55,7 @@ export async function CtaBanner() {
 
         <div className="relative hidden aspect-square max-h-80 lg:block">
           <Image
-            src={PRODUCT_IMAGE}
+            src={HERO_IMAGE}
             alt=""
             fill
             sizes="360px"
