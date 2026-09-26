@@ -62,19 +62,18 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
     : undefined
 
   // Fetch paginated & filtered data
-  const [{ docs: products, totalPages, totalDocs }, categories, productCounts] =
-    await Promise.all([
-      getFilteredProducts(locale, {
-        page,
-        limit: 12,
-        minPrice,
-        maxPrice,
-        categoryIds,
-        sort: query.sort || '-createdAt',
-      }),
-      getCategories(locale, 0),
-      getProductCountsByCategory(locale),
-    ])
+  const [{ docs: products, totalPages, totalDocs }, categories, productCounts] = await Promise.all([
+    getFilteredProducts(locale, {
+      page,
+      limit: 12,
+      minPrice,
+      maxPrice,
+      categoryIds,
+      sort: query.sort || '-createdAt',
+    }),
+    getCategories(locale, 0),
+    getProductCountsByCategory(locale),
+  ])
 
   const basePath = getPathname({ locale, href: '/products' })
   const hasFilters = Boolean(query.category || query.minPrice || query.maxPrice || page > 1)

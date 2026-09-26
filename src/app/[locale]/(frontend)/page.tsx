@@ -1,7 +1,8 @@
 import React from 'react'
+import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowRight } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
+import { Link, getPathname } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { Container } from '@/components/ui/container'
 import { SectionHeading } from '@/components/ui/section-heading'
@@ -12,11 +13,25 @@ import { Industries } from '@/components/home/industries'
 import { CtaBanner } from '@/components/home/cta-banner'
 import { ProductRail } from '@/components/product/product-rail'
 import { getBestsellers, getNewArrivals } from '@/lib/data/products'
+import { buildStaticLanguageAlternates } from '@/lib/seo/alternates'
+import { ogDefaults } from '@/lib/seo/meta'
 
 export const revalidate = 600
 
 interface PageProps {
   params: Promise<{ locale: Locale }>
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { locale } = await params
+  // Title/description come from the layout defaults; only the URLs are page-specific.
+  return {
+    alternates: {
+      canonical: getPathname({ locale, href: '/' }),
+      languages: buildStaticLanguageAlternates('/'),
+    },
+    openGraph: { ...ogDefaults(locale), url: getPathname({ locale, href: '/' }) },
+  }
 }
 
 export default async function HomePage({ params }: PageProps) {

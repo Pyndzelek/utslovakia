@@ -2,7 +2,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { cache } from 'react'
 import { unstable_cache } from 'next/cache'
-import type { Locale } from '@/i18n/routing'
+import { routing, type Locale } from '@/i18n/routing'
 import type { Category } from '@/payload-types'
 
 /**
@@ -97,3 +97,20 @@ export const getCategorySlugsByLocale = cache(
     { tags: [CATEGORIES_TAG], revalidate: 3600 },
   ),
 )
+
+/**
+ * When `slug` is another locale's slug for an active category, returns that category's
+ * slug in `locale` (or `null`). Lets the language switcher keep the current slug: the
+ * category page redirects to the right localized URL instead of 404ing.
+ */
+export async function findCategorySlugInLocale(
+  slug: string,
+  locale: Locale,
+): Promise<string | null> {
+  for (const otherLocale of routing.locales) {
+    if (otherLocale === locale) continue
+    const category = await getCategoryBySlug(slug, otherLocale)
+    if (category) return (await getCategorySlugsByLocale(category.id))[locale] ?? null
+  }
+  return null
+}

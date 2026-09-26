@@ -25,9 +25,7 @@ export async function Industries() {
             <span className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-600 group-hover:text-white">
               <Icon className="size-5" aria-hidden />
             </span>
-            <h3 className="mt-4 text-sm font-semibold text-navy-900">
-              {t(`${slug}.name`)}
-            </h3>
+            <h3 className="mt-4 text-sm font-semibold text-navy-900">{t(`${slug}.name`)}</h3>
             <p className="mt-1.5 text-xs leading-relaxed text-slate-500">
               {t(`${slug}.description`)}
             </p>

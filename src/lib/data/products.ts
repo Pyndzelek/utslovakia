@@ -85,28 +85,6 @@ export const getAllProductSlugsWithDates = cache(
   ),
 )
 
-/**
- * Maps every locale to this product's slug in that locale (the `slug` field
- * is localized). Used only to build hreflang alternate links.
- */
-export const getProductSlugsByLocale = cache(
-  unstable_cache(
-    async (id: number): Promise<Partial<Record<Locale, string>>> => {
-      const payload = await getPayload({ config })
-      const doc = await payload.findByID({
-        collection: 'products',
-        id,
-        locale: 'all',
-        depth: 0,
-        select: { slug: true },
-      })
-      return doc.slug as unknown as Partial<Record<Locale, string>>
-    },
-    ['product-slugs-by-locale'],
-    { tags: [PRODUCTS_TAG], revalidate: 3600 },
-  ),
-)
-
 export const getProductsByCategory = cache(
   unstable_cache(
     async (categoryId: number, locale: Locale): Promise<Product[]> => {

@@ -22,11 +22,14 @@ export default function FrontendError({
         Something went wrong
       </h1>
       <p className="mt-3 max-w-md text-[15px] leading-relaxed text-slate-500">
-        An unexpected error occurred while loading this page. You can try again, or head back to
-        the homepage.
+        An unexpected error occurred while loading this page. You can try again, or head back to the
+        homepage.
       </p>
       <div className="mt-8 flex flex-wrap justify-center gap-3">
-        <button onClick={() => reset()} className={buttonVariants({ variant: 'primary', size: 'md' })}>
+        <button
+          onClick={() => reset()}
+          className={buttonVariants({ variant: 'primary', size: 'md' })}
+        >
           Try again
         </button>
         <Link href="/" className={buttonVariants({ variant: 'outline', size: 'md' })}>

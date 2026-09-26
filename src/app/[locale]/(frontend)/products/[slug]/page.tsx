@@ -11,14 +11,10 @@ import { ProductRail } from '@/components/product/product-rail'
 import ProductView from '@/components/product/product-view'
 import { Product } from '@/payload-types'
 import { useTranslations } from 'next-intl'
-import {
-  getAllProductSlugs,
-  getProductBySlug,
-  getProductSlugsByLocale,
-  getProductsByCategory,
-} from '@/lib/data/products'
+import { getAllProductSlugs, getProductBySlug, getProductsByCategory } from '@/lib/data/products'
 import { buildDynamicLanguageAlternates } from '@/lib/seo/alternates'
 import { breadcrumbJsonLd, productJsonLd } from '@/lib/seo/json-ld'
+import { metaDescription, ogDefaults } from '@/lib/seo/meta'
 import { getMediaUrl } from '@/lib/utils'
 
 export const revalidate = 3600
@@ -46,13 +42,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const brand = typeof product.brand === 'object' ? product.brand : null
   const firstCategory = typeof product.categories?.[0] === 'object' ? product.categories[0] : null
 
+  // The layout's title template appends "| UTSlovakia".
   const title =
-    product.meta?.title ??
-    [product.title, brand?.name, firstCategory?.name, 'UTSlovakia'].filter(Boolean).join(' | ')
-  const description = product.meta?.description ?? product.description
+    product.meta?.title ||
+    [product.title, brand?.name, firstCategory?.name].filter(Boolean).join(' | ')
+  const description = product.meta?.description || metaDescription(product.description)
 
-  const canonicalPath = getPathname({ locale, href: { pathname: '/products/[slug]', params: { slug } } })
-  const languages = await buildLanguageAlternates(product.id)
+  const canonicalPath = getPathname({
+    locale,
+    href: { pathname: '/products/[slug]', params: { slug } },
+  })
+  // Product slugs aren't localized, so every locale shares this one.
+  const languages = buildDynamicLanguageAlternates('/products/[slug]', slug)
 
   const image = typeof product.images?.[0]?.image === 'object' ? product.images[0].image : null
   const imageUrl = getMediaUrl(image)
@@ -65,11 +66,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       languages,
     },
     openGraph: {
+      ...ogDefaults(locale),
       type: 'website',
       url: canonicalPath,
       title,
       description,
-      images: imageUrl ? [{ url: imageUrl, alt: product.images?.[0]?.alt ?? product.title }] : undefined,
+      images: imageUrl
+        ? [{ url: imageUrl, alt: product.images?.[0]?.alt ?? product.title }]
+        : undefined,
     },
     twitter: {
       card: 'summary_large_image',
@@ -95,6 +99,7 @@ export default async function ProductPage({ params }: PageProps) {
   })
   const image =
     typeof payloadProduct.images?.[0]?.image === 'object' ? payloadProduct.images[0].image : null
+  const tNav = await getTranslations('nav')
 
   return (
     <>
@@ -103,8 +108,8 @@ export default async function ProductPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             breadcrumbJsonLd([
-              { name: 'Home', path: getPathname({ locale, href: '/' }) },
-              { name: 'Products', path: getPathname({ locale, href: '/products' }) },
+              { name: tNav('home'), path: getPathname({ locale, href: '/' }) },
+              { name: tNav('products'), path: getPathname({ locale, href: '/products' }) },
               { name: payloadProduct.title, path: canonicalPath },
             ]),
           ),
@@ -140,13 +145,6 @@ export default async function ProductPage({ params }: PageProps) {
   )
 }
 
-/** Builds `alternates.languages` from this product's per-locale slugs. */
-async function buildLanguageAlternates(productId: number) {
-  const slugsByLocale = await getProductSlugsByLocale(productId)
-  return buildDynamicLanguageAlternates('/products/[slug]', slugsByLocale)
-}
-
-// 3. Inject actual category data into Breadcrumbs
 function BreadcrumbsHeader({
   productTitle,
   categories,
@@ -182,7 +180,7 @@ function BreadcrumbsHeader({
   )
 }
 
-// 4. Query Payload for Related Products
+/** Other products from the product's first category; hidden when there are none. */
 async function RelatedProducts({
   categories,
   currentProductId,
@@ -192,7 +190,7 @@ async function RelatedProducts({
   currentProductId: string | number
   locale: Locale
 }) {
-  const t = await getTranslations('productPage') // Use await inside async Server Components
+  const t = await getTranslations('productPage')
 
   const firstCategory = categories?.[0]
   const categoryData =
@@ -200,8 +198,10 @@ async function RelatedProducts({
 
   if (!categoryData) return null
 
-  //:TODO: Add logic to exclude the current product from the related products
-  const relatedProducts = await getProductsByCategory(categoryData.id, locale)
+  const relatedProducts = (await getProductsByCategory(categoryData.id, locale)).filter(
+    (product) => product.id !== currentProductId,
+  )
+  if (relatedProducts.length === 0) return null
 
   return (
     <section className="border-t border-line bg-white py-16">

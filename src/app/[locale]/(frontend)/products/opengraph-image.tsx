@@ -7,11 +7,7 @@ export const size = OG_IMAGE_SIZE
 export const contentType = OG_IMAGE_CONTENT_TYPE
 export const alt = 'UT Slovakia products'
 
-export default async function OpengraphImage({
-  params,
-}: {
-  params: Promise<{ locale: Locale }>
-}) {
+export default async function OpengraphImage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'products.meta' })
 

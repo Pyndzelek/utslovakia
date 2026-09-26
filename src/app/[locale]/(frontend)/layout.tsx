@@ -7,6 +7,9 @@ import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server
 import { routing, type Locale } from '@/i18n/routing'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
+import { getSiteSettings } from '@/lib/data/site-settings'
+import { organizationJsonLd } from '@/lib/seo/json-ld'
+import { ogDefaults } from '@/lib/seo/meta'
 import { SITE_URL } from '@/lib/site'
 import './styles.css'
 
@@ -43,6 +46,7 @@ export async function generateMetadata({ params }: RootLayoutProps): Promise<Met
       default: t('title'),
     },
     description: t('description'),
+    openGraph: ogDefaults(locale as Locale),
   }
 }
 
@@ -63,7 +67,7 @@ export default async function FrontendRootLayout({ children, params }: RootLayou
     notFound()
   }
   setRequestLocale(locale)
-  const messages = await getMessages()
+  const [messages, settings] = await Promise.all([getMessages(), getSiteSettings(locale as Locale)])
 
   return (
     <html
@@ -72,6 +76,10 @@ export default async function FrontendRootLayout({ children, params }: RootLayou
       data-scroll-behavior="smooth"
     >
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd(settings)) }}
+        />
         <NextIntlClientProvider messages={messages}>
           <div className="flex min-h-screen flex-col">
             <Header />

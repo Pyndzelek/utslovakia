@@ -1,6 +1,6 @@
 import { SITE_URL } from '@/lib/site'
 import { resolvePrice } from '@/lib/currency'
-import type { Product } from '@/payload-types'
+import type { Product, SiteSetting } from '@/payload-types'
 
 export interface BreadcrumbItem {
   name: string
@@ -117,5 +117,37 @@ export function productJsonLd(params: {
     image: imageUrl ? [toAbsoluteUrl(imageUrl)] : undefined,
     brand: brand ? { '@type': 'Brand', name: brand.name } : undefined,
     offers,
+  }
+}
+
+/** Site-wide Organization data from the `site-settings` global (rendered in the layout). */
+export function organizationJsonLd(settings: SiteSetting) {
+  const { address, social } = settings
+  const street = address?.street
+  const sameAs = [social?.facebook, social?.instagram, social?.linkedin].filter(
+    (url): url is string => Boolean(url),
+  )
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: settings.companyName,
+    url: SITE_URL,
+    logo: `${SITE_URL}/icon.png`,
+    vatID: settings.vatId || undefined,
+    taxID: settings.companyId || undefined,
+    telephone: settings.phones?.[0]?.number,
+    email: settings.emails?.[0]?.email,
+    address: street
+      ? {
+          '@type': 'PostalAddress',
+          streetAddress: street,
+          postalCode: address.postalCode,
+          addressLocality: address.city,
+          addressRegion: address.region || undefined,
+          addressCountry: address.country || undefined,
+        }
+      : undefined,
+    sameAs: sameAs.length > 0 ? sameAs : undefined,
   }
 }

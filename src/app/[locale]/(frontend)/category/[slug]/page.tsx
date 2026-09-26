@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { setRequestLocale } from 'next-intl/server'
-import { routing, type Locale } from '@/i18n/routing'
-import { getPathname } from '@/i18n/navigation'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
+import type { Locale } from '@/i18n/routing'
+import { getPathname, redirect } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
 import { FilterSidebar } from '@/components/catalog/filter-sidebar'
 import { CatalogToolbar } from '@/components/catalog/catalog-toolbar'
@@ -11,13 +11,20 @@ import { CatalogEmptyState } from '@/components/catalog/empty-state'
 import { ProductGrid } from '@/components/product/product-grid'
 import { CategoryHero } from '@/components/catalog/category-hero'
 import { CategoryNavigation } from '@/components/catalog/category-navigation'
-import { getCategories, getCategoryBySlug, getCategorySlugsByLocale } from '@/lib/data/categories'
+import {
+  findCategorySlugInLocale,
+  getCategories,
+  getCategoryBySlug,
+  getCategorySlugsByLocale,
+} from '@/lib/data/categories'
 import { getFilteredProducts } from '@/lib/data/products'
 import { buildDynamicLanguageAlternates } from '@/lib/seo/alternates'
 import { breadcrumbJsonLd, itemListJsonLd } from '@/lib/seo/json-ld'
+import { metaDescription, ogDefaults } from '@/lib/seo/meta'
 
 const PRODUCTS_PER_PAGE = 12
-export const revalidate = 600
+// Rendered per request: filters and pagination come from `searchParams`, which can't be
+// combined with static pre-rendering. The Payload queries behind it are cached.
 
 interface PageProps {
   params: Promise<{ locale: Locale; slug: string }>
@@ -29,17 +36,6 @@ interface PageProps {
   }>
 }
 
-export async function generateStaticParams() {
-  const paramsByLocale = await Promise.all(
-    routing.locales.map(async (locale) => {
-      const categories = await getCategories(locale, 0)
-      return categories.map((category) => ({ locale, slug: category.slug }))
-    }),
-  )
-
-  return paramsByLocale.flat()
-}
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params
   const category = await getCategoryBySlug(slug, locale)
@@ -48,8 +44,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const seoImage = typeof category.meta?.image === 'object' ? category.meta.image : null
   const fallbackImage = typeof category.image === 'object' ? category.image : null
   const image = seoImage ?? fallbackImage
-  const title = category.meta?.title ?? category.name
-  const description = category.meta?.description ?? category.description ?? undefined
+  const title = category.meta?.title || category.name
+  const description = category.meta?.description || metaDescription(category.description)
   const canonicalPath = getPathname({
     locale,
     href: { pathname: '/category/[slug]', params: { slug } },
@@ -64,6 +60,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       languages,
     },
     openGraph: {
+      ...ogDefaults(locale),
       type: 'website',
       url: canonicalPath,
       title,
@@ -79,13 +76,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-//Todo: fix changing language on this page - switching from one to another does not change the slug causing an error
 export default async function CategoryPage({ params, searchParams }: PageProps) {
   const { locale, slug } = await params
   setRequestLocale(locale)
 
   const category = await getCategoryBySlug(slug, locale)
-  if (!category) notFound()
+  if (!category) {
+    // Category slugs are localized; the language switcher keeps the current one, so
+    // send another locale's slug to this locale's URL for the same category.
+    const localizedSlug = await findCategorySlugInLocale(slug, locale)
+    if (!localizedSlug) notFound()
+    return redirect({
+      href: { pathname: '/category/[slug]', params: { slug: localizedSlug } },
+      locale,
+    })
+  }
+  const t = await getTranslations('nav')
   const allCategories = await getCategories(locale, 0)
 
   const query = await searchParams
@@ -113,14 +119,14 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
   const hasFilters = Boolean(query.minPrice || query.maxPrice || page > 1)
 
   return (
-    <main>
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             breadcrumbJsonLd([
-              { name: 'Home', path: getPathname({ locale, href: '/' }) },
-              { name: 'Categories', path: getPathname({ locale, href: '/category' }) },
+              { name: t('home'), path: getPathname({ locale, href: '/' }) },
+              { name: t('category'), path: getPathname({ locale, href: '/category' }) },
               {
                 name: category.name,
                 path: getPathname({
@@ -175,7 +181,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
           </div>
         </div>
       </Container>
-    </main>
+    </>
   )
 }
 

@@ -6,12 +6,14 @@ import { Link } from '@/i18n/navigation'
 import { buttonVariants } from '@/components/ui/button'
 import { HERO_IMAGE } from '@/lib/site'
 
-const services: { Icon: LucideIcon; labelKey: 'serviceAdvice' | 'serviceSupport' | 'servicePrice' }[] =
-  [
-    { Icon: Headset, labelKey: 'serviceAdvice' },
-    { Icon: Wrench, labelKey: 'serviceSupport' },
-    { Icon: PackageCheck, labelKey: 'servicePrice' },
-  ]
+const services: {
+  Icon: LucideIcon
+  labelKey: 'serviceAdvice' | 'serviceSupport' | 'servicePrice'
+}[] = [
+  { Icon: Headset, labelKey: 'serviceAdvice' },
+  { Icon: Wrench, labelKey: 'serviceSupport' },
+  { Icon: PackageCheck, labelKey: 'servicePrice' },
+]
 
 export async function CtaBanner() {
   const t = await getTranslations('home.cta')

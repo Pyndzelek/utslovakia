@@ -4,6 +4,9 @@ export const routing = defineRouting({
   locales: ['pl', 'en', 'sk', 'pt-br'],
   defaultLocale: 'pl',
   localePrefix: 'as-needed', // Hides '/pl' on default root URLs
+  // Pages emit hreflang via `alternates` metadata (src/lib/seo/alternates.ts). The
+  // middleware's automatic `Link` header can't know localized category slugs.
+  alternateLinks: false,
 
   pathnames: {
     '/': '/',
