@@ -82,14 +82,15 @@ Label or description changes don't need a migration. `migrate:create` tells you 
 Production's schema was originally created by schema push, not by migrations. Before the **first** deploy that includes `src/migrations/`:
 
 1. Compare production's schema with `20260926_020142_baseline` (e.g. on a Neon branch of production: `pnpm migrate:status`, or diff `pg_dump --schema-only` against a database created by `pnpm migrate`).
-2. Record the baseline as already applied, so only the later migrations run:
+2. Record the baseline as already applied, so only the later migrations run, and remove the `dev` row (batch `-1`) that schema push left behind. While that row exists, `payload migrate` asks for confirmation; Vercel's build can't answer, so it exits successfully **without migrating** and the new code is deployed against the old schema:
    ```sql
    INSERT INTO payload_migrations (name, batch, updated_at, created_at)
    VALUES ('20260926_020142_baseline', 1, now(), now());
+   DELETE FROM payload_migrations WHERE batch = -1;
    ```
 3. Try `pnpm migrate` on a Neon branch of production first, then deploy.
 
-The second migration adds user roles, version history and site settings. It makes every existing user an admin and pre-fills the company data. The third migration (`remove_versions`) drops that version history again to save database space. The fourth (`remove_company_id_registration`) removes the IČO and register-entry fields from site settings.
+The second migration adds user roles, version history and site settings. It makes every existing user an admin and pre-fills the company data. The third migration (`remove_versions`) drops that version history again to save database space. The fourth (`remove_company_id_registration`) removes the IČO and register-entry fields from site settings. The fifth (`search_unaccent`) enables Postgres's `unaccent` extension for diacritics-insensitive catalogue search.
 
 ## Media (Cloudflare R2)
 
