@@ -10,13 +10,12 @@ const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
   experimental: {
-    // Keep visited pages in the client router cache so back-and-forth
-    // navigation (home → products → home → products) reuses the RSC payload
-    // instead of re-rendering and flashing loading.tsx. `/products` reads
-    // searchParams and is therefore "dynamic", whose default stale time is 0.
-    // Server-side freshness is still handled by revalidateTag on CMS changes.
+    // Keep visited *static* pages in the client router cache so back-and-forth
+    // navigation reuses the RSC payload. `dynamic` must stay 0: it also applies to
+    // the Payload admin, where a non-zero value keeps showing cached admin pages
+    // after logout/session expiry and stale data after edits.
     staleTimes: {
-      dynamic: 300,
+      dynamic: 0,
       static: 1800,
     },
   },
