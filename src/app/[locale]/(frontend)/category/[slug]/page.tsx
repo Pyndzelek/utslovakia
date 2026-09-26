@@ -7,6 +7,7 @@ import { Container } from '@/components/ui/container'
 import { FilterSidebar } from '@/components/catalog/filter-sidebar'
 import { CatalogToolbar } from '@/components/catalog/catalog-toolbar'
 import { Pagination } from '@/components/catalog/pagination'
+import { CatalogEmptyState } from '@/components/catalog/empty-state'
 import { ProductGrid } from '@/components/product/product-grid'
 import { CategoryHero } from '@/components/catalog/category-hero'
 import { CategoryNavigation } from '@/components/catalog/category-navigation'
@@ -105,6 +106,12 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
     sort: query.sort || '-createdAt',
   })
 
+  const basePath = getPathname({
+    locale,
+    href: { pathname: '/category/[slug]', params: { slug: category.slug } },
+  })
+  const hasFilters = Boolean(query.minPrice || query.maxPrice || page > 1)
+
   return (
     <main>
       <script
@@ -152,13 +159,14 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
 
           <div>
             <CatalogToolbar resultCount={totalDocs} />
-            <ProductGrid products={categoryProducts} className="mt-6" />
+            {categoryProducts.length > 0 ? (
+              <ProductGrid products={categoryProducts} className="mt-6" />
+            ) : (
+              <CatalogEmptyState basePath={basePath} hasFilters={hasFilters} className="mt-6" />
+            )}
             <div className="mt-10">
               <Pagination
-                basePath={getPathname({
-                  locale,
-                  href: { pathname: '/category/[slug]', params: { slug: category.slug } },
-                })}
+                basePath={basePath}
                 searchParams={query}
                 pages={totalPages}
                 current={page}

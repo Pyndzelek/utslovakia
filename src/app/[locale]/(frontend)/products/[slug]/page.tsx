@@ -114,7 +114,12 @@ export default async function ProductPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
-            productJsonLd({ product: payloadProduct, canonicalPath, imageUrl: getMediaUrl(image) }),
+            productJsonLd({
+              product: payloadProduct,
+              locale,
+              canonicalPath,
+              imageUrl: getMediaUrl(image),
+            }),
           ),
         }}
       />

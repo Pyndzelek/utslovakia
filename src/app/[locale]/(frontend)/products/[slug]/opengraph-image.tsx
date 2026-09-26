@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og'
 import { getProductBySlug } from '@/lib/data/products'
-import { formatPrice } from '@/lib/format'
+import { formatPrice, resolvePrice } from '@/lib/currency'
 import type { Locale } from '@/i18n/routing'
 
 export const size = { width: 1200, height: 630 }
@@ -19,9 +19,10 @@ export default async function OpengraphImage({
 
   const name = product?.title ?? 'UT Slovakia'
   const brand = brandDoc?.name ?? 'Payment systems & components'
-  // formatPrice renders EUR (sk-SK locale); prefer the EUR price when set, PLN otherwise
-  const displayPrice = product?.prices?.EUR ?? product?.prices?.PLN
-  const price = displayPrice ? formatPrice(displayPrice) : null
+  const displayPrice = product?.prices ? resolvePrice(product.prices, locale) : null
+  const price = displayPrice?.amount
+    ? formatPrice(displayPrice.amount, displayPrice.currency, locale)
+    : null
 
   return new ImageResponse(
     (

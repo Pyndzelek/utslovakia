@@ -128,6 +128,13 @@
       "searchPlaceholder": "Buscar nos resultados…",
       "resultCount": "{count} produtos"
     },
+    "empty": {
+      "title": "Nenhum produto ainda",
+      "description": "Não há produtos listados aqui no momento. Volte em breve ou fale conosco — podemos encontrá-lo para você.",
+      "filteredTitle": "Nenhum produto corresponde aos filtros",
+      "filteredDescription": "Tente ampliar a faixa de preço ou selecionar outras categorias.",
+      "clearFilters": "Limpar filtros"
+    },
     "pagination": {
       "label": "Paginação",
       "previous": "Página anterior",

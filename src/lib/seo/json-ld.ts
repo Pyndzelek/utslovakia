@@ -1,4 +1,5 @@
 import { SITE_URL } from '@/lib/site'
+import { resolvePrice } from '@/lib/currency'
 import type { Product } from '@/payload-types'
 
 export interface BreadcrumbItem {
@@ -69,29 +70,19 @@ const availabilityMap: Record<Product['stockStatus'], string> = {
   preorder: 'https://schema.org/PreOrder',
 }
 
-/** Picks the display currency the rest of the app already uses: EUR when set, PLN otherwise. */
-function resolveBasePrice(prices: Product['prices']): { amount: number; currency: 'EUR' | 'PLN' } {
-  if (typeof prices.EUR === 'number') return { amount: prices.EUR, currency: 'EUR' }
-  return { amount: prices.PLN, currency: 'PLN' }
-}
-
-type PriceOverrides = NonNullable<NonNullable<Product['variants']>[number]['priceOverrides']>
-
-function resolveVariantAmount(
-  base: { amount: number; currency: 'EUR' | 'PLN' },
-  override?: PriceOverrides,
-): number {
-  const overrideAmount = override?.[base.currency]
-  return typeof overrideAmount === 'number' ? overrideAmount : base.amount
-}
-
-export function productJsonLd(params: { product: Product; canonicalPath: string; imageUrl?: string | null }) {
-  const { product, canonicalPath, imageUrl } = params
+export function productJsonLd(params: {
+  product: Product
+  locale: string
+  canonicalPath: string
+  imageUrl?: string | null
+}) {
+  const { product, locale, canonicalPath, imageUrl } = params
   const brand = typeof product.brand === 'object' ? product.brand : null
 
-  const base = resolveBasePrice(product.prices)
-  const variantAmounts = (product.variants ?? []).map((variant) =>
-    resolveVariantAmount(base, variant.priceOverrides),
+  // Same currency the page displays for this locale (PLN when that currency isn't set).
+  const base = resolvePrice(product.prices, locale)
+  const variantAmounts = (product.variants ?? []).map(
+    (variant) => resolvePrice(product.prices, locale, variant.priceOverrides).amount,
   )
   const allAmounts = [base.amount, ...variantAmounts]
   const lowPrice = Math.min(...allAmounts)

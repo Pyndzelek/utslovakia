@@ -137,6 +137,13 @@
       "searchPlaceholder": "Hľadať vo výsledkoch…",
       "resultCount": "{count} produktov"
     },
+    "empty": {
+      "title": "Zatiaľ žiadne produkty",
+      "description": "Momentálne tu nie sú žiadne produkty. Pozrite sa neskôr alebo nás kontaktujte — radi ich pre vás zaobstaráme.",
+      "filteredTitle": "Vašim filtrom nezodpovedajú žiadne produkty",
+      "filteredDescription": "Skúste rozšíriť cenové rozpätie alebo vybrať iné kategórie.",
+      "clearFilters": "Zrušiť filtre"
+    },
     "pagination": {
       "label": "Stránkovanie",
       "previous": "Predchádzajúca stránka",

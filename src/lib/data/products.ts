@@ -1,9 +1,10 @@
-import { getPayload, Where } from 'payload'
+import { getPayload, Where, WhereField } from 'payload'
 import config from '@payload-config'
 import { cache } from 'react'
 import { unstable_cache } from 'next/cache'
 import type { Locale } from '@/i18n/routing'
 import { Product } from '@/payload-types'
+import { currencyForLocale } from '@/lib/currency'
 
 /**
  * Data access for the `products` Payload collection.
@@ -129,32 +130,37 @@ export const getProductsByCategory = cache(
 /**
  * Counts published products per category in a single query, instead of one
  * `count()` round-trip per category — cheaper when listing many categories.
- *
- * Only request-deduped via `cache()`, not `unstable_cache`: its `Map` return
- * value doesn't survive `unstable_cache`'s JSON serialization.
+ * Returns a plain object (category id → count) so it survives
+ * `unstable_cache`'s JSON serialization.
  */
-export const getProductCountsByCategory = cache(async (locale: Locale): Promise<Map<number, number>> => {
-  const payload = await getPayload({ config })
+export const getProductCountsByCategory = cache(
+  unstable_cache(
+    async (locale: Locale): Promise<Record<number, number>> => {
+      const payload = await getPayload({ config })
 
-  const { docs } = await payload.find({
-    collection: 'products',
-    locale,
-    where: { status: { equals: 'published' } },
-    select: { categories: true },
-    depth: 0, // categories come back as bare ids, which is all we count here
-    pagination: false,
-  })
+      const { docs } = await payload.find({
+        collection: 'products',
+        locale,
+        where: { status: { equals: 'published' } },
+        select: { categories: true },
+        depth: 0, // categories come back as bare ids, which is all we count here
+        pagination: false,
+      })
 
-  const counts = new Map<number, number>()
-  for (const product of docs) {
-    for (const category of product.categories) {
-      const categoryId = typeof category === 'number' ? category : category.id
-      counts.set(categoryId, (counts.get(categoryId) ?? 0) + 1)
-    }
-  }
+      const counts: Record<number, number> = {}
+      for (const product of docs) {
+        for (const category of product.categories) {
+          const categoryId = typeof category === 'number' ? category : category.id
+          counts[categoryId] = (counts[categoryId] ?? 0) + 1
+        }
+      }
 
-  return counts
-})
+      return counts
+    },
+    ['product-counts-by-category'],
+    { tags: [PRODUCTS_TAG], revalidate: 3600 },
+  ),
+)
 
 /** Bestseller-badged products for the home page. */
 export const getBestsellers = cache(
@@ -260,15 +266,31 @@ export const getFilteredProducts = cache(
 
       const priceConditions: Where[] = []
 
-      // `prices.PLN` is the only required currency on every product, so it's
-      // the one field guaranteed to exist to filter on (display price prefers
-      // EUR when set, same as `productJsonLd`'s `resolveBasePrice`).
+      // Filter on the price the visitor actually sees: the locale's currency
+      // when a product has it set, its PLN base price otherwise (PLN is the
+      // only required currency) — mirrors `resolvePrice` in src/lib/currency.ts.
+      const currency = currencyForLocale(locale)
+      const priceRange = (range: WhereField): Where =>
+        currency === 'PLN'
+          ? { 'prices.PLN': range }
+          : {
+              or: [
+                { [`prices.${currency}`]: range },
+                {
+                  and: [
+                    { [`prices.${currency}`]: { exists: false } },
+                    { 'prices.PLN': range },
+                  ],
+                },
+              ],
+            }
+
       if (typeof minPrice === 'number' && !isNaN(minPrice) && minPrice >= 0) {
-        priceConditions.push({ 'prices.PLN': { greater_than_equal: minPrice } })
+        priceConditions.push(priceRange({ greater_than_equal: minPrice }))
       }
 
       if (typeof maxPrice === 'number' && !isNaN(maxPrice) && maxPrice >= 0) {
-        priceConditions.push({ 'prices.PLN': { less_than_equal: maxPrice } })
+        priceConditions.push(priceRange({ less_than_equal: maxPrice }))
       }
 
       if (priceConditions.length > 0) {

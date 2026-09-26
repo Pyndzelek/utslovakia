@@ -128,6 +128,13 @@
       "searchPlaceholder": "Szukaj w wynikach…",
       "resultCount": "{count} produktów"
     },
+    "empty": {
+      "title": "Brak produktów",
+      "description": "Obecnie nie ma tu żadnych produktów. Zajrzyj później lub skontaktuj się z nami — pomożemy je znaleźć.",
+      "filteredTitle": "Brak produktów spełniających kryteria",
+      "filteredDescription": "Spróbuj poszerzyć zakres cen lub wybrać inne kategorie.",
+      "clearFilters": "Wyczyść filtry"
+    },
     "pagination": {
       "label": "Paginacja",
       "previous": "Poprzednia strona",

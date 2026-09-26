@@ -3,7 +3,9 @@ import { Container } from '../ui/container'
 import { ProductGallery } from './product-gallery'
 import { StockBadge } from './product-badge'
 import { Price } from '../ui/price'
-import { Button } from '../ui/button'
+import { Button, buttonVariants } from '../ui/button'
+import { ProductDescription } from './product-description'
+import { cn } from '@/lib/utils'
 import { Check, Headset, RefreshCcw, ShieldCheck, ShoppingCart, Truck } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { Product } from '@/payload-types'
@@ -33,19 +35,29 @@ export default function ProductView({ product }: { product: Product }) {
           </div>
 
           <div className="mt-6 rounded-2xl border border-line bg-white p-6 shadow-card">
-            <Price price={product.prices.EUR ?? product.prices.PLN} size="lg" />
+            <Price prices={product.prices} size="lg" />
             <p className="mt-1 text-xs text-slate-400">{t('vatNote')}</p>
 
             <div className="mt-5 flex flex-wrap items-center gap-3">
-              <Button
-                variant="primary"
-                size="lg"
-                className="flex-1 basis-48"
-                disabled={!!product.link}
-              >
-                <ShoppingCart aria-hidden />
-                {t('buyViaEbay')}
-              </Button>
+              {product.link ? (
+                <a
+                  href={product.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    buttonVariants({ variant: 'primary', size: 'lg' }),
+                    'flex-1 basis-48',
+                  )}
+                >
+                  <ShoppingCart aria-hidden />
+                  {t('buyViaEbay')}
+                </a>
+              ) : (
+                <Button variant="primary" size="lg" className="flex-1 basis-48" disabled>
+                  <ShoppingCart aria-hidden />
+                  {t('buyViaEbay')}
+                </Button>
+              )}
             </div>
             <p className="mt-4 text-[15px] leading-relaxed text-slate-500">{t('bulkInquiry')}</p>
 
@@ -96,22 +108,27 @@ export default function ProductView({ product }: { product: Product }) {
           <h2 className="font-display text-2xl font-semibold tracking-tight text-navy-900">
             {t('description')}
           </h2>
-          <div className="mt-4 space-y-4 text-[15px] leading-relaxed text-slate-600">
-            {product.description}
-          </div>
+          <ProductDescription text={product.description} />
         </div>
         <div>
-          <h3 className="font-display mt-8 text-lg font-semibold text-navy-900">
-            {t('keyFeatures')}
-          </h3>
-          <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
-            {product.keyFeatures?.map((feature) => (
-              <li key={feature.text} className="flex items-start gap-2.5 text-sm text-slate-600">
-                <Check className="mt-0.5 size-4 shrink-0 text-emerald-600" aria-hidden />
-                {feature.text}
-              </li>
-            ))}
-          </ul>
+          {!!product.keyFeatures?.length && (
+            <>
+              <h3 className="font-display mt-8 text-lg font-semibold text-navy-900">
+                {t('keyFeatures')}
+              </h3>
+              <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
+                {product.keyFeatures?.map((feature) => (
+                  <li
+                    key={feature.text}
+                    className="flex items-start gap-2.5 text-sm text-slate-600"
+                  >
+                    <Check className="mt-0.5 size-4 shrink-0 text-emerald-600" aria-hidden />
+                    {feature.text}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       </div>
     </Container>

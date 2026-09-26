@@ -128,6 +128,13 @@
       "searchPlaceholder": "Search results…",
       "resultCount": "{count} products"
     },
+    "empty": {
+      "title": "No products yet",
+      "description": "There's nothing listed here at the moment. Check back soon or contact us — we can source it for you.",
+      "filteredTitle": "No products match your filters",
+      "filteredDescription": "Try widening the price range or selecting different categories.",
+      "clearFilters": "Clear filters"
+    },
     "pagination": {
       "label": "Pagination",
       "previous": "Previous page",

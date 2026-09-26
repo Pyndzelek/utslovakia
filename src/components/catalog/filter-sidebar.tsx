@@ -61,7 +61,7 @@ export function FilterSidebar({
   className,
 }: {
   categories?: Category[]
-  productCounts?: Map<number, number>
+  productCounts?: Record<number, number>
   /** Hide the category checkbox group — e.g. on a category detail page, where
    *  the category is already fixed by the URL and re-listing all categories
    *  to filter by would be redundant. */
@@ -82,6 +82,15 @@ export function FilterSidebar({
 
   const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') ?? '')
   const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') ?? '')
+
+  // Keep inputs in sync when the URL changes from outside the sidebar (e.g. the
+  // empty state's "clear filters" link, or browser back/forward).
+  const [syncedParams, setSyncedParams] = useState(searchParams)
+  if (searchParams !== syncedParams) {
+    setSyncedParams(searchParams)
+    setMinPrice(searchParams.get('minPrice') ?? '')
+    setMaxPrice(searchParams.get('maxPrice') ?? '')
+  }
 
   function pushParams(mutate: (params: URLSearchParams) => void) {
     const params = new URLSearchParams(searchParams.toString())
@@ -140,7 +149,7 @@ export function FilterSidebar({
               <CheckRow
                 key={category.id}
                 label={category.name}
-                count={productCounts?.get(category.id)}
+                count={productCounts?.[category.id]}
                 checked={activeCategoryIds.has(category.id)}
                 onChange={() => toggleCategory(category.id)}
               />

@@ -6,6 +6,7 @@ import { Container } from '@/components/ui/container'
 import { FilterSidebar } from '@/components/catalog/filter-sidebar'
 import { CatalogToolbar } from '@/components/catalog/catalog-toolbar'
 import { Pagination } from '@/components/catalog/pagination'
+import { CatalogEmptyState } from '@/components/catalog/empty-state'
 import { ProductGrid } from '@/components/product/product-grid'
 import PageHeader from '@/components/layout/page-header'
 import { getFilteredProducts, getProductCountsByCategory } from '@/lib/data/products'
@@ -75,6 +76,9 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
       getProductCountsByCategory(locale),
     ])
 
+  const basePath = getPathname({ locale, href: '/products' })
+  const hasFilters = Boolean(query.category || query.minPrice || query.maxPrice || page > 1)
+
   return (
     <>
       <script
@@ -110,10 +114,14 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
 
           <div>
             <CatalogToolbar resultCount={totalDocs} />
-            <ProductGrid products={products} className="mt-6" />
+            {products.length > 0 ? (
+              <ProductGrid products={products} className="mt-6" />
+            ) : (
+              <CatalogEmptyState basePath={basePath} hasFilters={hasFilters} className="mt-6" />
+            )}
             <div className="mt-10">
               <Pagination
-                basePath={getPathname({ locale, href: '/products' })}
+                basePath={basePath}
                 searchParams={query}
                 pages={totalPages}
                 current={page}

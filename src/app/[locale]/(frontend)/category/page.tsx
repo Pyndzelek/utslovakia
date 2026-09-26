@@ -92,7 +92,7 @@ async function CategoryGrid({ locale }: { locale: Locale }) {
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5 mb-14">
       {categories.map((category, index) => (
         <RevealOnScroll key={category.slug} index={index}>
-          <CategoryCard category={category} productCount={productCounts.get(category.id) ?? 0} />
+          <CategoryCard category={category} productCount={productCounts[category.id] ?? 0} />
         </RevealOnScroll>
       ))}
     </div>
