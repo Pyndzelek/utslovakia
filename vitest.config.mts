@@ -8,5 +8,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
     include: ['tests/int/**/*.int.spec.ts'],
+    // next-intl's ESM build imports `next/navigation` without an extension; let Vite resolve it.
+    server: { deps: { inline: ['next-intl'] } },
   },
 })

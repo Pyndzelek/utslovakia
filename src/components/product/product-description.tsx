@@ -1,6 +1,6 @@
 import React from 'react'
 
-type Block =
+export type Block =
   | { type: 'heading'; text: string }
   | { type: 'paragraph'; text: string }
   | { type: 'list'; items: string[] }
@@ -12,7 +12,7 @@ const isHeading = (line: string) => /^[^:]{1,50}:$/.test(line)
  * Turns plain-text descriptions (paragraphs separated by blank lines, "Heading:" lines,
  * one-item-per-line lists) into structured blocks.
  */
-function parse(text: string): Block[] {
+export function parseDescription(text: string): Block[] {
   const blocks: Block[] = []
   let lines: string[] = []
   const flush = () => {
@@ -35,7 +35,7 @@ function parse(text: string): Block[] {
 export function ProductDescription({ text }: { text: string }) {
   return (
     <div className="mt-4 space-y-4 text-[15px] leading-relaxed text-slate-600">
-      {parse(text).map((block, i) => {
+      {parseDescription(text).map((block, i) => {
         if (block.type === 'heading')
           return (
             <h3 key={i} className="pt-2 text-base font-semibold text-navy-900">

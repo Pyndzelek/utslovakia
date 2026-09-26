@@ -18,10 +18,15 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
+  // `pnpm dev` compiles routes on first visit, which can take several seconds.
+  expect: { timeout: 15_000 },
+  timeout: 90_000,
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:3000',
+    // Polish browser, so `/` isn't redirected by Accept-Language locale detection.
+    locale: 'pl-PL',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -34,6 +39,10 @@ export default defineConfig({
   ],
   webServer: {
     command: 'pnpm dev',
+    // Don't pass the test runner's `--import=tsx/esm` on to pnpm/Next.js. The server
+    // inherits DATABASE_URL from .env.test.local (loaded above), not the production one.
+    env: { NODE_OPTIONS: '--no-deprecation' },
+    timeout: 180_000,
     reuseExistingServer: true,
     url: 'http://localhost:3000',
   },

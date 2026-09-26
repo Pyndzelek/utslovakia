@@ -34,7 +34,7 @@ jobs:
 
       - uses: pnpm/action-setup@v4
         with:
-          version: 10
+          version: 11
 
       - uses: actions/setup-node@v4
         with:
@@ -45,14 +45,22 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: pnpm lint
+        run: pnpm lint --max-warnings 0
 
-      - name: Integration tests
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Unit tests
         run: pnpm test:int
+
+      # Schema push is disabled (src/payload.config.ts), so the empty CI database is
+      # created from the migrations — this also proves they apply cleanly from scratch.
+      - name: Apply migrations
+        run: pnpm migrate
 
       - name: Build
         run: pnpm build
 
       # Playwright e2e is intentionally not run here — it boots a full `pnpm dev`
-      # server and is heavier/flakier in CI. Run `pnpm test:e2e` locally before
-      # merging changes that touch frontend behavior.
+      # server and is heavier/flakier in CI. Run `pnpm test:e2e` locally (against a
+      # database from .env.test.local) before merging changes that touch behavior.
