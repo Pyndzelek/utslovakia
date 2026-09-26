@@ -150,6 +150,8 @@ export interface User {
   collection: 'users';
 }
 /**
+ * Maksymalny rozmiar pliku ok. 4 MB. Zdjęcia są automatycznie konwertowane do WebP i zmniejszane.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */

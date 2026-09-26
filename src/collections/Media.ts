@@ -2,6 +2,10 @@ import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {
   slug: 'media',
+  admin: {
+    description:
+      'Maksymalny rozmiar pliku ok. 4 MB. Zdjęcia są automatycznie konwertowane do WebP i zmniejszane.',
+  },
   access: {
     read: () => true,
   },

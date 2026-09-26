@@ -9,6 +9,17 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // Keep visited pages in the client router cache so back-and-forth
+    // navigation (home → products → home → products) reuses the RSC payload
+    // instead of re-rendering and flashing loading.tsx. `/products` reads
+    // searchParams and is therefore "dynamic", whose default stale time is 0.
+    // Server-side freshness is still handled by revalidateTag on CMS changes.
+    staleTimes: {
+      dynamic: 300,
+      static: 1800,
+    },
+  },
   images: {
     // Media are pre-resized server-side into named variants (thumbnail 200w /
     // card 480w / gallery 960w / og 1200w — see src/collections/Media.ts), and

@@ -28,13 +28,13 @@ export const Product: CollectionConfig = {
       },
     ],
     afterChange: [
-      () => {
-        revalidateTag('products', 'max')
+      ({ context }) => {
+        if (!context.disableRevalidate) revalidateTag('products', 'max')
       },
     ],
     afterDelete: [
-      () => {
-        revalidateTag('products', 'max')
+      ({ context }) => {
+        if (!context.disableRevalidate) revalidateTag('products', 'max')
       },
     ],
   },

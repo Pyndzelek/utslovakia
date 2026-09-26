@@ -92,9 +92,12 @@ export default buildConfig({
           secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
         },
       },
-      // Uploads go straight from the admin's browser to the bucket, bypassing
-      // Vercel's ~4.5MB serverless function request-body limit.
-      clientUploads: true,
+      // No `clientUploads`: with it, the browser PUTs the raw file straight to
+      // the bucket and Payload never re-uploads the webp-converted/resized
+      // original (plugin-cloud-storage skips files carrying clientUploadContext),
+      // so the DB points at e.g. `x.webp` while the bucket only has `x.png`.
+      // Server-side uploads keep only compressed webp in R2, at the cost of
+      // Vercel's ~4.5MB request-body limit per upload.
     }),
   ],
 })

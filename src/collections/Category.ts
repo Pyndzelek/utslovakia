@@ -17,13 +17,13 @@ export const Category: CollectionConfig = {
   },
   hooks: {
     afterChange: [
-      () => {
-        revalidateTag('categories', 'max')
+      ({ context }) => {
+        if (!context.disableRevalidate) revalidateTag('categories', 'max')
       },
     ],
     afterDelete: [
-      () => {
-        revalidateTag('categories', 'max')
+      ({ context }) => {
+        if (!context.disableRevalidate) revalidateTag('categories', 'max')
       },
     ],
   },
