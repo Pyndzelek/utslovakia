@@ -1,4 +1,4 @@
-// Any setup scripts you might need go here
+// Load env: `.env.test.local` (gitignored, point it at a local/Neon-branch DB) wins over `.env`.
+import dotenv from 'dotenv'
 
-// Load .env files
-import 'dotenv/config'
+dotenv.config({ path: ['.env.test.local', '.env'] })
