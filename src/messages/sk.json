@@ -10,7 +10,7 @@
     "contact": "Kontakt"
   },
   "header": {
-    "searchPlaceholder": "Hľadať produkty, značky, SKU…"
+    "searchPlaceholder": "Hľadať produkty…"
   },
   "footer": {
     "tagline": "Platobné systémy a komponenty pre gaming, vending a zábavný priemysel.",
@@ -128,11 +128,16 @@
       "priceTo": "Do",
       "priceFromAria": "Cena od",
       "priceToAria": "Cena do",
-      "applyPrice": "Použiť cenový rozsah"
+      "applyPrice": "Použiť cenový rozsah",
+      "open": "Filtre",
+      "showResults": "Zobraziť výsledky",
+      "close": "Zavrieť filtre"
     },
     "toolbar": {
-      "searchPlaceholder": "Hľadať vo výsledkoch…",
-      "resultCount": "{count} produktov"
+      "searchPlaceholder": "Hľadať podľa názvu alebo SKU…",
+      "resultCount": "{count, plural, one {# produkt} few {# produkty} other {# produktov}}",
+      "searchLabel": "Hľadať produkty",
+      "submit": "Hľadať"
     },
     "empty": {
       "title": "Zatiaľ žiadne produkty",
@@ -170,7 +175,8 @@
         "title": "30 dní na vrátenie",
         "text": "Nie ste spokojní? Vráťte do 30 dní"
       }
-    }
+    },
+    "askForOffer": "Vyžiadať ponuku"
   },
   "contact": {
     "meta": {

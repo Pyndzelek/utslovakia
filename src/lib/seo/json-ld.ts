@@ -133,7 +133,7 @@ export function organizationJsonLd(settings: SiteSetting) {
     '@type': 'Organization',
     name: settings.companyName,
     url: SITE_URL,
-    logo: `${SITE_URL}/icon.png`,
+    logo: `${SITE_URL}/icon-512.png`,
     vatID: settings.vatId || undefined,
     taxID: settings.companyId || undefined,
     telephone: settings.phones?.[0]?.number,

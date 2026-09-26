@@ -27,7 +27,7 @@ export function Breadcrumbs({
         <li>
           <Link
             href="/"
-            className="flex items-center gap-1 text-slate-400 transition-colors hover:text-brand-600"
+            className="flex items-center gap-1 text-slate-500 transition-colors hover:text-brand-600"
           >
             <Home className="size-3.5" aria-hidden />
             <span className="sr-only">{t('nav.home')}</span>

@@ -37,7 +37,7 @@ export function ProductCard({ product, className }: { product: Product; classNam
 
       {/* Body */}
       <div className="flex flex-1 flex-col p-4">
-        <p className="text-[11px] font-semibold tracking-[0.12em] text-slate-400 uppercase">
+        <p className="text-[11px] font-semibold tracking-[0.12em] text-slate-500 uppercase">
           {brand?.name || ''}
         </p>
         <h3 className="mt-1.5 text-sm leading-snug font-semibold text-navy-900">

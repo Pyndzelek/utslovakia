@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'motion/react'
 
 export function AnimatedResultCount({ text, count }: { text: string; count: number }) {
   return (
-    <p className="hidden text-sm whitespace-nowrap text-slate-400 md:block">
+    <p className="hidden text-sm whitespace-nowrap text-slate-500 md:block">
       <AnimatePresence mode="wait" initial={false}>
         <motion.span
           key={count}

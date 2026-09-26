@@ -5,6 +5,7 @@ import { getPathname } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
 import { FilterSidebar } from '@/components/catalog/filter-sidebar'
 import { CatalogToolbar } from '@/components/catalog/catalog-toolbar'
+import { MobileFilters } from '@/components/catalog/mobile-filters'
 import { Pagination } from '@/components/catalog/pagination'
 import { CatalogEmptyState } from '@/components/catalog/empty-state'
 import { ProductGrid } from '@/components/product/product-grid'
@@ -24,6 +25,7 @@ interface PageProps {
     maxPrice?: string
     category?: string
     sort?: string
+    q?: string
   }>
 }
 
@@ -70,13 +72,16 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
       maxPrice,
       categoryIds,
       sort: query.sort || '-createdAt',
+      search: query.q,
     }),
     getCategories(locale, 0),
     getProductCountsByCategory(locale),
   ])
 
   const basePath = getPathname({ locale, href: '/products' })
-  const hasFilters = Boolean(query.category || query.minPrice || query.maxPrice || page > 1)
+  const hasFilters = Boolean(
+    query.q || query.category || query.minPrice || query.maxPrice || page > 1,
+  )
 
   return (
     <>
@@ -112,7 +117,14 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
           />
 
           <div>
-            <CatalogToolbar resultCount={totalDocs} />
+            <CatalogToolbar
+              resultCount={totalDocs}
+              basePath={basePath}
+              searchParams={query}
+              mobileFilters={
+                <MobileFilters categories={categories} productCounts={productCounts} />
+              }
+            />
             {products.length > 0 ? (
               <ProductGrid products={products} className="mt-6" />
             ) : (

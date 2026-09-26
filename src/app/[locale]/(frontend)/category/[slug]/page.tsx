@@ -6,6 +6,7 @@ import { getPathname, redirect } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
 import { FilterSidebar } from '@/components/catalog/filter-sidebar'
 import { CatalogToolbar } from '@/components/catalog/catalog-toolbar'
+import { MobileFilters } from '@/components/catalog/mobile-filters'
 import { Pagination } from '@/components/catalog/pagination'
 import { CatalogEmptyState } from '@/components/catalog/empty-state'
 import { ProductGrid } from '@/components/product/product-grid'
@@ -33,6 +34,7 @@ interface PageProps {
     minPrice?: string
     maxPrice?: string
     sort?: string
+    q?: string
   }>
 }
 
@@ -110,13 +112,14 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
     minPrice,
     maxPrice,
     sort: query.sort || '-createdAt',
+    search: query.q,
   })
 
   const basePath = getPathname({
     locale,
     href: { pathname: '/category/[slug]', params: { slug: category.slug } },
   })
-  const hasFilters = Boolean(query.minPrice || query.maxPrice || page > 1)
+  const hasFilters = Boolean(query.q || query.minPrice || query.maxPrice || page > 1)
 
   return (
     <>
@@ -164,7 +167,12 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
           <FilterSidebar showCategoryFilter={false} className="hidden self-start lg:block" />
 
           <div>
-            <CatalogToolbar resultCount={totalDocs} />
+            <CatalogToolbar
+              resultCount={totalDocs}
+              basePath={basePath}
+              searchParams={query}
+              mobileFilters={<MobileFilters showCategoryFilter={false} />}
+            />
             {categoryProducts.length > 0 ? (
               <ProductGrid products={categoryProducts} className="mt-6" />
             ) : (

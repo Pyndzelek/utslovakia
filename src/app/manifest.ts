@@ -8,13 +8,11 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: '/',
     display: 'standalone',
     theme_color: '#080e21',
-    background_color: '#080e21',
+    background_color: '#ffffff',
     icons: [
-      {
-        src: '/uts_icon.png',
-        sizes: '574x589',
-        type: 'image/png',
-      },
+      { src: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { src: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+      { src: '/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
     ],
   }
 }

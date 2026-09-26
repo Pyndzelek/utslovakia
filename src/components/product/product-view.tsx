@@ -3,7 +3,7 @@ import { Container } from '../ui/container'
 import { ProductGallery } from './product-gallery'
 import { StockBadge } from './product-badge'
 import { Price } from '../ui/price'
-import { Button, buttonVariants } from '../ui/button'
+import { buttonVariants } from '../ui/button'
 import { ProductDescription } from './product-description'
 import { cn } from '@/lib/utils'
 import { Check, Headset, RefreshCcw, ShieldCheck, ShoppingCart, Truck } from 'lucide-react'
@@ -36,7 +36,7 @@ export default function ProductView({ product }: { product: Product }) {
 
           <div className="mt-6 rounded-2xl border border-line bg-white p-6 shadow-card">
             <Price prices={product.prices} size="lg" />
-            <p className="mt-1 text-xs text-slate-400">{t('vatNote')}</p>
+            <p className="mt-1 text-xs text-slate-500">{t('vatNote')}</p>
 
             <div className="mt-5 flex flex-wrap items-center gap-3">
               {product.link ? (
@@ -53,10 +53,16 @@ export default function ProductView({ product }: { product: Product }) {
                   {t('buyViaEbay')}
                 </a>
               ) : (
-                <Button variant="primary" size="lg" className="flex-1 basis-48" disabled>
-                  <ShoppingCart aria-hidden />
-                  {t('buyViaEbay')}
-                </Button>
+                <Link
+                  href="/contact"
+                  className={cn(
+                    buttonVariants({ variant: 'primary', size: 'lg' }),
+                    'flex-1 basis-48',
+                  )}
+                >
+                  <Headset aria-hidden />
+                  {t('askForOffer')}
+                </Link>
               )}
             </div>
             <p className="mt-4 text-[15px] leading-relaxed text-slate-500">{t('bulkInquiry')}</p>
@@ -71,7 +77,7 @@ export default function ProductView({ product }: { product: Product }) {
                       <p className="text-xs font-semibold text-navy-900">
                         {t(`assurances.${key}.title`)}
                       </p>
-                      <p className="mt-0.5 text-[11px] leading-snug text-slate-400">
+                      <p className="mt-0.5 text-[11px] leading-snug text-slate-500">
                         {t(`assurances.${key}.text`)}
                       </p>
                     </div>

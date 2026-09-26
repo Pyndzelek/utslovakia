@@ -50,7 +50,7 @@ function CheckRow({
     <label className="flex cursor-pointer items-center gap-2.5 py-1 text-sm text-slate-600 transition-colors hover:text-navy-900">
       <Checkbox checked={checked} onChange={onChange} />
       <span className="flex-1">{label}</span>
-      {count !== undefined && <span className="text-xs text-slate-400">{count}</span>}
+      {count !== undefined && <span className="text-xs text-slate-500">{count}</span>}
     </label>
   )
 }
@@ -59,6 +59,7 @@ export function FilterSidebar({
   categories = [],
   productCounts,
   showCategoryFilter = true,
+  showTitle = true,
   className,
 }: {
   categories?: Category[]
@@ -67,6 +68,8 @@ export function FilterSidebar({
    *  the category is already fixed by the URL and re-listing all categories
    *  to filter by would be redundant. */
   showCategoryFilter?: boolean
+  /** Hide the "Filters" heading when a surrounding drawer already shows it. */
+  showTitle?: boolean
   className?: string
 }) {
   const t = useTranslations('products.filters')
@@ -128,17 +131,26 @@ export function FilterSidebar({
   function reset() {
     setMinPrice('')
     setMaxPrice('')
-    router.push(pathname, { scroll: false })
+    // Clearing filters keeps the current search term.
+    const q = searchParams.get('q')
+    router.push(q ? `${pathname}?${new URLSearchParams({ q })}` : pathname, { scroll: false })
   }
 
   return (
     <aside className={cn('rounded-2xl border border-line bg-white p-5 shadow-card', className)}>
       <div className="mb-1 flex items-center justify-between">
-        <h2 className="font-display text-base font-semibold text-navy-900">{t('title')}</h2>
+        <h2
+          className={cn(
+            'font-display text-base font-semibold text-navy-900',
+            !showTitle && 'sr-only',
+          )}
+        >
+          {t('title')}
+        </h2>
         <button
           type="button"
           onClick={reset}
-          className="flex cursor-pointer items-center gap-1.5 text-xs font-medium text-slate-400 transition-colors hover:text-brand-600"
+          className="flex cursor-pointer items-center gap-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-brand-600"
         >
           <RotateCcw className="size-3" aria-hidden />
           {t('reset')}

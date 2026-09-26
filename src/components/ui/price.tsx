@@ -21,7 +21,8 @@ export function Price({ prices, size = 'md', className }: PriceProps) {
   const locale = useLocale()
   const t = useTranslations('price')
   const price = prices ? resolvePrice(prices, locale) : null
-  const hasPrice = typeof price?.amount === 'number' && Number.isFinite(price.amount)
+  // 0 means the editor left the price empty rather than a free product.
+  const hasPrice = typeof price?.amount === 'number' && price.amount > 0
 
   return (
     <div className={className}>

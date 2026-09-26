@@ -20,7 +20,7 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
   // Fallback if the product has no images assigned
   if (!images || images.length === 0) {
     return (
-      <div className="flex aspect-square items-center justify-center rounded-3xl border border-line bg-slate-50 text-slate-400">
+      <div className="flex aspect-square items-center justify-center rounded-3xl border border-line bg-slate-50 text-slate-500">
         {t('noImage')}
       </div>
     )
@@ -47,7 +47,7 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
             className="object-contain p-10 animate-in fade-in zoom-in-95 duration-300 sm:p-14"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-slate-400">
+          <div className="flex h-full w-full items-center justify-center text-slate-500">
             {t('loadError')}
           </div>
         )}

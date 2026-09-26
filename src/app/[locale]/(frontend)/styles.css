@@ -74,3 +74,18 @@
     display: none;
   }
 }
+
+/* Respect the OS "reduce motion" setting for CSS transitions/animations too (Motion is
+   handled by MotionProvider). */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

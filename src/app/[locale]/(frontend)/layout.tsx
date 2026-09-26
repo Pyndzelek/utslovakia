@@ -7,6 +7,7 @@ import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server
 import { routing, type Locale } from '@/i18n/routing'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
+import { MotionProvider } from '@/components/layout/motion-provider'
 import { getSiteSettings } from '@/lib/data/site-settings'
 import { organizationJsonLd } from '@/lib/seo/json-ld'
 import { ogDefaults } from '@/lib/seo/meta'
@@ -81,11 +82,13 @@ export default async function FrontendRootLayout({ children, params }: RootLayou
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd(settings)) }}
         />
         <NextIntlClientProvider messages={messages}>
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
+          <MotionProvider>
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+          </MotionProvider>
         </NextIntlClientProvider>
       </body>
     </html>

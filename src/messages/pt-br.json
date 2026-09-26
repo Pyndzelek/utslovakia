@@ -10,7 +10,7 @@
     "contact": "Contato"
   },
   "header": {
-    "searchPlaceholder": "Buscar produtos, marcas, SKU…"
+    "searchPlaceholder": "Buscar produtos…"
   },
   "footer": {
     "tagline": "Sistemas de pagamento e componentes para os setores de gaming, vending e entretenimento.",
@@ -119,11 +119,16 @@
       "priceTo": "Até",
       "priceFromAria": "Preço de",
       "priceToAria": "Preço até",
-      "applyPrice": "Aplicar faixa de preço"
+      "applyPrice": "Aplicar faixa de preço",
+      "open": "Filtros",
+      "showResults": "Ver resultados",
+      "close": "Fechar filtros"
     },
     "toolbar": {
-      "searchPlaceholder": "Buscar nos resultados…",
-      "resultCount": "{count} produtos"
+      "searchPlaceholder": "Buscar por nome ou SKU…",
+      "resultCount": "{count, plural, one {# produto} other {# produtos}}",
+      "searchLabel": "Buscar produtos",
+      "submit": "Buscar"
     },
     "empty": {
       "title": "Nenhum produto ainda",
@@ -161,7 +166,8 @@
         "title": "30 dias para devolução",
         "text": "Insatisfeito? Devolva em até 30 dias"
       }
-    }
+    },
+    "askForOffer": "Pedir orçamento"
   },
   "category": {
     "meta": {

@@ -191,6 +191,8 @@ export interface GetFilteredProductsOptions {
   page?: number
   /** Number of items per page */
   limit?: number
+  /** Free-text search on the (localized) title and the SKU. */
+  search?: string
   /** One of `SORT_OPTIONS`; anything else falls back to newest first. */
   sort?: string
   /** Filter by publication status */
@@ -224,6 +226,7 @@ export const getFilteredProducts = cache(
         limit = 12,
         sort = '-createdAt',
         status = 'published',
+        search,
       } = options
 
       const payload = await getPayload({ config })
@@ -247,7 +250,7 @@ export const getFilteredProducts = cache(
         }
       }
 
-      const priceConditions: Where[] = []
+      const conditions: Where[] = []
 
       // Filter on the price the visitor actually sees: the locale's currency
       // when a product has it set, its PLN base price otherwise (PLN is the
@@ -269,15 +272,20 @@ export const getFilteredProducts = cache(
             }
 
       if (typeof minPrice === 'number' && !isNaN(minPrice) && minPrice >= 0) {
-        priceConditions.push(priceRange({ greater_than_equal: minPrice }))
+        conditions.push(priceRange({ greater_than_equal: minPrice }))
       }
 
       if (typeof maxPrice === 'number' && !isNaN(maxPrice) && maxPrice >= 0) {
-        priceConditions.push(priceRange({ less_than_equal: maxPrice }))
+        conditions.push(priceRange({ less_than_equal: maxPrice }))
       }
 
-      if (priceConditions.length > 0) {
-        where.and = priceConditions
+      const term = search?.trim().slice(0, 100)
+      if (term) {
+        conditions.push({ or: [{ title: { like: term } }, { sku: { like: term } }] })
+      }
+
+      if (conditions.length > 0) {
+        where.and = conditions
       }
 
       const result = await payload.find({

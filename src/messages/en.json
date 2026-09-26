@@ -10,7 +10,7 @@
     "contact": "Contact"
   },
   "header": {
-    "searchPlaceholder": "Search products, brands, SKU…"
+    "searchPlaceholder": "Search products…"
   },
   "footer": {
     "tagline": "Payment systems and components for the gaming, vending and amusement industries.",
@@ -119,11 +119,16 @@
       "priceTo": "To",
       "priceFromAria": "Price from",
       "priceToAria": "Price to",
-      "applyPrice": "Apply price range"
+      "applyPrice": "Apply price range",
+      "open": "Filters",
+      "showResults": "Show results",
+      "close": "Close filters"
     },
     "toolbar": {
-      "searchPlaceholder": "Search results…",
-      "resultCount": "{count} products"
+      "searchPlaceholder": "Search by name or SKU…",
+      "resultCount": "{count, plural, one {# product} other {# products}}",
+      "searchLabel": "Search products",
+      "submit": "Search"
     },
     "empty": {
       "title": "No products yet",
@@ -161,7 +166,8 @@
         "title": "30-day returns",
         "text": "Not satisfied? Return within 30 days"
       }
-    }
+    },
+    "askForOffer": "Ask for a quote"
   },
   "category": {
     "meta": {
