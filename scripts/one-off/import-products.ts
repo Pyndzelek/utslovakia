@@ -7,6 +7,10 @@
  * brands by name, categories by the mapping below. Text is written to the `en` locale and
  * mirrored into MIRROR_LOCALES as a placeholder until translated — a locale whose text
  * already differs from the English (i.e. was translated) is left alone.
+ *
+ * Tied to the production data it was written for: CATEGORY_MAP uses production category
+ * IDs (4 = bill acceptors, 5 = coin acceptors), and products without a photo get the
+ * existing Media doc whose filename is `maszynka.png`. Check both before running it anywhere else.
  */
 import fs from 'node:fs'
 import { getPayload } from 'payload'

@@ -24,8 +24,7 @@ const dirname = path.dirname(filename)
 const seoFieldDescriptions: Record<string, string> = {
   title:
     'Tytuł w wynikach Google (ok. 50–60 znaków). Puste = nazwa produktu. „ | UTSlovakia” dodaje się automatycznie.',
-  description:
-    'Opis w wynikach Google (ok. 120–155 znaków). Puste = początek opisu produktu.',
+  description: 'Opis w wynikach Google (ok. 120–155 znaków). Puste = początek opisu produktu.',
   image: 'Obraz przy udostępnianiu linku (Facebook, WhatsApp). Puste = pierwsze zdjęcie produktu.',
 }
 
@@ -35,6 +34,13 @@ function requiredEnv(name: string): string {
   if (!value) throw new Error(`Missing required environment variable: ${name}`)
   return value
 }
+
+/**
+ * R2 credentials: required on Vercel (media must never silently fail to upload), optional
+ * elsewhere so CI and local builds without storage access still work.
+ */
+const storageEnv = (name: string): string =>
+  process.env.VERCEL ? requiredEnv(name) : (process.env[name] ?? '')
 
 export default buildConfig({
   // Only accept cookie-authenticated requests from the site's own origins. (No `serverURL`:
@@ -122,14 +128,14 @@ export default buildConfig({
           prefix: 'media',
         },
       },
-      bucket: process.env.S3_BUCKET || '',
+      bucket: storageEnv('S3_BUCKET'),
       config: {
         region: 'auto',
-        endpoint: process.env.S3_ENDPOINT,
+        endpoint: storageEnv('S3_ENDPOINT') || undefined,
         forcePathStyle: true,
         credentials: {
-          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
-          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+          accessKeyId: storageEnv('S3_ACCESS_KEY_ID'),
+          secretAccessKey: storageEnv('S3_SECRET_ACCESS_KEY'),
         },
       },
       // No `clientUploads`: with it, the browser PUTs the raw file straight to

@@ -3,7 +3,7 @@ import React from 'react'
 const tips: { title: string; text: string; href?: string; linkLabel?: string }[] = [
   {
     title: 'Dodawanie produktu',
-    text: 'Produkty → „Utwórz nowy”. Wpisz nazwę, wybierz kategorię, dodaj zdjęcia i cenę w PLN (pozostałe waluty są opcjonalne). Status „Opublikowany” pokazuje produkt na stronie.',
+    text: 'Produkty → „Stwórz nowy”. Wpisz nazwę, wybierz kategorię, dodaj zdjęcia i cenę w PLN (pozostałe waluty są opcjonalne). Status „Opublikowany” pokazuje produkt na stronie.',
     href: '/admin/collections/products/create',
     linkLabel: 'Dodaj produkt',
   },
@@ -41,7 +41,9 @@ export function DashboardHelp() {
         background: 'var(--theme-elevation-50)',
       }}
     >
-      <h2 style={{ margin: 0, marginBottom: 'calc(var(--base) * 0.75)' }}>Jak korzystać z panelu</h2>
+      <h2 style={{ margin: 0, marginBottom: 'calc(var(--base) * 0.75)' }}>
+        Jak korzystać z panelu
+      </h2>
       <div
         style={{
           display: 'grid',
@@ -64,7 +66,7 @@ export function DashboardHelp() {
         ))}
       </div>
       <p style={{ margin: 0, marginTop: 'var(--base)', color: 'var(--theme-elevation-600)' }}>
-        Zmiany są widoczne na stronie od razu po zapisaniu. Pełna instrukcja: docs/instrukcja-admin.md
+        Zmiany są widoczne na stronie od razu po zapisaniu.
       </p>
     </section>
   )
