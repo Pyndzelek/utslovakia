@@ -49,7 +49,11 @@ export default buildConfig({
     SITE_URL,
     process.env.VERCEL_URL && `https://${process.env.VERCEL_URL}`,
     process.env.VERCEL_BRANCH_URL && `https://${process.env.VERCEL_BRANCH_URL}`,
-    process.env.NODE_ENV !== 'production' && 'http://localhost:3000',
+    // Local `pnpm dev` *and* `pnpm build && pnpm start` (which runs with NODE_ENV=production):
+    // allow localhost everywhere except the live Vercel deployment.
+    ...(process.env.VERCEL_ENV === 'production'
+      ? []
+      : [`http://localhost:${process.env.PORT || 3000}`, 'http://localhost:3000']),
   ].filter((origin): origin is string => Boolean(origin)),
   admin: {
     user: Users.slug,
