@@ -1,10 +1,12 @@
-import { getPayload, Where, WhereField } from 'payload'
+import { getPayload, type Payload, Where, WhereField } from 'payload'
+import { sql, type PostgresAdapter } from '@payloadcms/db-postgres'
 import config from '@payload-config'
 import { cache } from 'react'
 import { unstable_cache } from 'next/cache'
 import type { Locale } from '@/i18n/routing'
 import { Product } from '@/payload-types'
 import { currencyForLocale } from '@/lib/currency'
+import { searchWords } from '@/lib/search'
 
 /**
  * Data access for the `products` Payload collection.
@@ -191,11 +193,14 @@ export interface GetFilteredProductsOptions {
   page?: number
   /** Number of items per page */
   limit?: number
-  /** Free-text search on the (localized) title and the SKU. */
+  /** Free-text search across the product's text in every locale (see `searchProductIds`). */
   search?: string
   /** Only products carrying one of these badges (values straight from the URL; unknown ones are ignored). */
   badges?: string[]
-  /** One of `SORT_OPTIONS`; anything else falls back to newest first. */
+  /**
+   * One of `SORT_OPTIONS`. Anything else (or nothing) lists search results best match
+   * first and everything else newest first.
+   */
   sort?: string
   /** Filter by publication status */
   status?: 'published' | 'draft'
@@ -219,6 +224,93 @@ const BADGE_OPTIONS: readonly string[] = ['new', 'bestseller'] satisfies NonNull
   Product['badge']
 >[]
 
+/**
+ * IDs of every product whose text contains all the search `words`, best matches first.
+ *
+ * Searches all locales at once — the visitor's locale only decides how results are shown —
+ * so "touch screen" on the Polish site finds "Monitor dotykowy…" through its English title.
+ * Diacritics are folded on both sides with `unaccent()` (enabled by the `search_unaccent`
+ * migration), so "wyswietlacz" finds "wyświetlacz"; that also makes ILIKE case-insensitive
+ * for accented letters, which it isn't under the database's `C` ctype.
+ *
+ * Words may be spread over any fields. Products whose title, SKU or brand alone contain
+ * every word rank first; the rest matched through their description, key features or
+ * variants. Status isn't checked here: the caller's Payload query filters on it along with
+ * everything else. Raw SQL because Payload's `like` can't fold diacritics; the table names
+ * are the ones Payload generates for the `products` collection.
+ */
+async function searchProductIds(payload: Payload, words: string[]): Promise<number[]> {
+  const { drizzle } = payload.db as unknown as PostgresAdapter
+  const containsEvery = (text: ReturnType<typeof sql>) =>
+    sql.join(
+      words.map((word) => sql`${text} ILIKE unaccent(${`%${word}%`}::text)`),
+      sql` AND `,
+    )
+
+  const { rows } = await drizzle.execute<{ id: number }>(sql`
+    WITH product_text AS (
+      SELECT
+        p.id,
+        p.created_at,
+        unaccent(concat_ws(' ', p.sku, b.name,
+          (SELECT string_agg(l.title, ' ') FROM products_locales l WHERE l._parent_id = p.id)
+        )) AS headline,
+        unaccent(concat_ws(' ',
+          (SELECT string_agg(l.description, ' ') FROM products_locales l WHERE l._parent_id = p.id),
+          (SELECT string_agg(kl.text, ' ')
+            FROM products_key_features k
+            JOIN products_key_features_locales kl ON kl._parent_id = k.id
+            WHERE k._parent_id = p.id),
+          (SELECT string_agg(concat_ws(' ', v.sku, vl.model_name), ' ')
+            FROM products_variants v
+            LEFT JOIN products_variants_locales vl ON vl._parent_id = v.id
+            WHERE v._parent_id = p.id)
+        )) AS details
+      FROM products p
+      LEFT JOIN brands b ON b.id = p.brand_id
+    )
+    SELECT id FROM product_text
+    WHERE ${containsEvery(sql`(headline || ' ' || details)`)}
+    ORDER BY ${containsEvery(sql`headline`)} DESC, created_at DESC
+  `)
+  return rows.map((row) => row.id)
+}
+
+/** One page of products from `ids`, kept in the given order (Payload can't sort by search rank). */
+async function findPageInOrder(
+  payload: Payload,
+  locale: Locale,
+  ids: number[],
+  page: number,
+  limit: number,
+): Promise<PaginatedProductsResult> {
+  const current = Number.isInteger(page) && page > 0 ? page : 1
+  const pageIds = ids.slice((current - 1) * limit, current * limit)
+  const { docs } =
+    pageIds.length > 0
+      ? await payload.find({
+          collection: 'products',
+          locale,
+          where: { id: { in: pageIds } },
+          depth: 1,
+          pagination: false,
+        })
+      : { docs: [] }
+  const position = new Map(pageIds.map((id, index) => [id, index]))
+  docs.sort((a, b) => position.get(a.id)! - position.get(b.id)!)
+
+  const totalPages = Math.ceil(ids.length / limit)
+  return {
+    docs,
+    totalDocs: ids.length,
+    limit,
+    totalPages,
+    page: current,
+    hasNextPage: current < totalPages,
+    hasPrevPage: current > 1,
+  }
+}
+
 export const getFilteredProducts = cache(
   unstable_cache(
     async (
@@ -231,7 +323,7 @@ export const getFilteredProducts = cache(
         maxPrice,
         page = 1,
         limit = 12,
-        sort = '-createdAt',
+        sort,
         status = 'published',
         search,
         badges,
@@ -239,7 +331,7 @@ export const getFilteredProducts = cache(
 
       const payload = await getPayload({ config })
       // `sort` comes straight from the URL; never pass arbitrary field paths to the DB.
-      const safeSort = (SORT_OPTIONS as readonly string[]).includes(sort) ? sort : '-createdAt'
+      const safeSort = sort && (SORT_OPTIONS as readonly string[]).includes(sort) ? sort : undefined
 
       const where: Where = {
         status: { equals: status },
@@ -290,13 +382,32 @@ export const getFilteredProducts = cache(
         conditions.push(priceRange({ less_than_equal: maxPrice }))
       }
 
-      const term = search?.trim().slice(0, 100)
-      if (term) {
-        conditions.push({ or: [{ title: { like: term } }, { sku: { like: term } }] })
+      const words = searchWords(search)
+      const rankedIds = words.length > 0 ? await searchProductIds(payload, words) : undefined
+      if (rankedIds) {
+        if (rankedIds.length === 0) return findPageInOrder(payload, locale, [], page, limit)
+        where.id = { in: rankedIds }
       }
 
       if (conditions.length > 0) {
         where.and = conditions
+      }
+
+      // Payload can only sort by fields, so a search without an explicit sort keeps
+      // `searchProductIds`' best-match order: find which ranked products pass the other
+      // filters, then page through them in that order.
+      if (rankedIds && !safeSort) {
+        const { docs: passing } = await payload.find({
+          collection: 'products',
+          locale,
+          where,
+          select: { slug: true },
+          depth: 0,
+          pagination: false,
+        })
+        const passingIds = new Set(passing.map((doc) => doc.id))
+        const orderedIds = rankedIds.filter((id) => passingIds.has(id))
+        return findPageInOrder(payload, locale, orderedIds, page, limit)
       }
 
       const result = await payload.find({
@@ -305,7 +416,7 @@ export const getFilteredProducts = cache(
         where,
         page,
         limit,
-        sort: safeSort,
+        sort: safeSort ?? '-createdAt',
         depth: 1,
       })
 

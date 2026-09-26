@@ -112,7 +112,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
     limit: PRODUCTS_PER_PAGE,
     minPrice,
     maxPrice,
-    sort: query.sort || '-createdAt',
+    sort: query.sort,
     search: query.q,
     badges: query.badge?.split(','),
   })

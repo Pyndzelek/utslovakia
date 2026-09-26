@@ -28,10 +28,40 @@ test.describe('Frontend', () => {
 
   test('search narrows the product list', async ({ page }) => {
     await page.goto('/en/products')
-    await page.getByLabel('Search products').fill('zzz-no-such-product')
+    // The mobile menu has its own "Search products" field; use the catalogue's.
+    await page.getByRole('main').getByLabel('Search products').fill('zzz-no-such-product')
     await page.getByRole('button', { name: 'Search', exact: true }).click()
     await expect(page).toHaveURL(/q=zzz-no-such-product/)
     await expect(page.getByText('0 products').first()).toBeVisible()
+  })
+
+  test('search matches other languages and ignores diacritics', async ({ page }) => {
+    await page.goto('/en/products')
+    const firstCard = page.getByRole('main').locator('article').first()
+    await page.getByRole('main').getByRole('searchbox').waitFor()
+    test.skip((await firstCard.count()) === 0, 'no published products in this database')
+
+    // Product slugs aren't localized, so the same product is /produkty/<slug> on the Polish site.
+    const href = await firstCard.locator('a[href^="/en/products/"]').first().getAttribute('href')
+    const polishLink = `a[href="${href!.replace('/en/products/', '/produkty/')}"]`
+    const englishTitle = (await firstCard.locator('h3').innerText()).trim()
+
+    // Its English title finds it on the Polish site… (dropping the NEXT_LOCALE=en cookie
+    // from the visit above, which would otherwise redirect unprefixed Polish URLs to /en)
+    await page.context().clearCookies()
+    await page.goto(`/produkty?q=${encodeURIComponent(englishTitle)}`)
+    const result = page.getByRole('main').locator('article', { has: page.locator(polishLink) })
+    await expect(result).toBeVisible()
+
+    // …and so does its Polish title typed without Polish letters.
+    const polishTitle = (await result.locator('h3').innerText()).trim()
+    const withoutDiacritics = polishTitle
+      .normalize('NFD')
+      .replace(/\p{M}/gu, '')
+      .replace(/ł/g, 'l')
+      .replace(/Ł/g, 'L')
+    await page.goto(`/produkty?q=${encodeURIComponent(withoutDiacritics)}`)
+    await expect(page.getByRole('main').locator(polishLink).first()).toBeVisible()
   })
 
   test('product card links to the product page', async ({ page }) => {

@@ -77,7 +77,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
       minPrice,
       maxPrice,
       categoryIds,
-      sort: query.sort || '-createdAt',
+      sort: query.sort,
       search: query.q,
       badges,
     }),
