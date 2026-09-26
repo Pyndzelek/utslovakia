@@ -23,10 +23,6 @@ const tips: { title: string; text: string; href?: string; linkLabel?: string }[]
     href: '/admin/globals/site-settings',
     linkLabel: 'Edytuj dane firmy',
   },
-  {
-    title: 'Cofanie zmian',
-    text: 'Każdy produkt, kategoria i dane firmy mają zakładkę „Wersje” — można tam przywrócić wcześniejszy zapis.',
-  },
 ]
 
 /** Short Polish how-to shown above the admin dashboard (admin.components.beforeDashboard). */
