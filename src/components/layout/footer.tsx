@@ -58,10 +58,6 @@ export async function Footer() {
     { label: 'Instagram', href: settings.social?.instagram, Icon: InstagramIcon },
     { label: 'LinkedIn', href: settings.social?.linkedin, Icon: LinkedInIcon },
   ].filter((social): social is typeof social & { href: string } => Boolean(social.href))
-  const companyIds = [
-    settings.companyId && `${t('footer.companyId')}: ${settings.companyId}`,
-    settings.vatId && `${t('footer.vatId')}: ${settings.vatId}`,
-  ].filter(Boolean)
 
   const pages = [
     { href: '/products', label: t('nav.products') },
@@ -161,9 +157,9 @@ export async function Footer() {
             <p>
               © {year} {settings.companyName}. {t('footer.rights')}
             </p>
-            {(companyIds.length > 0 || settings.registration) && (
+            {settings.vatId && (
               <p className="mt-1 text-slate-500">
-                {[...companyIds, settings.registration].filter(Boolean).join(' · ')}
+                {t('footer.vatId')}: {settings.vatId}
               </p>
             )}
           </div>

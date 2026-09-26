@@ -675,12 +675,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface SiteSetting {
   id: number;
   companyName: string;
-  companyId?: string | null;
   vatId?: string | null;
-  /**
-   * Np. „Obchodný register Okresného súdu Žilina, oddiel: Sro, vložka č. …”
-   */
-  registration?: string | null;
   address: {
     street: string;
     postalCode: string;
@@ -743,9 +738,7 @@ export interface SiteSetting {
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
   companyName?: T;
-  companyId?: T;
   vatId?: T;
-  registration?: T;
   address?:
     | T
     | {

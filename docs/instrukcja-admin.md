@@ -107,7 +107,7 @@ Tytuł i opis widoczne w wynikach Google oraz obraz przy udostępnianiu linku. W
 
 **Treści → Dane firmy i kontakt**
 
-- **Firma:** pełna nazwa, IČO, IČ DPH, wpis do rejestru, adres.
+- **Firma:** pełna nazwa, IČ DPH, adres.
 - **Kontakt:** telefony i e-maile (**pierwszy** z listy jest pokazywany w stopce i w menu mobilnym), godziny otwarcia, media społecznościowe (puste pola są ukrywane).
 - **Strona główna:** liczby w sekcji powitalnej („Lat w branży”, „Sprzedanych urządzeń”). Puste pole ukrywa liczbę.
 - **FAQ:** pytania i odpowiedzi na stronie Kontakt, osobno dla każdego języka. Gdy lista jest pusta, sekcja FAQ jest ukryta.

@@ -37,22 +37,7 @@ export const SiteSettings: GlobalConfig = {
               label: 'Pełna nazwa firmy',
               required: true,
             },
-            {
-              type: 'row',
-              fields: [
-                { name: 'companyId', type: 'text', label: 'IČO' },
-                { name: 'vatId', type: 'text', label: 'IČ DPH (VAT ID)' },
-              ],
-            },
-            {
-              name: 'registration',
-              type: 'text',
-              label: 'Wpis do rejestru',
-              localized: true,
-              admin: {
-                description: 'Np. „Obchodný register Okresného súdu Žilina, oddiel: Sro, vložka č. …”',
-              },
-            },
+            { name: 'vatId', type: 'text', label: 'IČ DPH (VAT ID)' },
             {
               name: 'address',
               type: 'group',

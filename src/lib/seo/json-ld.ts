@@ -135,7 +135,6 @@ export function organizationJsonLd(settings: SiteSetting) {
     url: SITE_URL,
     logo: `${SITE_URL}/icon-512.png`,
     vatID: settings.vatId || undefined,
-    taxID: settings.companyId || undefined,
     telephone: settings.phones?.[0]?.number,
     email: settings.emails?.[0]?.email,
     address: street
