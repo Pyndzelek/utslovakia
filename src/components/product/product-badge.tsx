@@ -50,7 +50,7 @@ export function StockBadge({
     status === 'out_of_stock'
       ? t('outOfStock')
       : status === 'preorder'
-        ? t('preorder')
+        ? t('onOrder')
         : t('inStock')
 
   return (

@@ -158,7 +158,7 @@
         "text": "Envio internacional FedEx"
       },
       "warranty": {
-        "title": "Garantia de 3 meses",
+        "title": "Garantia de {months, plural, one {# mês} other {# meses}}",
         "text": "Produto verificado"
       },
       "returns": {
@@ -166,7 +166,9 @@
         "text": "Insatisfeito? Devolva em até 30 dias"
       }
     },
-    "askForOffer": "Pedir orçamento"
+    "askForOffer": "Pedir orçamento",
+    "variant": "Variante",
+    "sku": "SKU: {sku}"
   },
   "category": {
     "meta": {
@@ -218,7 +220,11 @@
     "noImage": "Sem imagem",
     "loadError": "Não foi possível carregar a imagem",
     "imageAlt": "{title} — imagem {index}",
-    "viewImage": "Mostrar imagem {index}"
+    "viewImage": "Mostrar imagem {index}",
+    "openPreview": "Ampliar imagem",
+    "closePreview": "Fechar visualização",
+    "previous": "Imagem anterior",
+    "next": "Próxima imagem"
   },
   "price": {
     "onRequest": "Preço sob consulta"

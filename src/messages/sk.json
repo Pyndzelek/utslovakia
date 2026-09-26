@@ -167,7 +167,7 @@
         "text": "Medzinárodná preprava FedEx"
       },
       "warranty": {
-        "title": "3-mesačná záruka",
+        "title": "Záruka {months, plural, one {# mesiac} few {# mesiace} other {# mesiacov}}",
         "text": "Overený produkt"
       },
       "returns": {
@@ -175,7 +175,9 @@
         "text": "Nie ste spokojní? Vráťte do 30 dní"
       }
     },
-    "askForOffer": "Vyžiadať ponuku"
+    "askForOffer": "Vyžiadať ponuku",
+    "variant": "Variant",
+    "sku": "SKU: {sku}"
   },
   "contact": {
     "meta": {
@@ -218,7 +220,11 @@
     "noImage": "Bez obrázka",
     "loadError": "Obrázok sa nepodarilo načítať",
     "imageAlt": "{title} — obrázok {index}",
-    "viewImage": "Zobraziť obrázok {index}"
+    "viewImage": "Zobraziť obrázok {index}",
+    "openPreview": "Zväčšiť obrázok",
+    "closePreview": "Zavrieť náhľad",
+    "previous": "Predchádzajúci obrázok",
+    "next": "Ďalší obrázok"
   },
   "price": {
     "onRequest": "Cena na vyžiadanie"

@@ -193,6 +193,10 @@ export const Product: CollectionConfig = {
               type: 'number',
               label: 'Gwarancja w miesiącach',
               min: 0,
+              admin: {
+                description:
+                  'Pozostaw puste lub wpisz 0, aby nie pokazywać gwarancji na stronie produktu.',
+              },
             },
             {
               name: 'prices',

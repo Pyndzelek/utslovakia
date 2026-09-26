@@ -43,6 +43,36 @@ test.describe('Frontend', () => {
     await expect(page).toHaveURL(/\/en\/products\/[^/?]+$/)
   })
 
+  test('clicking the product image opens an enlarged preview', async ({ page }) => {
+    await page.goto('/en/products')
+    // The listing streams in after the loading skeleton; its search box arrives with the grid.
+    await page.getByRole('main').getByRole('searchbox').waitFor()
+    // A card with an image means the product page has a gallery to open.
+    const productWithImage = page
+      .locator('main article', { has: page.locator('img') })
+      .locator('a[href^="/en/products/"]')
+      .first()
+    test.skip((await productWithImage.count()) === 0, 'no published products with images')
+
+    await productWithImage.click()
+    await page.getByRole('button', { name: 'Enlarge image' }).click()
+    const preview = page.getByRole('dialog')
+    await expect(preview).toBeVisible()
+    await expect(preview.locator('img')).toBeVisible()
+
+    // With several images, arrow keys browse them — also once focus has moved into the
+    // dialog, whose popup stops arrow keys from bubbling.
+    const counter = preview.getByText(/^\d+ \/ \d+$/)
+    if ((await counter.count()) > 0) {
+      await expect(page.getByRole('button', { name: 'Close preview' })).toBeFocused()
+      await page.keyboard.press('ArrowRight')
+      await expect(counter).toHaveText(/^2 \//)
+    }
+
+    await page.keyboard.press('Escape')
+    await expect(preview).toBeHidden()
+  })
+
   test('switching language on a category page lands on the localized category', async ({
     page,
   }) => {

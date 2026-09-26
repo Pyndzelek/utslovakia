@@ -158,7 +158,7 @@
         "text": "FedEx international shipping"
       },
       "warranty": {
-        "title": "3-month warranty",
+        "title": "{months}-month warranty",
         "text": "Verified product"
       },
       "returns": {
@@ -166,7 +166,9 @@
         "text": "Not satisfied? Return within 30 days"
       }
     },
-    "askForOffer": "Ask for a quote"
+    "askForOffer": "Ask for a quote",
+    "variant": "Variant",
+    "sku": "SKU: {sku}"
   },
   "category": {
     "meta": {
@@ -218,7 +220,11 @@
     "noImage": "No image",
     "loadError": "The image could not be loaded",
     "imageAlt": "{title} — image {index}",
-    "viewImage": "Show image {index}"
+    "viewImage": "Show image {index}",
+    "openPreview": "Enlarge image",
+    "closePreview": "Close preview",
+    "previous": "Previous image",
+    "next": "Next image"
   },
   "price": {
     "onRequest": "Price on request"

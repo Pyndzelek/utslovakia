@@ -1,8 +1,7 @@
 import React from 'react'
 import { Container } from '../ui/container'
 import { ProductGallery } from './product-gallery'
-import { StockBadge } from './product-badge'
-import { Price } from '../ui/price'
+import { ProductPurchase } from './product-purchase'
 import { buttonVariants } from '../ui/button'
 import { ProductDescription } from './product-description'
 import { cn } from '@/lib/utils'
@@ -11,7 +10,6 @@ import { Link } from '@/i18n/navigation'
 import { Product } from '@/payload-types'
 import { useTranslations } from 'next-intl'
 
-const assuranceKeys = ['shipping', 'warranty', 'returns'] as const
 const assuranceIcons = {
   shipping: Truck,
   warranty: ShieldCheck,
@@ -20,6 +18,12 @@ const assuranceIcons = {
 
 export default function ProductView({ product }: { product: Product }) {
   const t = useTranslations('productPage')
+  // No warranty set (or 0) → the tile is left out rather than promising a default.
+  const warrantyMonths = product.warranty ?? 0
+  const assuranceKeys = (['shipping', 'warranty', 'returns'] as const).filter(
+    (key) => key !== 'warranty' || warrantyMonths > 0,
+  )
+
   return (
     <Container className="py-8 lg:py-12">
       <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
@@ -30,14 +34,12 @@ export default function ProductView({ product }: { product: Product }) {
             {product.title}
           </h1>
 
-          <div className="mt-6 flex flex-wrap items-center gap-4">
-            <StockBadge status={product.stockStatus} />
-          </div>
-
-          <div className="mt-6 rounded-2xl border border-line bg-white p-6 shadow-card">
-            <Price prices={product.prices} size="lg" />
-            <p className="mt-1 text-xs text-slate-500">{t('vatNote')}</p>
-
+          <ProductPurchase
+            prices={product.prices}
+            stockStatus={product.stockStatus}
+            sku={product.sku}
+            variants={product.variants}
+          >
             <div className="mt-5 flex flex-wrap items-center gap-3">
               {product.link ? (
                 <a
@@ -67,7 +69,12 @@ export default function ProductView({ product }: { product: Product }) {
             </div>
             <p className="mt-4 text-[15px] leading-relaxed text-slate-500">{t('bulkInquiry')}</p>
 
-            <div className="mt-5 grid gap-3 border-t border-line pt-5 sm:grid-cols-3">
+            <div
+              className={cn(
+                'mt-5 grid gap-3 border-t border-line pt-5',
+                assuranceKeys.length === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2',
+              )}
+            >
               {assuranceKeys.map((key) => {
                 const Icon = assuranceIcons[key]
                 return (
@@ -75,7 +82,7 @@ export default function ProductView({ product }: { product: Product }) {
                     <Icon className="size-5 shrink-0 text-brand-600" aria-hidden />
                     <div>
                       <p className="text-xs font-semibold text-navy-900">
-                        {t(`assurances.${key}.title`)}
+                        {t(`assurances.${key}.title`, { months: warrantyMonths })}
                       </p>
                       <p className="mt-0.5 text-[11px] leading-snug text-slate-500">
                         {t(`assurances.${key}.text`)}
@@ -85,7 +92,7 @@ export default function ProductView({ product }: { product: Product }) {
                 )
               })}
             </div>
-          </div>
+          </ProductPurchase>
 
           <div className="mt-5 flex items-center gap-3 rounded-2xl bg-brand-50 p-4">
             <Headset

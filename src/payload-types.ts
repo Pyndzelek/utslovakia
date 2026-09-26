@@ -169,6 +169,9 @@ export interface Product {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Pozostaw puste lub wpisz 0, aby nie pokazywać gwarancji na stronie produktu.
+   */
   warranty?: number | null;
   /**
    * PLN jest wymagane. Pozostałe waluty opcjonalnie.
