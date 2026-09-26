@@ -15,9 +15,19 @@ import { Product } from './collections/Product'
 import { Brand } from './collections/Brand'
 import { SiteSettings } from './globals/SiteSettings'
 import { SITE_URL } from './lib/site'
+import { metaDescription } from './lib/seo/meta'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+/** Polish help text for the SEO plugin's fields (shown in the product/category "SEO" tab). */
+const seoFieldDescriptions: Record<string, string> = {
+  title:
+    'Tytuł w wynikach Google (ok. 50–60 znaków). Puste = nazwa produktu. „ | UTSlovakia” dodaje się automatycznie.',
+  description:
+    'Opis w wynikach Google (ok. 120–155 znaków). Puste = początek opisu produktu.',
+  image: 'Obraz przy udostępnianiu linku (Facebook, WhatsApp). Puste = pierwsze zdjęcie produktu.',
+}
 
 /** Fail fast instead of booting with an empty secret / connection string. */
 function requiredEnv(name: string): string {
@@ -45,7 +55,7 @@ export default buildConfig({
         Logo: '/components/admin/logo#Logo', // shown on login/create-first-user view
         Icon: '/components/admin/icon#Icon', // small mark shown in the nav
       },
-      // you can also override beforeLogin, afterLogin, beforeDashboard, etc.
+      beforeDashboard: ['/components/admin/dashboard-help#DashboardHelp'],
     },
     meta: {
       titleSuffix: '- UTS Admin',
@@ -91,11 +101,19 @@ export default buildConfig({
     seoPlugin({
       collections: ['products', 'categories'],
       uploadsCollection: 'media',
-      generateTitle: ({ doc, collectionConfig }) => {
-        const name = collectionConfig?.slug === 'categories' ? doc?.name : doc?.title
-        return `${name} | UTSlovakia`
-      },
-      generateDescription: ({ doc }) => doc?.description ?? '',
+      // The site's title template appends "| UTSlovakia", so don't add it here.
+      generateTitle: ({ doc, collectionConfig }) =>
+        (collectionConfig?.slug === 'categories' ? doc?.name : doc?.title) ?? '',
+      generateDescription: ({ doc }) => metaDescription(doc?.description) ?? '',
+      fields: ({ defaultFields }) =>
+        defaultFields.map((field) =>
+          'name' in field && field.name in seoFieldDescriptions
+            ? {
+                ...field,
+                admin: { ...field.admin, description: seoFieldDescriptions[field.name] },
+              }
+            : field,
+        ) as typeof defaultFields,
     }),
     s3Storage({
       collections: {

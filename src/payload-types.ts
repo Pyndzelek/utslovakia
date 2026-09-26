@@ -200,10 +200,16 @@ export interface Product {
       }[]
     | null;
   meta?: {
+    /**
+     * Tytuł w wynikach Google (ok. 50–60 znaków). Puste = nazwa produktu. „ | UTSlovakia” dodaje się automatycznie.
+     */
     title?: string | null;
+    /**
+     * Opis w wynikach Google (ok. 120–155 znaków). Puste = początek opisu produktu.
+     */
     description?: string | null;
     /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     * Obraz przy udostępnianiu linku (Facebook, WhatsApp). Puste = pierwsze zdjęcie produktu.
      */
     image?: (number | null) | Media;
   };
@@ -249,10 +255,16 @@ export interface Category {
    */
   status: 'active' | 'hidden';
   meta?: {
+    /**
+     * Tytuł w wynikach Google (ok. 50–60 znaków). Puste = nazwa produktu. „ | UTSlovakia” dodaje się automatycznie.
+     */
     title?: string | null;
+    /**
+     * Opis w wynikach Google (ok. 120–155 znaków). Puste = początek opisu produktu.
+     */
     description?: string | null;
     /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     * Obraz przy udostępnianiu linku (Facebook, WhatsApp). Puste = pierwsze zdjęcie produktu.
      */
     image?: (number | null) | Media;
   };

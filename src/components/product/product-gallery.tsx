@@ -26,6 +26,13 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
     )
   }
 
+  // Per-product alt override → the media library's alt → a generic "title — image n".
+  const altFor = (index: number) => {
+    const item = images[index]
+    const media = typeof item?.image === 'object' ? item.image : null
+    return item?.alt || media?.alt || t('imageAlt', { title, index: index + 1 })
+  }
+
   // Safely get the active image URL
   const activeImageField = images[active]?.image
   const activeImageUrl = getMediaUrl(activeImageField, 'gallery')
@@ -40,7 +47,7 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
           <Image
             key={activeImageUrl} // React key triggers animation on change
             src={activeImageUrl}
-            alt={images[active]?.alt || t('imageAlt', { title, index: active + 1 })}
+            alt={altFor(active)}
             fill
             priority
             sizes="(max-width: 1024px) 90vw, 560px"
@@ -58,7 +65,7 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
         <div className="mt-3 grid grid-cols-4 gap-3">
           {images.map((item, index) => {
             const thumbnailUrl = getMediaUrl(item.image, 'thumbnail')
-            const altText = item.alt || t('imageAlt', { title, index: index + 1 })
+            const altText = altFor(index)
 
             // Skip rendering if thumbnail URL is missing
             if (!thumbnailUrl) return null
