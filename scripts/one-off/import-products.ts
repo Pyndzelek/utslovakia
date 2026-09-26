@@ -16,11 +16,10 @@ import fs from 'node:fs'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Product } from '@/payload-types'
+import { BRAND_MAP, scriptContext } from './lib'
 
 const LOCALE = 'en' as const
 const MIRROR_LOCALES = ['pl'] as const
-// Revalidation hooks need a Next.js request context, which a CLI script doesn't have.
-const context = { disableRevalidate: true }
 const PLACEHOLDER_MEDIA_FILENAME = 'maszynka.png'
 
 // CSV category name (trimmed, lowercased) → existing category id, or a new category to create.
@@ -39,21 +38,6 @@ const CATEGORY_MAP: Record<string, number | { name: string; slug: string }> = {
   },
   hopper: { name: 'Hoppers', slug: 'hoppers' },
   backplain: { name: 'Backplanes', slug: 'backplanes' },
-}
-
-// CSV brand name (trimmed) → canonical brand name.
-const BRAND_MAP: Record<string, string> = {
-  JCM: 'JCM Global',
-  'JCM Global': 'JCM Global',
-  TransAct: 'TransAct Technologies',
-  'TransAct Technologies Incorporated': 'TransAct Technologies',
-  'CRANE- CPI': 'Crane Payment Innovations (CPI)',
-  'Crane Payment Innovations (CPI).': 'Crane Payment Innovations (CPI)',
-  'Innovative Technology Ltd.': 'Innovative Technology Ltd.',
-  'DATA MODUL -NOVOMATIC': 'DATA MODUL',
-  NOVOMATIC: 'Novomatic',
-  SUZOHAPP: 'SUZOHAPP',
-  'Elo Touch Solutions': 'Elo Touch Solutions',
 }
 
 // Variant cells that aren't in the "1)… 2)…" format.
@@ -142,7 +126,8 @@ function splitKeyFeatures(description: string): { description: string; keyFeatur
 
 const [csvPath, ...flags] = process.argv.slice(2).filter((a) => a !== '--')
 const dry = flags.includes('--dry')
-if (!csvPath) throw new Error('Usage: payload run scripts/one-off/import-products.ts -- <csv> [--dry]')
+if (!csvPath)
+  throw new Error('Usage: payload run scripts/one-off/import-products.ts -- <csv> [--dry]')
 
 const [header, ...rows] = parseCsv(fs.readFileSync(csvPath, 'utf8'))
 const col = (name: string) => header.indexOf(name)
@@ -181,7 +166,7 @@ async function resolveCategory(raw: string): Promise<number> {
             collection: 'categories',
             locale: LOCALE,
             data: { ...target, image: placeholderId, status: 'active' },
-            context,
+            context: scriptContext(),
           })
         ).id
   }
@@ -194,7 +179,13 @@ async function resolveCategory(raw: string): Promise<number> {
         fallbackLocale: false,
       })
       if (doc.name && doc.name !== target.name) continue
-      await payload.update({ collection: 'categories', id, locale, data: target, context })
+      await payload.update({
+        collection: 'categories',
+        id,
+        locale,
+        data: target,
+        context: scriptContext(),
+      })
     }
   }
   categoryIds.set(target.slug, id)
@@ -273,14 +264,14 @@ for (const r of rows) {
         locale: LOCALE,
         data,
         depth: 0,
-        context,
+        context: scriptContext(),
       })
     : await payload.create({
         collection: 'products',
         locale: LOCALE,
         data: { ...data, images: [{ image: placeholderId, alt: title }] },
         depth: 0,
-        context,
+        context: scriptContext(),
       })
 
   // Copy the localized fields into the other locales, reusing array row ids so rows are shared.
@@ -298,7 +289,7 @@ for (const r of rows) {
       id: saved.id,
       locale,
       depth: 0,
-      context,
+      context: scriptContext(),
       data: {
         title: saved.title,
         description: saved.description,

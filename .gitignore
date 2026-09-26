@@ -48,3 +48,6 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# eBay store snapshot written by scripts/one-off/ebay/fetch.ts
+ebay-listings.json
