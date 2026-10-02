@@ -670,7 +670,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * Dane widoczne w stopce, na stronie Kontakt i w menu mobilnym. Zmiany są widoczne na stronie od razu po zapisaniu.
+ * Dane widoczne w stopce, na stronie Kontakt i w menu mobilnym, a w zakładce „Strona główna” — slajdy sekcji powitalnej. Zmiany są widoczne na stronie od razu po zapisaniu.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
@@ -715,6 +715,26 @@ export interface SiteSetting {
     instagram?: string | null;
     linkedin?: string | null;
   };
+  /**
+   * Rotują co 5 sekund. Zdjęcie, marka, cena i kategoria pochodzą z wybranego produktu. Bez slajdów sekcja pokazuje samo hasło i przyciski.
+   */
+  heroSlides?:
+    | {
+        /**
+         * Jedno krótkie słowo (do 10 znaków), osobne dla każdego języka.
+         */
+        word: string;
+        /**
+         * Slajd bez produktu jest pomijany.
+         */
+        product?: (number | null) | Product;
+        /**
+         * Najlepiej wycięte zdjęcie produktu (PNG z przezroczystym tłem). Puste pole = pierwsze zdjęcie produktu.
+         */
+        image?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * Puste pole ukrywa daną liczbę.
    */
@@ -772,6 +792,14 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         facebook?: T;
         instagram?: T;
         linkedin?: T;
+      };
+  heroSlides?:
+    | T
+    | {
+        word?: T;
+        product?: T;
+        image?: T;
+        id?: T;
       };
   heroStats?:
     | T

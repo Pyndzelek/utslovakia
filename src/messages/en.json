@@ -66,13 +66,9 @@
       "description": "Bill acceptors, coin validators and cabinets for gaming and vending — tested and shipped within 24 hours.",
       "ctaProducts": "View products",
       "ctaContact": "Contact us",
-      "statYears": "Years in the industry",
-      "statDevices": "Devices sold",
-      "warrantyTitle": "12-month warranty",
-      "warrantySubtitle": "on selected products",
-      "shippingTitle": "Ships within 24 hours",
-      "shippingSubtitle": "worldwide",
-      "imageAlt": "Payment system component"
+      "imageAlt": "Payment system component",
+      "slidesLabel": "Featured categories",
+      "openCategory": "Open category: {name}"
     },
     "categoryShowcase": {
       "productCount": "{count, plural, one {# product} other {# products}}",

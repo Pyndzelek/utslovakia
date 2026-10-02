@@ -75,13 +75,9 @@
       "description": "Akceptory bankoviek, validátory mincí a skrine pre gaming a vending — otestované a odoslané do 24 hodín.",
       "ctaProducts": "Zobraziť produkty",
       "ctaContact": "Kontaktujte nás",
-      "statYears": "Rokov v odvetví",
-      "statDevices": "Predaných zariadení",
-      "warrantyTitle": "12-mesačná záruka",
-      "warrantySubtitle": "na vybrané produkty",
-      "shippingTitle": "Expedícia do 24 hodín",
-      "shippingSubtitle": "do celého sveta",
-      "imageAlt": "Komponent platobného systému"
+      "imageAlt": "Komponent platobného systému",
+      "slidesLabel": "Vybrané kategórie",
+      "openCategory": "Otvoriť kategóriu: {name}"
     },
     "categoryShowcase": {
       "productCount": "{count, plural, one {# produkt} few {# produkty} other {# produktov}}",

@@ -1,143 +1,105 @@
 import React from 'react'
 import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
-import { ArrowRight, BadgeCheck, ShieldCheck, Truck } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
 import type { Locale } from '@/i18n/routing'
-import { getSiteSettings } from '@/lib/data/site-settings'
+import { getHeroSlides } from '@/lib/data/site-settings'
 import { HERO_IMAGE } from '@/lib/site'
-
-/** Staggered entrance for hero content (tw-animate-css; the global reduced-motion rule neutralises it). */
-const enter = 'animate-in fade-in fill-mode-both duration-700 ease-out'
+import { HeroShowcase } from './hero-showcase'
 
 export async function Hero({ locale }: { locale: Locale }) {
   const t = await getTranslations('home.hero')
-  const { heroStats } = await getSiteSettings(locale)
-  const stats = [
-    { label: t('statYears'), value: heroStats?.years },
-    { label: t('statDevices'), value: heroStats?.devicesSold },
-  ].filter((stat): stat is { label: string; value: string } => Boolean(stat.value))
+  const slides = await getHeroSlides(locale)
 
   return (
-    <section className="relative overflow-hidden bg-navy-950">
-      <div className="pattern-chevron-dark absolute inset-0" aria-hidden />
+    <section className="relative flex flex-col overflow-hidden bg-brand-50 lg:min-h-[calc(100svh-4rem)]">
+      {/* Background blobs */}
+      <svg
+        viewBox="0 0 900 640"
+        aria-hidden
+        className="pointer-events-none absolute -top-[30%] -left-[18%] h-auto w-[64%] min-w-[560px] fill-brand-100"
+      >
+        <path d="M84 40C220-40 470 10 640 70s250 190 210 320-170 160-330 170-260 70-380 10S-20 400 10 250 -10 100 84 40Z" />
+      </svg>
+      <svg
+        viewBox="0 0 600 600"
+        aria-hidden
+        className="pointer-events-none absolute top-[4%] -right-[10%] h-auto w-[min(64vw,920px)] min-w-[460px] fill-white"
+      >
+        <path d="M330 20c120 10 240 110 260 240s-40 270-170 320S120 600 50 480 -10 230 60 130 210 10 330 20Z" />
+      </svg>
 
-      <Container className="relative grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-2 lg:gap-x-12 lg:py-24">
-        <div className="lg:col-start-1 lg:row-start-1 lg:self-end">
-          <Badge variant="on-dark" className={`${enter} slide-in-from-bottom-2`}>
-            <BadgeCheck className="size-3.5" aria-hidden />
-            {t('badge')}
-          </Badge>
-
-          <h1
-            className={`${enter} slide-in-from-bottom-4 font-display mt-5 text-[2.125rem] leading-[1.08] font-bold tracking-tight text-balance text-white delay-100 sm:mt-6 sm:text-5xl sm:leading-[1.02] xl:text-6xl`}
-          >
-            {t.rich('title', {
-              highlight: (chunks) => (
-                <span className="bg-linear-to-r from-brand-300 to-brand-500 bg-clip-text text-transparent">
-                  {chunks}
-                </span>
-              ),
-            })}
-          </h1>
-
-          <p
-            className={`${enter} slide-in-from-bottom-4 mt-5 max-w-xl text-[15px] leading-relaxed text-pretty text-slate-300 delay-200 sm:mt-6 sm:text-lg`}
-          >
-            {t('description')}
-          </p>
-
-          <div
-            className={`${enter} slide-in-from-bottom-4 mt-8 grid gap-3 delay-300 sm:flex sm:flex-wrap sm:items-center`}
-          >
-            <Link
-              href="/products"
-              className={buttonVariants({
-                variant: 'primary',
-                size: 'lg',
-                className: 'w-full sm:w-auto',
-              })}
-            >
-              {t('ctaProducts')}
-              <ArrowRight aria-hidden />
-            </Link>
-            <Link
-              href="/contact"
-              className={buttonVariants({
-                variant: 'outline-inverse',
-                size: 'lg',
-                className: 'w-full sm:w-auto',
-              })}
-            >
-              {t('ctaContact')}
-            </Link>
-          </div>
-        </div>
-
-        {/* Product visual */}
-        <div
-          className={`${enter} zoom-in-95 relative mx-auto w-full max-w-sm delay-300 duration-1000 sm:max-w-md lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:max-w-none`}
-        >
-          <div className="relative aspect-square">
-            <div
-              className="absolute inset-6 rounded-[2.5rem] border border-white/10 bg-linear-to-br from-white/10 to-white/2 backdrop-blur-sm"
-              aria-hidden
-            />
-            <Image
-              src={HERO_IMAGE}
-              alt={t('imageAlt')}
-              fill
-              priority
-              sizes="(max-width: 1024px) 90vw, 560px"
-              className="object-contain p-14 drop-shadow-[0_32px_48px_rgba(0,0,0,0.55)]"
-            />
-
-            {/* Floating spec chips */}
-            <div
-              className={`${enter} slide-in-from-left-6 absolute top-8 left-0 flex items-center gap-2 rounded-2xl border border-white/10 bg-navy-900/80 px-4 py-3 shadow-lift backdrop-blur-md delay-700 sm:top-10 sm:left-2`}
-            >
-              <ShieldCheck className="size-5 text-brand-400" aria-hidden />
-              <div>
-                <p className="text-xs font-semibold text-white">{t('warrantyTitle')}</p>
-                <p className="text-[11px] text-slate-400">{t('warrantySubtitle')}</p>
+      <div className="relative z-10 flex flex-1 flex-col justify-center pt-[clamp(28px,5svh,56px)] pb-[clamp(110px,12vw,170px)]">
+        <Container>
+          <HeroShowcase
+            slides={slides}
+            badge={<Badge variant="brand">{t('badge')}</Badge>}
+            intro={
+              <>
+                <h1
+                  className={`font-display text-navy-900 ${slides.length ? 'mt-2.5 text-[clamp(1.375rem,2.2vw,1.875rem)] leading-[1.15] font-semibold tracking-[-0.02em]' : 'mt-6 text-[2.125rem] leading-[1.08] font-bold tracking-tight sm:text-5xl xl:text-6xl'} text-balance`}
+                >
+                  {t.rich('title', {
+                    highlight: (chunks) => (
+                      <span className="whitespace-nowrap text-brand-600">{chunks}</span>
+                    ),
+                  })}
+                </h1>
+                <p className="mt-3 max-w-[440px] text-[15px] leading-relaxed text-pretty text-slate-600">
+                  {t('description')}
+                </p>
+              </>
+            }
+            actions={
+              <div className="grid gap-2.5 sm:flex sm:flex-wrap">
+                <Link
+                  href="/products"
+                  className={buttonVariants({ size: 'lg', className: 'w-full sm:w-auto' })}
+                >
+                  {t('ctaProducts')}
+                  <ArrowRight aria-hidden />
+                </Link>
+                <Link
+                  href="/contact"
+                  className={buttonVariants({
+                    variant: 'outline',
+                    size: 'lg',
+                    className: 'w-full sm:w-auto',
+                  })}
+                >
+                  {t('ctaContact')}
+                </Link>
               </div>
-            </div>
-            <div
-              className={`${enter} slide-in-from-right-6 absolute right-0 bottom-10 flex items-center gap-2 rounded-2xl border border-white/10 bg-navy-900/80 px-4 py-3 shadow-lift backdrop-blur-md delay-[850ms] sm:right-2 sm:bottom-12`}
-            >
-              <Truck className="size-5 text-brand-400" aria-hidden />
-              <div>
-                <p className="text-xs font-semibold text-white">{t('shippingTitle')}</p>
-                <p className="text-[11px] text-slate-400">{t('shippingSubtitle')}</p>
+            }
+            fallbackVisual={
+              <div className="relative aspect-square w-[min(100%,clamp(280px,60svh,560px))]">
+                <Image
+                  src={HERO_IMAGE}
+                  alt={t('imageAlt')}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 90vw, 560px"
+                  className="object-contain p-10"
+                />
               </div>
-            </div>
-          </div>
-        </div>
+            }
+          />
+        </Container>
+      </div>
 
-        {/* Below the image on mobile; back under the CTAs in the left column on desktop */}
-        {stats.length > 0 && (
-          <dl
-            className={`${enter} slide-in-from-bottom-4 -mt-4 grid w-full max-w-md grid-cols-2 gap-3 delay-400 sm:mx-auto lg:col-start-1 lg:mt-0 lg:row-start-2 lg:mx-0 lg:self-start`}
-          >
-            {stats.map((stat) => (
-              <div
-                key={stat.label}
-                className="flex flex-col rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm"
-              >
-                <dt className="order-2 mt-0.5 text-[13px] leading-snug text-slate-300">
-                  {stat.label}
-                </dt>
-                <dd className="font-display order-1 text-2xl font-bold text-white sm:text-3xl">
-                  {stat.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        )}
-      </Container>
+      {/* Wave into the white section below */}
+      <svg
+        viewBox="0 0 1440 160"
+        preserveAspectRatio="none"
+        aria-hidden
+        className="pointer-events-none absolute -bottom-px left-0 z-[5] block h-[clamp(60px,9vw,150px)] w-full fill-white"
+      >
+        <path d="M0 160V96C240 150 520 160 820 110S1240 10 1440 40V160Z" />
+      </svg>
     </section>
   )
 }

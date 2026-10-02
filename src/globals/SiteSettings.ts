@@ -15,7 +15,7 @@ export const SiteSettings: GlobalConfig = {
   admin: {
     group: 'Treści',
     description:
-      'Dane widoczne w stopce, na stronie Kontakt i w menu mobilnym. Zmiany są widoczne na stronie od razu po zapisaniu.',
+      'Dane widoczne w stopce, na stronie Kontakt i w menu mobilnym, a w zakładce „Strona główna” — slajdy sekcji powitalnej. Zmiany są widoczne na stronie od razu po zapisaniu.',
   },
   access: {
     read: () => true,
@@ -82,7 +82,9 @@ export const SiteSettings: GlobalConfig = {
                       required: true,
                       admin: { placeholder: '+421 2 5478 9630' },
                       validate: (value: string | null | undefined) =>
-                        !value || /^\+?[\d\s()-]{6,}$/.test(value) || 'Nieprawidłowy numer telefonu',
+                        !value ||
+                        /^\+?[\d\s()-]{6,}$/.test(value) ||
+                        'Nieprawidłowy numer telefonu',
                     },
                     {
                       name: 'label',
@@ -135,6 +137,55 @@ export const SiteSettings: GlobalConfig = {
           label: 'Strona główna',
           fields: [
             {
+              name: 'heroSlides',
+              type: 'array',
+              label: 'Slajdy w sekcji powitalnej',
+              labels: { singular: 'Slajd', plural: 'Slajdy' },
+              maxRows: 5,
+              admin: {
+                description:
+                  'Rotują co 5 sekund. Zdjęcie, marka, cena i kategoria pochodzą z wybranego produktu. Bez slajdów sekcja pokazuje samo hasło i przyciski.',
+              },
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'word',
+                      type: 'text',
+                      label: 'Duże hasło',
+                      required: true,
+                      localized: true,
+                      maxLength: 10,
+                      admin: {
+                        placeholder: 'ACCEPT',
+                        description:
+                          'Jedno krótkie słowo (do 10 znaków), osobne dla każdego języka.',
+                      },
+                    },
+                    {
+                      name: 'product',
+                      type: 'relationship',
+                      label: 'Produkt',
+                      relationTo: 'products',
+                      // Optional so deleting the product doesn't fail; slides without one are skipped.
+                      admin: { description: 'Slajd bez produktu jest pomijany.' },
+                    },
+                  ],
+                },
+                {
+                  name: 'image',
+                  type: 'upload',
+                  label: 'Zdjęcie (opcjonalnie)',
+                  relationTo: 'media',
+                  admin: {
+                    description:
+                      'Najlepiej wycięte zdjęcie produktu (PNG z przezroczystym tłem). Puste pole = pierwsze zdjęcie produktu.',
+                  },
+                },
+              ],
+            },
+            {
               name: 'heroStats',
               type: 'group',
               label: 'Liczby w sekcji powitalnej',
@@ -143,7 +194,12 @@ export const SiteSettings: GlobalConfig = {
                 {
                   type: 'row',
                   fields: [
-                    { name: 'years', type: 'text', label: 'Lat w branży', admin: { placeholder: '5+' } },
+                    {
+                      name: 'years',
+                      type: 'text',
+                      label: 'Lat w branży',
+                      admin: { placeholder: '5+' },
+                    },
                     {
                       name: 'devicesSold',
                       type: 'text',

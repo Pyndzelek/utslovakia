@@ -66,13 +66,9 @@
       "description": "Akceptory banknotów, walidatory monet i obudowy dla gamingu oraz vendingu, przetestowane i wysyłane w ciągu 24 godzin.",
       "ctaProducts": "Zobacz produkty",
       "ctaContact": "Skontaktuj się z nami",
-      "statYears": "Lat w branży",
-      "statDevices": "Sprzedanych urządzeń",
-      "warrantyTitle": "12-miesięczna gwarancja",
-      "warrantySubtitle": "na wybrane produkty",
-      "shippingTitle": "Wysyłka w 24 godziny",
-      "shippingSubtitle": "na cały świat",
-      "imageAlt": "Komponent systemu płatniczego"
+      "imageAlt": "Komponent systemu płatniczego",
+      "slidesLabel": "Wyróżnione kategorie",
+      "openCategory": "Otwórz kategorię: {name}"
     },
     "categoryShowcase": {
       "productCount": "{count, plural, one {# produkt} few {# produkty} many {# produktów} other {# produktu}}",

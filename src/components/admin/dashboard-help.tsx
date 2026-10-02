@@ -19,7 +19,7 @@ const tips: { title: string; text: string; href?: string; linkLabel?: string }[]
   },
   {
     title: 'Dane firmy i kontakt',
-    text: 'Telefony, e-maile, adres, godziny otwarcia i FAQ widoczne w stopce i na stronie Kontakt.',
+    text: 'Telefony, e-maile, adres, godziny otwarcia i FAQ widoczne w stopce i na stronie Kontakt. W zakładce „Strona główna” wybierasz produkty do sekcji powitalnej.',
     href: '/admin/globals/site-settings',
     linkLabel: 'Edytuj dane firmy',
   },

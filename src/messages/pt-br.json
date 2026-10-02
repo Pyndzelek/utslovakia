@@ -66,13 +66,9 @@
       "description": "Aceitadores de cédulas, validadores de moedas e gabinetes para gaming e vending — testados e enviados em até 24 horas.",
       "ctaProducts": "Ver produtos",
       "ctaContact": "Fale conosco",
-      "statYears": "Anos no setor",
-      "statDevices": "Dispositivos vendidos",
-      "warrantyTitle": "Garantia de 12 meses",
-      "warrantySubtitle": "em produtos selecionados",
-      "shippingTitle": "Envio em 24 horas",
-      "shippingSubtitle": "para o mundo todo",
-      "imageAlt": "Componente de sistema de pagamento"
+      "imageAlt": "Componente de sistema de pagamento",
+      "slidesLabel": "Categorias em destaque",
+      "openCategory": "Abrir categoria: {name}"
     },
     "categoryShowcase": {
       "productCount": "{count, plural, one {# produto} other {# produtos}}",
