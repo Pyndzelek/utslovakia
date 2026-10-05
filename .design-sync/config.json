@@ -1,0 +1,11 @@
+{
+  "projectId": "90de25e1-0144-400f-975c-b12145985eb0",
+  "shape": "package",
+  "pkg": "utslovakia",
+  "globalName": "UTSlovakia",
+  "buildCmd": "node .design-sync/ds/build.mjs",
+  "srcDir": "../../src/components/ui",
+  "tsconfig": "../../tsconfig.json",
+  "cssEntry": "dist/index.css",
+  "readmeHeader": ".design-sync/conventions.md"
+}

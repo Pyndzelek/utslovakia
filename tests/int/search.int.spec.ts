@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { searchWords } from '@/lib/search'
+import { highlightMatches, searchWords } from '@/lib/search'
 
 describe('searchWords', () => {
   it('splits on whitespace and punctuation, lowercased', () => {
@@ -27,5 +27,41 @@ describe('searchWords', () => {
     expect(searchWords(undefined)).toEqual([])
     expect(searchWords('   ')).toEqual([])
     expect(searchWords('--/"')).toEqual([])
+  })
+})
+
+/** Renders segments as a string with the matches in [brackets], for compact assertions. */
+const marked = (text: string, query: string) =>
+  highlightMatches(text, searchWords(query))
+    .map((segment) => (segment.match ? `[${segment.text}]` : segment.text))
+    .join('')
+
+describe('highlightMatches', () => {
+  it('marks every occurrence, ignoring case', () => {
+    expect(marked('Monitor dotykowy MONITOR', 'monitor')).toBe('[Monitor] dotykowy [MONITOR]')
+  })
+
+  it('ignores diacritics on both sides', () => {
+    expect(marked('Wyświetlacz LCD', 'wyswietlacz')).toBe('[Wyświetlacz] LCD')
+    expect(marked('Lacznik kablowy', 'łącznik')).toBe('[Lacznik] kablowy')
+    expect(marked('Łącznik kablowy', 'lacz')).toBe('[Łącz]nik kablowy')
+  })
+
+  it('keeps decomposed accents inside the marked letter', () => {
+    const decomposed = 'Wyświetlacz'.normalize('NFD')
+    expect(marked(decomposed, 'wys')).toBe(`[${'Wyś'.normalize('NFD')}]wietlacz`)
+  })
+
+  it('marks several words and merges overlapping or touching matches', () => {
+    expect(marked('Touch screen monitor', 'touch monitor')).toBe('[Touch] screen [monitor]')
+    expect(marked('Akceptor banknotów', 'akcep ceptor')).toBe('[Akceptor] banknotów')
+    expect(marked('UBA-10-SS', 'uba 10')).toBe('[UBA]-[10]-SS')
+    expect(marked('abcdef', 'abc def')).toBe('[abcdef]')
+  })
+
+  it('returns the text unmarked when nothing matches', () => {
+    expect(highlightMatches('Monitor', ['xyz'])).toEqual([{ text: 'Monitor', match: false }])
+    expect(highlightMatches('Monitor', [])).toEqual([{ text: 'Monitor', match: false }])
+    expect(highlightMatches('', ['a'])).toEqual([])
   })
 })

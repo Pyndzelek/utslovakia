@@ -10,7 +10,15 @@
     "contact": "Kontakt"
   },
   "header": {
-    "searchPlaceholder": "Hľadať produkty…"
+    "search": {
+      "placeholder": "Hľadať produkty…",
+      "label": "Hľadať produkty",
+      "clear": "Vymazať vyhľadávanie",
+      "resultsLabel": "Návrhy produktov",
+      "noResults": "Žiadne produkty nezodpovedajú „{query}“",
+      "viewAll": "{count, plural, one {Zobraziť # výsledok} few {Zobraziť všetky # výsledky} other {Zobraziť všetkých # výsledkov}}",
+      "error": "Vyhľadávanie je momentálne nedostupné. Skúste to znova."
+    }
   },
   "footer": {
     "tagline": "Platobné systémy a komponenty pre gaming, vending a zábavný priemysel.",

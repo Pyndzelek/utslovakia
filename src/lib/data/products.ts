@@ -7,6 +7,7 @@ import type { Locale } from '@/i18n/routing'
 import { Product } from '@/payload-types'
 import { currencyForLocale } from '@/lib/currency'
 import { searchWords } from '@/lib/search'
+import { getMediaUrl } from '@/lib/utils'
 
 /**
  * Data access for the `products` Payload collection.
@@ -433,4 +434,84 @@ export const getFilteredProducts = cache(
     ['filtered-products'],
     { tags: [PRODUCTS_TAG], revalidate: 300 },
   ),
+)
+
+/** A search-as-you-type result: just what the header's dropdown shows, not the whole product. */
+export interface ProductSuggestion {
+  id: number
+  slug: string
+  title: string
+  sku: string | null
+  brand: string | null
+  imageUrl: string | null
+}
+
+export interface ProductSuggestionsResult {
+  results: ProductSuggestion[]
+  /** Every published product matching the query, not only the ones in `results`. */
+  total: number
+}
+
+const cachedProductSuggestions = unstable_cache(
+  async (
+    locale: Locale,
+    normalizedQuery: string,
+    limit: number,
+  ): Promise<ProductSuggestionsResult> => {
+    const payload = await getPayload({ config })
+    const rankedIds = await searchProductIds(payload, normalizedQuery.split(' '))
+    if (rankedIds.length === 0) return { results: [], total: 0 }
+
+    const { docs: published } = await payload.find({
+      collection: 'products',
+      locale,
+      where: { id: { in: rankedIds }, status: { equals: 'published' } },
+      select: { slug: true },
+      depth: 0,
+      pagination: false,
+    })
+    const publishedIds = new Set(published.map((doc) => doc.id))
+    const orderedIds = rankedIds.filter((id) => publishedIds.has(id))
+    const topIds = orderedIds.slice(0, limit)
+    if (topIds.length === 0) return { results: [], total: 0 }
+
+    const { docs } = await payload.find({
+      collection: 'products',
+      locale,
+      where: { id: { in: topIds } },
+      select: { slug: true, title: true, sku: true, brand: true, images: true },
+      depth: 1,
+      pagination: false,
+    })
+    const position = new Map(topIds.map((id, index) => [id, index]))
+    docs.sort((a, b) => position.get(a.id)! - position.get(b.id)!)
+
+    const results = docs.map((doc): ProductSuggestion => {
+      const firstImage = doc.images?.[0]?.image
+      return {
+        id: doc.id,
+        slug: doc.slug,
+        title: doc.title,
+        sku: doc.sku ?? null,
+        brand: typeof doc.brand === 'object' && doc.brand ? doc.brand.name : null,
+        imageUrl: getMediaUrl(firstImage, 'thumbnail'),
+      }
+    })
+    return { results, total: orderedIds.length }
+  },
+  ['product-suggestions'],
+  { tags: [PRODUCTS_TAG], revalidate: 300 },
+)
+
+/**
+ * The best `limit` published matches for the header's live search, plus how many there are
+ * in total. Same matching and ranking as the catalogue search (`searchProductIds`); the
+ * cache is keyed on the normalized words, so "Monitor " and "monitor" share an entry.
+ */
+export const searchProductSuggestions = cache(
+  async (locale: Locale, query: string, limit = 6): Promise<ProductSuggestionsResult> => {
+    const words = searchWords(query)
+    if (words.length === 0) return { results: [], total: 0 }
+    return cachedProductSuggestions(locale, words.join(' '), limit)
+  },
 )

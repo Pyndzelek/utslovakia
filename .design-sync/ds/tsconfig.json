@@ -1,0 +1,1 @@
+{"extends":"../../tsconfig.json","compilerOptions":{"noEmit":false,"declaration":true,"emitDeclarationOnly":true,"incremental":false,"outDir":"../pkg/dist/types","rootDir":"../..","skipLibCheck":true},"include":["index.ts","stubs/*.tsx","../../src/payload-types.ts"]}

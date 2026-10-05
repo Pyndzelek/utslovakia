@@ -6,6 +6,7 @@ import { Logo } from '@/components/layout/logo'
 import { NavLink, type NavItem } from '@/components/layout/nav-link'
 import { LocaleSwitcher } from '@/components/layout/locale-switcher'
 import { MobileMenu } from '@/components/layout/mobile-menu'
+import { HeaderSearch } from '@/components/layout/header-search'
 
 export async function Header() {
   const t = await getTranslations()
@@ -31,7 +32,9 @@ export async function Header() {
             ))}
           </nav>
 
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
+            <HeaderSearch className="hidden w-60 md:block xl:w-72" />
+
             <div className="hidden shrink-0 md:block">
               <LocaleSwitcher />
             </div>

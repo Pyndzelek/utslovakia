@@ -10,7 +10,15 @@
     "contact": "Kontakt"
   },
   "header": {
-    "searchPlaceholder": "Szukaj produktów…"
+    "search": {
+      "placeholder": "Szukaj produktów…",
+      "label": "Szukaj produktów",
+      "clear": "Wyczyść wyszukiwanie",
+      "resultsLabel": "Podpowiedzi produktów",
+      "noResults": "Brak produktów pasujących do „{query}”",
+      "viewAll": "{count, plural, one {Pokaż # wynik} few {Pokaż wszystkie # wyniki} many {Pokaż wszystkie # wyników} other {Pokaż wszystkie # wyniku}}",
+      "error": "Wyszukiwanie jest chwilowo niedostępne. Spróbuj ponownie."
+    }
   },
   "footer": {
     "tagline": "Systemy płatności i komponenty dla branży gamingowej, vendingowej i rozrywkowej.",

@@ -3,8 +3,9 @@
 import React, { useEffect, useRef, useState, useCallback, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslations } from 'next-intl'
-import { Mail, Menu, Phone, Search, X } from 'lucide-react'
-import { Link, usePathname, useRouter } from '@/i18n/navigation'
+import { Mail, Menu, Phone, X } from 'lucide-react'
+import { Link, usePathname } from '@/i18n/navigation'
+import { HeaderSearch } from '@/components/layout/header-search'
 import { LocaleSwitcher } from '@/components/layout/locale-switcher'
 import type { NavItem } from '@/components/layout/nav-link'
 import { cn, telHref } from '@/lib/utils'
@@ -19,9 +20,6 @@ const noopSubscribe = () => () => {}
 
 export function MobileMenu({ items, phone, email }: MobileMenuProps) {
   const t = useTranslations('a11y')
-  const tSearch = useTranslations('products.toolbar')
-  const tHeader = useTranslations('header')
-  const router = useRouter()
   const [open, setOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
@@ -46,8 +44,11 @@ export function MobileMenu({ items, phone, email }: MobileMenuProps) {
   useEffect(() => {
     if (!open) return
     const trigger = triggerRef.current
+    // Skips elements hidden at this width (e.g. the search field, which moves into the header bar at `md`).
     const focusables = () =>
-      Array.from(panelRef.current?.querySelectorAll<HTMLElement>('a[href], button, input') ?? [])
+      Array.from(
+        panelRef.current?.querySelectorAll<HTMLElement>('a[href], button, input') ?? [],
+      ).filter((el) => el.getClientRects().length > 0)
     // The panel's `visibility` is transitioned, so it can't take focus in this same frame.
     const focusTimer = window.setTimeout(() => focusables()[0]?.focus(), 50)
 
@@ -72,13 +73,6 @@ export function MobileMenu({ items, phone, email }: MobileMenuProps) {
       trigger?.focus()
     }
   }, [open, closeMenu])
-
-  function submitSearch(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    const q = new FormData(event.currentTarget).get('q')?.toString().trim()
-    router.push(q ? { pathname: '/products', query: { q } } : '/products')
-    closeMenu()
-  }
 
   // Lock body scroll while the drawer is open
   useEffect(() => {
@@ -141,23 +135,7 @@ export function MobileMenu({ items, phone, email }: MobileMenuProps) {
             >
               {/* Content Body */}
               <div className="p-5">
-                <form role="search" onSubmit={submitSearch} className="relative mb-4">
-                  <label htmlFor="mobile-search" className="sr-only">
-                    {tSearch('searchLabel')}
-                  </label>
-                  <Search
-                    className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-slate-500"
-                    aria-hidden
-                  />
-                  <input
-                    id="mobile-search"
-                    type="search"
-                    name="q"
-                    maxLength={100}
-                    placeholder={tHeader('searchPlaceholder')}
-                    className="h-11 w-full rounded-xl border border-transparent bg-slate-100 pr-4 pl-10 text-[15px] text-navy-900 placeholder:text-slate-500 focus:border-brand-400 focus:bg-white focus:outline-none"
-                  />
-                </form>
+                <HeaderSearch variant="drawer" onNavigate={closeMenu} className="mb-4 md:hidden" />
 
                 {/* Navigation Links */}
                 <nav aria-label={t('mainNav')} className="flex flex-col gap-1">

@@ -10,7 +10,15 @@
     "contact": "Contact"
   },
   "header": {
-    "searchPlaceholder": "Search products…"
+    "search": {
+      "placeholder": "Search products…",
+      "label": "Search products",
+      "clear": "Clear search",
+      "resultsLabel": "Product suggestions",
+      "noResults": "No products match “{query}”",
+      "viewAll": "{count, plural, one {Show # result} other {Show all # results}}",
+      "error": "Search is unavailable right now. Please try again."
+    }
   },
   "footer": {
     "tagline": "Payment systems and components for the gaming, vending and amusement industries.",

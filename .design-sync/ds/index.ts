@@ -1,0 +1,10 @@
+// Design-sync entry: the UTSlovakia UI primitives (src/components/ui) exposed as one package.
+export { Badge } from '../../src/components/ui/badge'
+export { Breadcrumbs } from '../../src/components/ui/breadcrumbs'
+export { Button, buttonVariants } from '../../src/components/ui/button'
+export { Container } from '../../src/components/ui/container'
+export * from '../../src/components/ui/field'
+export { Price } from '../../src/components/ui/price'
+export { RevealOnScroll } from '../../src/components/ui/reveal'
+export { SectionHeading } from '../../src/components/ui/section-heading'
+export { Skeleton } from '../../src/components/ui/skeleton'
