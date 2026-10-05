@@ -365,7 +365,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
       phones: [{ number: '+421 2 5478 9630' }],
       emails: [{ email: 'sales@utslovakia.sk' }],
       openingHours: 'pon.–pt., 8:00 – 16:30',
-      heroStats: { years: '5+', devicesSold: '1000+' },
     },
   })
   const localized = {

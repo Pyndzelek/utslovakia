@@ -14,6 +14,7 @@ import { Category } from './collections/Category'
 import { Product } from './collections/Product'
 import { Brand } from './collections/Brand'
 import { SiteSettings } from './globals/SiteSettings'
+import { HomePage } from './globals/HomePage'
 import { SITE_URL } from './lib/site'
 import { metaDescription } from './lib/seo/meta'
 
@@ -86,7 +87,7 @@ export default buildConfig({
     fallback: true,
   },
   collections: [Product, Category, Brand, Media, Users],
-  globals: [SiteSettings],
+  globals: [HomePage, SiteSettings],
   editor: lexicalEditor(),
   secret: requiredEnv('PAYLOAD_SECRET'),
   typescript: {

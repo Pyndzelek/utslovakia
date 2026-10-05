@@ -7,7 +7,7 @@ import { Container } from '@/components/ui/container'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
 import type { Locale } from '@/i18n/routing'
-import { getHeroSlides } from '@/lib/data/site-settings'
+import { getHeroSlides } from '@/lib/data/home-page'
 import { HERO_IMAGE } from '@/lib/site'
 import { HeroShowcase } from './hero-showcase'
 

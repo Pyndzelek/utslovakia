@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl'
 import { ArrowUpRight } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
-import type { HeroSlide } from '@/lib/data/site-settings'
+import type { HeroSlide } from '@/lib/data/home-page'
 
 const INTERVAL_MS = 5000
 const EASE_OUT = 'cubic-bezier(.2,.7,.2,1)'
@@ -126,9 +126,6 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
                     >
                       {slide.category.name}
                     </span>
-                    {slide.price && (
-                      <span className="ml-auto shrink-0 text-xs text-slate-500">{slide.price}</span>
-                    )}
                   </button>
                   <Link
                     href={{ pathname: '/category/[slug]', params: { slug: slide.category.slug } }}
@@ -154,12 +151,13 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
       <div
         className={cn(
           heroEnter,
-          'zoom-in-95 flex min-w-0 flex-[1_1_420px] flex-col items-center gap-5 delay-300 duration-1000',
+          'zoom-in-95 flex min-w-0 flex-[1_1_420px] flex-col items-center delay-300 duration-1000 lg:items-end',
         )}
       >
         {current ? (
-          <>
-            <div className="relative aspect-square w-[min(100%,clamp(280px,60svh,560px))]">
+          // Sized to the stage so the caption stays centred under it while the pair hugs the right edge.
+          <div className="flex w-[min(100%,clamp(280px,60svh,560px))] flex-col items-center gap-5">
+            <div className="relative aspect-square w-full">
               <div
                 aria-hidden
                 className="absolute inset-x-[20%] -bottom-[1%] h-[6%] rounded-[50%] bg-[radial-gradient(ellipse,rgb(11_22_51/0.24),rgb(11_22_51/0)_70%)]"
@@ -200,7 +198,7 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
                 {[current.brand, current.productTitle].filter(Boolean).join(' · ')}
               </Link>
             </p>
-          </>
+          </div>
         ) : (
           fallbackVisual
         )}

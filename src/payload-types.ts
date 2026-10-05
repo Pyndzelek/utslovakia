@@ -95,9 +95,11 @@ export interface Config {
   fallbackLocale:
     ('false' | 'none' | 'null') | false | null | ('pl' | 'en' | 'sk' | 'pt-br') | ('pl' | 'en' | 'sk' | 'pt-br')[];
   globals: {
+    'home-page': HomePage;
     'site-settings': SiteSetting;
   };
   globalsSelect: {
+    'home-page': HomePageSelect<false> | HomePageSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: 'pl' | 'en' | 'sk' | 'pt-br';
@@ -670,7 +672,45 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * Dane widoczne w stopce, na stronie Kontakt i w menu mobilnym, a w zakładce „Strona główna” — slajdy sekcji powitalnej. Zmiany są widoczne na stronie od razu po zapisaniu.
+ * Treść sekcji powitalnej na stronie głównej. Zmiany są widoczne na stronie od razu po zapisaniu.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page".
+ */
+export interface HomePage {
+  id: number;
+  /**
+   * Rotują co 5 sekund. Zdjęcie, marka i kategoria pochodzą z wybranego produktu. Bez slajdów sekcja pokazuje samo hasło i przyciski.
+   */
+  heroSlides?:
+    | {
+        /**
+         * Jedno krótkie słowo (do 10 znaków), osobne dla każdego języka.
+         */
+        word: string;
+        /**
+         * Slajd bez produktu jest pomijany.
+         */
+        product?: (number | null) | Product;
+        /**
+         * Najlepiej wycięte zdjęcie produktu (PNG z przezroczystym tłem). Puste pole = pierwsze zdjęcie produktu.
+         */
+        image?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Puste pole ukrywa daną liczbę.
+   */
+  heroStats?: {
+    years?: string | null;
+    devicesSold?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Dane widoczne w stopce, na stronie Kontakt i w menu mobilnym. Zmiany są widoczne na stronie od razu po zapisaniu.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
@@ -716,33 +756,6 @@ export interface SiteSetting {
     linkedin?: string | null;
   };
   /**
-   * Rotują co 5 sekund. Zdjęcie, marka, cena i kategoria pochodzą z wybranego produktu. Bez slajdów sekcja pokazuje samo hasło i przyciski.
-   */
-  heroSlides?:
-    | {
-        /**
-         * Jedno krótkie słowo (do 10 znaków), osobne dla każdego języka.
-         */
-        word: string;
-        /**
-         * Slajd bez produktu jest pomijany.
-         */
-        product?: (number | null) | Product;
-        /**
-         * Najlepiej wycięte zdjęcie produktu (PNG z przezroczystym tłem). Puste pole = pierwsze zdjęcie produktu.
-         */
-        image?: (number | null) | Media;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Puste pole ukrywa daną liczbę.
-   */
-  heroStats?: {
-    years?: string | null;
-    devicesSold?: string | null;
-  };
-  /**
    * Osobna lista dla każdego języka (przełącz język u góry strony). Sekcja jest ukryta, gdy lista jest pusta.
    */
   faq?:
@@ -754,6 +767,29 @@ export interface SiteSetting {
     | null;
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page_select".
+ */
+export interface HomePageSelect<T extends boolean = true> {
+  heroSlides?:
+    | T
+    | {
+        word?: T;
+        product?: T;
+        image?: T;
+        id?: T;
+      };
+  heroStats?:
+    | T
+    | {
+        years?: T;
+        devicesSold?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -792,20 +828,6 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         facebook?: T;
         instagram?: T;
         linkedin?: T;
-      };
-  heroSlides?:
-    | T
-    | {
-        word?: T;
-        product?: T;
-        image?: T;
-        id?: T;
-      };
-  heroStats?:
-    | T
-    | {
-        years?: T;
-        devicesSold?: T;
       };
   faq?:
     | T
