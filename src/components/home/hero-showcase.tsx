@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { ArrowUpRight } from 'lucide-react'
@@ -44,6 +44,18 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
     return () => clearInterval(id)
   }, [slides.length, paused, cycle])
 
+  // Keep the active chip in view as autoplay advances (only when the mobile row is rendered).
+  const chipsRef = useRef<HTMLUListElement>(null)
+  useEffect(() => {
+    const row = chipsRef.current
+    const chip = row?.children[active] as HTMLElement | undefined
+    if (!row || !chip || !row.offsetParent) return
+    row.scrollTo({
+      left: chip.offsetLeft - (row.clientWidth - chip.offsetWidth) / 2,
+      behavior: 'smooth',
+    })
+  }, [active])
+
   const select = (i: number) => {
     setActive(i)
     setCycle((c) => c + 1)
@@ -55,8 +67,11 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
   const pad = (n: number) => String(n).padStart(2, '0')
 
   return (
+    // Mobile: one column ordered badge → word → product → selector → intro → actions, so the
+    // product lands right under the word it illustrates. From lg the text column is a real box
+    // again and sits beside the stage.
     <div
-      className="flex flex-wrap items-center gap-x-14 gap-y-10"
+      className="flex flex-col lg:flex-row lg:items-center lg:gap-14"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
@@ -64,13 +79,13 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
         if (!e.currentTarget.contains(e.relatedTarget)) setPaused(false)
       }}
     >
-      <div className="max-w-[540px] min-w-0 flex-[1_1_400px]">
-        <div className={cn(heroEnter, 'slide-in-from-bottom-2')}>{badge}</div>
+      <div className="contents lg:block lg:max-w-[540px] lg:min-w-0 lg:flex-[1_1_400px]">
+        <div className={cn(heroEnter, 'order-1 slide-in-from-bottom-2')}>{badge}</div>
 
         {slides.length > 0 && (
           <div
             aria-hidden
-            className={cn(heroEnter, 'slide-in-from-bottom-4 mt-5 grid delay-100 sm:mt-6')}
+            className={cn(heroEnter, 'order-2 slide-in-from-bottom-4 mt-4 grid delay-100 sm:mt-6')}
           >
             {slides.map((slide, i) => (
               <div
@@ -90,14 +105,64 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
           </div>
         )}
 
-        <div className={cn(heroEnter, 'slide-in-from-bottom-4 delay-200')}>{intro}</div>
+        {slides.length > 0 && (
+          // Mobile selector: a swipeable chip row directly under the product.
+          <ul
+            ref={chipsRef}
+            aria-label={t('slidesLabel')}
+            className={cn(
+              heroEnter,
+              'no-scrollbar relative order-4 -mx-4 mt-5 flex snap-x gap-2 overflow-x-auto scroll-px-4 px-4 py-0.5 delay-300 sm:-mx-6 sm:scroll-px-6 sm:px-6 lg:hidden',
+            )}
+          >
+            {slides.map((slide, i) => {
+              const isActive = i === active
+              return (
+                <li
+                  key={i}
+                  className={cn(
+                    'flex shrink-0 snap-start items-center rounded-full border transition-colors duration-300',
+                    isActive
+                      ? 'border-brand-600 bg-brand-600 text-white'
+                      : 'border-navy-900/10 bg-white/70 text-navy-800',
+                  )}
+                >
+                  <button
+                    type="button"
+                    aria-pressed={isActive}
+                    onClick={() => select(i)}
+                    className={cn(
+                      'font-display flex h-9 cursor-pointer items-center rounded-full pl-3.5 text-sm font-semibold whitespace-nowrap outline-brand-500 focus-visible:outline-2 focus-visible:outline-offset-2',
+                      isActive ? 'pr-1' : 'pr-3.5',
+                    )}
+                  >
+                    {slide.category.name}
+                  </button>
+                  {isActive && (
+                    <Link
+                      href={{ pathname: '/category/[slug]', params: { slug: slide.category.slug } }}
+                      aria-label={t('openCategory', { name: slide.category.name })}
+                      className="mr-1 grid size-7 place-items-center rounded-full outline-white hover:bg-white/15 focus-visible:outline-2"
+                    >
+                      <ArrowUpRight className="size-4" aria-hidden />
+                    </Link>
+                  )}
+                </li>
+              )
+            })}
+          </ul>
+        )}
+
+        <div className={cn(heroEnter, 'order-5 mt-6 slide-in-from-bottom-4 delay-200 lg:mt-0')}>
+          {intro}
+        </div>
 
         {slides.length > 0 && (
           <ul
             aria-label={t('slidesLabel')}
             className={cn(
               heroEnter,
-              'slide-in-from-bottom-4 mt-7 border-t border-navy-900/10 delay-300',
+              'slide-in-from-bottom-4 mt-7 hidden border-t border-navy-900/10 delay-300 lg:block',
             )}
           >
             {slides.map((slide, i) => {
@@ -145,18 +210,23 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
           </ul>
         )}
 
-        <div className={cn(heroEnter, 'slide-in-from-bottom-4 mt-7 delay-400')}>{actions}</div>
+        <div className={cn(heroEnter, 'order-6 mt-7 slide-in-from-bottom-4 delay-400')}>
+          {actions}
+        </div>
       </div>
 
       <div
         className={cn(
           heroEnter,
-          'zoom-in-95 flex min-w-0 flex-[1_1_420px] flex-col items-center delay-300 duration-1000 lg:items-end',
+          // Without slides the fallback image is decoration, so it drops below the actions.
+          slides.length ? 'order-3 mt-5' : 'order-7 mt-10',
+          'zoom-in-95 flex min-w-0 flex-col items-center delay-300 duration-1000 lg:order-none lg:mt-0 lg:flex-[1_1_420px] lg:items-end',
         )}
       >
         {current ? (
           // Sized to the stage so the caption stays centred under it while the pair hugs the right edge.
-          <div className="flex w-[min(100%,clamp(280px,60svh,560px))] flex-col items-center gap-5">
+          // Smaller on mobile so word + product + selector fit the first screen.
+          <div className="flex w-[min(100%,clamp(240px,42svh,420px))] flex-col items-center gap-3 lg:w-[min(100%,clamp(280px,60svh,560px))] lg:gap-5">
             <div className="relative aspect-square w-full">
               <div
                 aria-hidden
@@ -181,13 +251,13 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
                     alt={slide.productTitle}
                     fill
                     priority={i === 0}
-                    sizes="(max-width: 1024px) 90vw, 560px"
+                    sizes="(max-width: 1024px) 80vw, 560px"
                     className="object-contain transition-transform duration-500 group-hover:scale-[1.03]"
                   />
                 </Link>
               ))}
             </div>
-            <p className="flex max-w-md items-baseline gap-3 text-xs text-navy-800">
+            <p className="flex max-w-md items-baseline gap-3 text-center text-xs text-navy-800">
               <span className="font-display shrink-0 font-semibold text-brand-600">
                 {pad(active + 1)} / {pad(slides.length)}
               </span>

@@ -5,7 +5,7 @@ import { revalidateGlobal } from '@/hooks/revalidate'
 export const HOME_PAGE_TAG = 'home-page'
 
 /**
- * Home page content (hero slides and stats). Read on the frontend via `getHeroSlides`
+ * Home page content (hero slides). Read on the frontend via `getHeroSlides`
  * (src/lib/data/home-page.ts).
  */
 export const HomePage: GlobalConfig = {
@@ -70,31 +70,6 @@ export const HomePage: GlobalConfig = {
             description:
               'Najlepiej wycięte zdjęcie produktu (PNG z przezroczystym tłem). Puste pole = pierwsze zdjęcie produktu.',
           },
-        },
-      ],
-    },
-    {
-      name: 'heroStats',
-      type: 'group',
-      label: 'Liczby w sekcji powitalnej',
-      admin: { description: 'Puste pole ukrywa daną liczbę.' },
-      fields: [
-        {
-          type: 'row',
-          fields: [
-            {
-              name: 'years',
-              type: 'text',
-              label: 'Lat w branży',
-              admin: { placeholder: '5+' },
-            },
-            {
-              name: 'devicesSold',
-              type: 'text',
-              label: 'Sprzedanych urządzeń',
-              admin: { placeholder: '1000+' },
-            },
-          ],
         },
       ],
     },

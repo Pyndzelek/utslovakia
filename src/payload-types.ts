@@ -699,13 +699,6 @@ export interface HomePage {
         id?: string | null;
       }[]
     | null;
-  /**
-   * Puste pole ukrywa daną liczbę.
-   */
-  heroStats?: {
-    years?: string | null;
-    devicesSold?: string | null;
-  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -780,12 +773,6 @@ export interface HomePageSelect<T extends boolean = true> {
         product?: T;
         image?: T;
         id?: T;
-      };
-  heroStats?:
-    | T
-    | {
-        years?: T;
-        devicesSold?: T;
       };
   updatedAt?: T;
   createdAt?: T;
