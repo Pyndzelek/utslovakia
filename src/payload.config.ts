@@ -18,6 +18,12 @@ import { HomePage } from './globals/HomePage'
 import { SITE_URL } from './lib/site'
 import { metaDescription } from './lib/seo/meta'
 
+/** Bucket's public host (r2.dev or custom domain); tolerates a pasted `https://…/` form. */
+const MEDIA_HOSTNAME = process.env.S3_PUBLIC_HOSTNAME?.replace(/^https?:\/\//, '').replace(
+  /\/+$/,
+  '',
+)
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -131,6 +137,14 @@ export default buildConfig({
         media: {
           disableLocalStorage: true,
           prefix: 'media',
+          // Point media URLs straight at the bucket's public host (r2.dev or a custom domain)
+          // instead of `/api/media/file/**`, which runs a serverless function + DB access check
+          // + two R2 calls per image. Computed on read, so existing uploads switch with no
+          // migration; the proxy route stays registered for any old cached HTML.
+          ...(MEDIA_HOSTNAME && {
+            generateFileURL: ({ filename, prefix }) =>
+              `https://${MEDIA_HOSTNAME}/${prefix || 'media'}/${encodeURIComponent(filename)}`,
+          }),
         },
       },
       bucket: storageEnv('S3_BUCKET'),

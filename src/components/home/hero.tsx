@@ -81,8 +81,8 @@ export async function Hero({ locale }: { locale: Locale }) {
                   src={HERO_IMAGE}
                   alt={t('imageAlt')}
                   fill
-                  priority
-                  sizes="(max-width: 1024px) 90vw, 560px"
+                  preload
+                  sizes="(max-width: 560px) 100vw, 560px"
                   className="object-contain p-10"
                 />
               </div>

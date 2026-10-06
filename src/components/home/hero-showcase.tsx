@@ -36,6 +36,9 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
   const [paused, setPaused] = useState(false)
   // Bumped on manual selection so the autoplay timer restarts from zero.
   const [cycle, setCycle] = useState(0)
+  // Furthest slide whose image has loaded. Only the first image is in the server HTML, so its
+  // download isn't contended; each load then mounts the next one, queueing the rest behind it.
+  const [loaded, setLoaded] = useState(-1)
 
   useEffect(() => {
     if (slides.length < 2 || paused) return
@@ -220,7 +223,7 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
           heroEnter,
           // Without slides the fallback image is decoration, so it drops below the actions.
           slides.length ? 'order-3 mt-5' : 'order-7 mt-10',
-          'zoom-in-95 flex min-w-0 flex-col items-center delay-300 duration-1000 lg:order-none lg:mt-0 lg:flex-[1_1_420px] lg:items-end',
+          'zoom-in-95 flex min-w-0 flex-col items-center duration-500 lg:order-none lg:mt-0 lg:flex-[1_1_420px] lg:items-end',
         )}
       >
         {current ? (
@@ -246,14 +249,19 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
                     pointerEvents: i === active ? 'auto' : 'none',
                   }}
                 >
-                  <Image
-                    src={slide.imageUrl}
-                    alt={slide.productTitle}
-                    fill
-                    priority={i === 0}
-                    sizes="(max-width: 1024px) 80vw, 560px"
-                    className="object-contain transition-transform duration-500 group-hover:scale-[1.03]"
-                  />
+                  {i <= Math.max(loaded + 1, active) && (
+                    <Image
+                      src={slide.imageUrl}
+                      alt={slide.productTitle}
+                      fill
+                      preload={i === 0}
+                      fetchPriority={i === 0 ? 'high' : 'low'}
+                      // Stage is clamp(240px,42svh,420px) below lg, at most 560px from lg.
+                      sizes="(max-width: 1024px) 420px, 560px"
+                      onLoad={() => setLoaded((l) => Math.max(l, i))}
+                      className="object-contain transition-transform duration-500 group-hover:scale-[1.03]"
+                    />
+                  )}
                 </Link>
               ))}
             </div>

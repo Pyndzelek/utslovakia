@@ -6,7 +6,16 @@ import { cn, getMediaUrl } from '@/lib/utils'
 import { InStock } from '@/components/product/in-stock'
 import { ProductBadgeTag } from './product-badge'
 
-export function ProductCard({ product, className }: { product: Product; className?: string }) {
+export function ProductCard({
+  product,
+  className,
+  preload,
+}: {
+  product: Product
+  className?: string
+  /** Above-the-fold cards: preload the image instead of lazy-loading it. */
+  preload?: boolean
+}) {
   const inStock = product.stockStatus === 'in_stock'
   const brand = typeof product.brand === 'object' ? product.brand : null
   const image = typeof product.images?.[0] === 'object' ? product.images?.[0] : null
@@ -29,6 +38,7 @@ export function ProductCard({ product, className }: { product: Product; classNam
             src={imageUrl}
             alt={image?.alt ?? product.title}
             fill
+            preload={preload}
             sizes="(max-width: 640px) 60vw, (max-width: 1024px) 33vw, 280px"
             className="object-contain p-6 transition-transform duration-500 group-hover:scale-105"
           />

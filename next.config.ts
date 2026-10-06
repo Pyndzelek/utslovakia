@@ -7,6 +7,11 @@ import createNextIntlPlugin from 'next-intl/plugin'
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
+/** Bucket's public host (r2.dev or custom domain); tolerates a pasted `https://…/` form. */
+const MEDIA_HOSTNAME = process.env.S3_PUBLIC_HOSTNAME?.replace(/^https?:\/\//, '').replace(
+  /\/+$/,
+  '',
+)
 
 const nextConfig: NextConfig = {
   experimental: {
@@ -28,13 +33,14 @@ const nextConfig: NextConfig = {
     // Media uploads are immutable per-URL (new upload = new filename).
     deviceSizes: [384, 480, 640, 750, 960, 1200, 1440],
     minimumCacheTTL: 2678400, // 31 days
-    // Covers both `/api/media/file/**` (Payload-proxied R2 media) and `public/` assets.
+    // `public/` assets, plus `/api/media/file/**` (Payload-proxied R2 media) when
+    // S3_PUBLIC_HOSTNAME is unset. With it set, media come from that host (remotePatterns).
     localPatterns: [{ pathname: '/**' }],
-    remotePatterns: process.env.S3_PUBLIC_HOSTNAME
+    remotePatterns: MEDIA_HOSTNAME
       ? [
           {
             protocol: 'https',
-            hostname: process.env.S3_PUBLIC_HOSTNAME,
+            hostname: MEDIA_HOSTNAME,
           },
         ]
       : [],
