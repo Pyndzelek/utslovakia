@@ -232,7 +232,8 @@
     "next": "Ďalší obrázok",
     "zoomIn": "Priblížiť",
     "zoomOut": "Oddialiť",
-    "resetZoom": "Obnoviť veľkosť"
+    "resetZoom": "Obnoviť veľkosť",
+    "playVideo": "Prehrať video"
   },
   "price": {
     "onRequest": "Cena na vyžiadanie"
@@ -297,7 +298,8 @@
       "workbench": "Servisné a testovacie pracovisko v dielni UTS",
       "printLab": "3D tlačiareň a elektronické pracovisko na prototypovanie skriniek a dielov",
       "validators": "Krabica bankovkových validátorov MEI SC Advance pripravených na odoslanie",
-      "cabinets": "Rad repasovaných herných automatov v sklade UTS"
+      "cabinets": "Rad repasovaných herných automatov v sklade UTS",
+      "video": "Prechádzka skladom UTS s hernými automatmi"
     }
   }
 }

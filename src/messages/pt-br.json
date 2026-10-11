@@ -232,7 +232,8 @@
     "next": "Próxima imagem",
     "zoomIn": "Aproximar",
     "zoomOut": "Afastar",
-    "resetZoom": "Redefinir zoom"
+    "resetZoom": "Redefinir zoom",
+    "playVideo": "Reproduzir vídeo"
   },
   "price": {
     "onRequest": "Preço sob consulta"
@@ -297,7 +298,8 @@
       "workbench": "Bancada de reparo e testes na oficina da UTS",
       "printLab": "Impressora 3D e bancada de eletrônica para prototipagem de gabinetes e peças",
       "validators": "Caixa de validadores de cédulas MEI SC Advance prontos para envio",
-      "cabinets": "Fileira de máquinas de jogos recondicionadas no armazém da UTS"
+      "cabinets": "Fileira de máquinas de jogos recondicionadas no armazém da UTS",
+      "video": "Passeio pelo armazém da UTS com máquinas de jogos"
     }
   }
 }

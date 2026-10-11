@@ -1,14 +1,17 @@
 import React from 'react'
-import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
 import { ArrowRight, Boxes, Lightbulb, Wrench, type LucideIcon } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { buttonVariants } from '@/components/ui/button'
 import { AboutPhotoGallery, type AboutPhoto } from '@/components/about/about-photo-gallery'
-import { AboutVideo } from '@/components/about/about-video'
 
-const VIDEO_SRC = '/about/workshop.mp4'
-const VIDEO_POSTER = '/about/workshop-poster.jpg'
+// Portrait clip (576×1024), muted — its sound track was dropped at encode time.
+const video = {
+  src: '/about/workshop.mp4',
+  poster: '/about/workshop-poster.jpg',
+  width: 576,
+  height: 1024,
+}
 
 // Files live in public/about/; copy for each is under `about.mediaAlt.<key>`.
 const photos: {
@@ -98,19 +101,12 @@ export async function AboutSection({ showCta = true }: AboutSectionProps) {
       </div>
 
       {/* Media */}
-      <div className="space-y-2 sm:space-y-3 lg:sticky lg:top-28">
-        {/* The clip is portrait; it sits on a blurred copy of its own frame to fill the box. */}
-        <div className="relative aspect-4/3 overflow-hidden rounded-2xl bg-navy-950 shadow-lift">
-          <Image
-            src={VIDEO_POSTER}
-            alt=""
-            fill
-            sizes="(max-width: 1024px) 100vw, 600px"
-            className="scale-110 object-cover opacity-60 blur-2xl"
-          />
-          <AboutVideo src={VIDEO_SRC} poster={VIDEO_POSTER} />
-        </div>
-        <AboutPhotoGallery photos={galleryPhotos} label={t('photosLabel')} />
+      <div className="lg:sticky lg:top-28">
+        <AboutPhotoGallery
+          video={{ ...video, alt: t('mediaAlt.video') }}
+          photos={galleryPhotos}
+          label={t('photosLabel')}
+        />
       </div>
     </div>
   )

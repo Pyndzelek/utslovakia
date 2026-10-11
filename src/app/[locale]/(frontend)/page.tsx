@@ -90,7 +90,7 @@ export default async function HomePage({ params }: PageProps) {
         </Container>
       </section>
 
-      {/* About us — the CTA banner right below carries the contact button */}
+      {/* About us — contact button left to the CTA banner at the end of the page */}
       <section id="about" className="scroll-mt-24 py-12 lg:pt-16 lg:pb-20">
         <Container>
           <AboutSection showCta={false} />

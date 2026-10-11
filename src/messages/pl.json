@@ -232,7 +232,8 @@
     "next": "Następne zdjęcie",
     "zoomIn": "Powiększ",
     "zoomOut": "Pomniejsz",
-    "resetZoom": "Przywróć rozmiar"
+    "resetZoom": "Przywróć rozmiar",
+    "playVideo": "Odtwórz wideo"
   },
   "price": {
     "onRequest": "Cena na zapytanie"
@@ -297,7 +298,8 @@
       "workbench": "Stanowisko serwisowe i testowe w warsztacie UTS",
       "printLab": "Drukarka 3D i stanowisko elektroniczne do prototypowania obudów i części",
       "validators": "Karton walidatorów banknotów MEI SC Advance gotowych do wysyłki",
-      "cabinets": "Rząd odnowionych automatów do gier w magazynie UTS"
+      "cabinets": "Rząd odnowionych automatów do gier w magazynie UTS",
+      "video": "Przejście przez magazyn UTS z automatami do gier"
     }
   }
 }

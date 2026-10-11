@@ -232,7 +232,8 @@
     "next": "Next image",
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
-    "resetZoom": "Reset zoom"
+    "resetZoom": "Reset zoom",
+    "playVideo": "Play video"
   },
   "price": {
     "onRequest": "Price on request"
@@ -297,7 +298,8 @@
       "workbench": "Repair and testing workbench in the UTS workshop",
       "printLab": "3D printer and electronics bench used to prototype enclosures and parts",
       "validators": "A box of MEI SC Advance bill validators ready to ship",
-      "cabinets": "A row of refurbished gaming cabinets in the UTS warehouse"
+      "cabinets": "A row of refurbished gaming cabinets in the UTS warehouse",
+      "video": "Walk-through of the UTS warehouse with gaming cabinets"
     }
   }
 }

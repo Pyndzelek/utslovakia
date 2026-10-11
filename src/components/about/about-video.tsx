@@ -41,7 +41,7 @@ export function AboutVideo({ src, poster }: { src: string; poster: string }) {
       preload="metadata"
       aria-hidden
       tabIndex={-1}
-      className="absolute inset-0 size-full object-contain"
+      className="pointer-events-none absolute inset-0 size-full object-contain"
     />
   )
 }

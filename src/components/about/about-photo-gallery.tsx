@@ -4,7 +4,8 @@ import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { Dialog } from '@base-ui/react/dialog'
 import { useTranslations } from 'next-intl'
-import { ChevronLeft, ChevronRight, RotateCcw, X, ZoomIn, ZoomOut } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Play, RotateCcw, X, ZoomIn, ZoomOut } from 'lucide-react'
+import { AboutVideo } from '@/components/about/about-video'
 import { cn } from '@/lib/utils'
 
 export interface AboutPhoto {
@@ -14,6 +15,11 @@ export interface AboutPhoto {
   height: number
 }
 
+export interface AboutClip extends AboutPhoto {
+  poster: string
+}
+
+type Item = (AboutPhoto & { type: 'photo' }) | (AboutClip & { type: 'video' })
 type View = { scale: number; x: number; y: number }
 type Point = { x: number; y: number }
 
@@ -26,11 +32,20 @@ const RESET: View = { scale: 1, x: 0, y: 0 }
 const clampNumber = (value: number, limit: number) => Math.min(limit, Math.max(-limit, value))
 
 /**
- * Photo mosaic whose tiles open a full-screen lightbox. The lightbox shows the whole
- * photo and supports zoom (click/tap, wheel, pinch, buttons, +/−/0 keys) and panning
- * by dragging. All zoom is a CSS transform on the full-resolution original.
+ * A featured video frame above a strip of photo thumbnails; each opens a full-screen
+ * lightbox. The video plays there with controls. Photos show whole and support zoom
+ * (click/tap, wheel, pinch, buttons, +/−/0 keys) and panning by dragging — a CSS
+ * transform on the full-resolution original.
  */
-export function AboutPhotoGallery({ photos, label }: { photos: AboutPhoto[]; label: string }) {
+export function AboutPhotoGallery({
+  video,
+  photos,
+  label,
+}: {
+  video?: AboutClip
+  photos: AboutPhoto[]
+  label: string
+}) {
   const t = useTranslations('gallery')
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(0)
@@ -50,13 +65,19 @@ export function AboutPhotoGallery({ photos, label }: { photos: AboutPhoto[]; lab
     pinch?: { distance: number; scale: number }
   } | null>(null)
 
-  const photo = photos[active]
-  const count = photos.length
+  const items: Item[] = [
+    ...(video ? [{ ...video, type: 'video' as const }] : []),
+    ...photos.map((photo) => ({ ...photo, type: 'photo' as const })),
+  ]
+  const photoOffset = video ? 1 : 0
+  const item = items[active]
+  const isVideo = item?.type === 'video'
+  const count = items.length
 
   // Size of the photo as drawn by `object-contain` inside the stage, at scale 1.
   const fitted = (() => {
-    if (!photo || !stage.width || !stage.height) return { width: 0, height: 0 }
-    const ratio = photo.width / photo.height
+    if (!item || !stage.width || !stage.height) return { width: 0, height: 0 }
+    const ratio = item.width / item.height
     return stage.width / stage.height > ratio
       ? { width: stage.height * ratio, height: stage.height }
       : { width: stage.width, height: stage.width / ratio }
@@ -153,13 +174,14 @@ export function AboutPhotoGallery({ photos, label }: { photos: AboutPhoto[]; lab
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'ArrowLeft' && count > 1) step(-1)
       else if (event.key === 'ArrowRight' && count > 1) step(1)
+      else if (isVideo) return
       else if (event.key === '+' || event.key === '=') zoomTo(viewRef.current.scale * BUTTON_STEP)
       else if (event.key === '-') zoomTo(viewRef.current.scale / BUTTON_STEP)
       else if (event.key === '0') setView(RESET)
     }
     window.addEventListener('keydown', onKeyDown, true)
     return () => window.removeEventListener('keydown', onKeyDown, true)
-  }, [open, count, step, zoomTo])
+  }, [open, count, isVideo, step, zoomTo])
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     event.currentTarget.setPointerCapture(event.pointerId)
@@ -250,21 +272,49 @@ export function AboutPhotoGallery({ photos, label }: { photos: AboutPhoto[]; lab
         if (!next) setView(RESET)
       }}
     >
+      {video && (
+        <button
+          ref={(node) => {
+            tileRefs.current[0] = node
+          }}
+          type="button"
+          onClick={() => openAt(0)}
+          aria-label={`${t('playVideo')}: ${video.alt}`}
+          className="group relative mb-2 block aspect-4/3 w-full cursor-pointer overflow-hidden rounded-2xl bg-navy-950 shadow-lift focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:outline-none sm:mb-3"
+        >
+          {/* The clip is portrait; it sits on a blurred copy of its own frame to fill the box. */}
+          <Image
+            src={video.poster}
+            alt=""
+            fill
+            sizes="(max-width: 1024px) 100vw, 600px"
+            className="scale-110 object-cover opacity-60 blur-2xl"
+          />
+          <AboutVideo src={video.src} poster={video.poster} />
+          <span
+            className="absolute top-1/2 left-1/2 flex size-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-navy-900 shadow-lift transition-transform duration-200 group-hover:scale-110"
+            aria-hidden
+          >
+            <Play className="ml-1 size-6 fill-current" />
+          </span>
+        </button>
+      )}
+
       <ul aria-label={label} className="grid grid-cols-4 gap-2 sm:gap-3">
-        {photos.map((item, index) => (
-          <li key={item.src}>
+        {photos.map((photo, photoIndex) => (
+          <li key={photo.src}>
             <button
               ref={(node) => {
-                tileRefs.current[index] = node
+                tileRefs.current[photoIndex + photoOffset] = node
               }}
               type="button"
-              onClick={() => openAt(index)}
-              aria-label={`${t('openPreview')}: ${item.alt}`}
+              onClick={() => openAt(photoIndex + photoOffset)}
+              aria-label={`${t('openPreview')}: ${photo.alt}`}
               className="group relative block aspect-square w-full cursor-zoom-in overflow-hidden rounded-xl border border-line bg-slate-100 shadow-card focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               <Image
-                src={item.src}
-                alt={item.alt}
+                src={photo.src}
+                alt={photo.alt}
                 fill
                 sizes="(max-width: 1024px) 25vw, 160px"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -288,7 +338,7 @@ export function AboutPhotoGallery({ photos, label }: { photos: AboutPhoto[]; lab
           onClick={(event) => event.target === event.currentTarget && setOpen(false)}
           className="fixed inset-0 z-999 flex flex-col items-center justify-center gap-4 p-4 transition-opacity duration-200 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 sm:p-10"
         >
-          <Dialog.Title className="sr-only">{photo?.alt}</Dialog.Title>
+          <Dialog.Title className="sr-only">{item?.alt}</Dialog.Title>
           <Dialog.Close
             aria-label={t('closePreview')}
             className={cn(controlClass, 'absolute top-4 right-4 z-10')}
@@ -296,7 +346,27 @@ export function AboutPhotoGallery({ photos, label }: { photos: AboutPhoto[]; lab
             <X className="size-5" aria-hidden />
           </Dialog.Close>
 
-          {photo && (
+          {item?.type === 'video' && (
+            // Sized to the clip's own shape so the native controls span just the picture.
+            <div
+              className="relative h-[78vh] max-w-full overflow-hidden rounded-xl bg-black"
+              style={{ aspectRatio: `${item.width} / ${item.height}` }}
+            >
+              <video
+                key={item.src}
+                src={item.src}
+                poster={item.poster}
+                controls
+                autoPlay
+                muted // the clip has no sound track; muted keeps autoplay allowed
+                loop
+                playsInline
+                className="absolute inset-0 size-full object-contain"
+              />
+            </div>
+          )}
+
+          {item?.type === 'photo' && (
             <div
               ref={stageRef}
               onPointerDown={onPointerDown}
@@ -316,9 +386,9 @@ export function AboutPhotoGallery({ photos, label }: { photos: AboutPhoto[]; lab
                 style={{ transform: `translate(${view.x}px, ${view.y}px) scale(${view.scale})` }}
               >
                 <Image
-                  key={photo.src}
-                  src={photo.src}
-                  alt={photo.alt}
+                  key={item.src}
+                  src={item.src}
+                  alt={item.alt}
                   fill
                   unoptimized // full-resolution original, so zoomed detail stays sharp
                   draggable={false}
@@ -339,39 +409,45 @@ export function AboutPhotoGallery({ photos, label }: { photos: AboutPhoto[]; lab
                 <ChevronLeft className="size-6" aria-hidden />
               </button>
             )}
-            <button
-              type="button"
-              onClick={() => zoomTo(view.scale / BUTTON_STEP)}
-              disabled={!zoomed}
-              aria-label={t('zoomOut')}
-              className={controlClass}
-            >
-              <ZoomOut className="size-5" aria-hidden />
-            </button>
+            {!isVideo && (
+              <button
+                type="button"
+                onClick={() => zoomTo(view.scale / BUTTON_STEP)}
+                disabled={!zoomed}
+                aria-label={t('zoomOut')}
+                className={controlClass}
+              >
+                <ZoomOut className="size-5" aria-hidden />
+              </button>
+            )}
             <p
               className="min-w-16 text-center text-sm font-medium text-white/80 tabular-nums"
               aria-live="polite"
             >
               {active + 1} / {count}
             </p>
-            <button
-              type="button"
-              onClick={() => zoomTo(view.scale * BUTTON_STEP)}
-              disabled={view.scale >= MAX_SCALE}
-              aria-label={t('zoomIn')}
-              className={controlClass}
-            >
-              <ZoomIn className="size-5" aria-hidden />
-            </button>
-            <button
-              type="button"
-              onClick={() => setView(RESET)}
-              disabled={!zoomed}
-              aria-label={t('resetZoom')}
-              className={controlClass}
-            >
-              <RotateCcw className="size-5" aria-hidden />
-            </button>
+            {!isVideo && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => zoomTo(view.scale * BUTTON_STEP)}
+                  disabled={view.scale >= MAX_SCALE}
+                  aria-label={t('zoomIn')}
+                  className={controlClass}
+                >
+                  <ZoomIn className="size-5" aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setView(RESET)}
+                  disabled={!zoomed}
+                  aria-label={t('resetZoom')}
+                  className={controlClass}
+                >
+                  <RotateCcw className="size-5" aria-hidden />
+                </button>
+              </>
+            )}
             {count > 1 && (
               <button
                 type="button"
