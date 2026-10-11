@@ -229,7 +229,10 @@
     "openPreview": "Ampliar imagem",
     "closePreview": "Fechar visualização",
     "previous": "Imagem anterior",
-    "next": "Próxima imagem"
+    "next": "Próxima imagem",
+    "zoomIn": "Aproximar",
+    "zoomOut": "Afastar",
+    "resetZoom": "Redefinir zoom"
   },
   "price": {
     "onRequest": "Preço sob consulta"
@@ -261,5 +264,40 @@
   },
   "og": {
     "tagline": "Sistemas de pagamento e componentes"
+  },
+  "about": {
+    "eyebrow": "Sobre nós",
+    "title": "Hardware com que você realmente pode contar",
+    "intro": "Sabemos como é frustrante quando um projeto empaca por causa de um gabinete frágil ou de um único componente faltando. Foi exatamente por isso que fundamos a Unique Technology Solutions em 2018.",
+    "crew": {
+      "title": "Uma equipe enxuta focada nos detalhes",
+      "body": "Somos 15 pessoas na UTS. Buscamos e fornecemos gabinetes sob medida e componentes eletrônicos essenciais, com foco total em durabilidade e precisão. Nada de exageros ou promessas infladas; simplesmente garantimos que cada peça funcione como deve antes de sair das nossas mãos."
+    },
+    "scale": {
+      "title": "Feito para projetos de qualquer escala",
+      "items": {
+        "makers": {
+          "title": "Para entusiastas e criadores independentes",
+          "body": "Se você precisa de apenas uma peça difícil de encontrar ou de um gabinete robusto para um projeto pessoal, terá toda a nossa atenção."
+        },
+        "wholesale": {
+          "title": "Para compradores B2B no atacado",
+          "body": "Se você precisa de remessas regulares e grandes volumes para manter a produção dentro do prazo, nossa cadeia de suprimentos está pronta."
+        },
+        "vision": {
+          "title": "Para quem tem uma visão maior",
+          "body": "Se você está esboçando um conceito totalmente novo e precisa de orientação de quem conhece as peças por dentro e por fora, estamos aqui para ajudar a definir as especificações."
+        }
+      }
+    },
+    "closing": "Tem algo em andamento? Fale com a gente e vamos tirar isso do papel.",
+    "cta": "Fale conosco",
+    "photosLabel": "Fotos da nossa oficina",
+    "mediaAlt": {
+      "workbench": "Bancada de reparo e testes na oficina da UTS",
+      "printLab": "Impressora 3D e bancada de eletrônica para prototipagem de gabinetes e peças",
+      "validators": "Caixa de validadores de cédulas MEI SC Advance prontos para envio",
+      "cabinets": "Fileira de máquinas de jogos recondicionadas no armazém da UTS"
+    }
   }
 }

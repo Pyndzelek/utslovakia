@@ -7,6 +7,7 @@ import { getPathname } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
 import { Logo } from '@/components/layout/logo'
 import PageHeader from '@/components/layout/page-header'
+import { AboutSection } from '@/components/about/about-section'
 import { buildStaticLanguageAlternates } from '@/lib/seo/alternates'
 import { faqJsonLd } from '@/lib/seo/json-ld'
 import { addressLines, getSiteSettings } from '@/lib/data/site-settings'
@@ -116,6 +117,14 @@ export default async function ContactPage({ params }: PageProps) {
             </div>
           ))}
         </div>
+
+        {/* About us */}
+        <section
+          id="about"
+          className="mt-16 scroll-mt-24 border-t border-line pt-16 lg:mt-20 lg:pt-20"
+        >
+          <AboutSection showCta={false} />
+        </section>
 
         <div className="mt-20 flex flex-col items-center gap-3 justify-center">
           <Logo className="w-md border border-white rounded-4xl p-5 bg-white shadow-card" />

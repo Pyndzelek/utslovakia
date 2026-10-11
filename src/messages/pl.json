@@ -229,7 +229,10 @@
     "openPreview": "Powiększ zdjęcie",
     "closePreview": "Zamknij podgląd",
     "previous": "Poprzednie zdjęcie",
-    "next": "Następne zdjęcie"
+    "next": "Następne zdjęcie",
+    "zoomIn": "Powiększ",
+    "zoomOut": "Pomniejsz",
+    "resetZoom": "Przywróć rozmiar"
   },
   "price": {
     "onRequest": "Cena na zapytanie"
@@ -261,5 +264,40 @@
   },
   "og": {
     "tagline": "Systemy płatności i komponenty"
+  },
+  "about": {
+    "eyebrow": "O nas",
+    "title": "Sprzęt, na którym naprawdę można polegać",
+    "intro": "Wiemy, jak frustrujące jest, gdy projekt staje w miejscu przez słabą obudowę albo jeden brakujący podzespół. Właśnie dlatego w 2018 roku założyliśmy Unique Technology Solutions.",
+    "crew": {
+      "title": "Zgrany zespół, który dba o szczegóły",
+      "body": "Jest nas w UTS piętnaście osób. Dostarczamy dopasowane obudowy i niezbędne podzespoły elektroniczne, stawiając wyłącznie na trwałość i precyzję. Bez marketingowego szumu i obietnic bez pokrycia — po prostu dbamy o to, by każda część działała tak, jak powinna, zanim wyjdzie z naszych rąk."
+    },
+    "scale": {
+      "title": "Dla projektów każdej skali",
+      "items": {
+        "makers": {
+          "title": "Dla majsterkowiczów i twórców",
+          "body": "Jeśli potrzebujesz jednej, trudno dostępnej części albo solidnej obudowy do własnego projektu, masz naszą pełną uwagę."
+        },
+        "wholesale": {
+          "title": "Dla hurtowych klientów B2B",
+          "body": "Jeśli potrzebujesz regularnych dostaw i dużych wolumenów, żeby produkcja szła zgodnie z planem, nasz łańcuch dostaw jest gotowy."
+        },
+        "vision": {
+          "title": "Dla każdego z większą wizją",
+          "body": "Jeśli szkicujesz zupełnie nowy koncept i potrzebujesz porady od ludzi, którzy znają podzespoły od podszewki, pomożemy Ci dobrać specyfikację."
+        }
+      }
+    },
+    "closing": "Masz coś w planach? Napisz do nas — zbudujmy to razem.",
+    "cta": "Skontaktuj się z nami",
+    "photosLabel": "Zdjęcia z naszego warsztatu",
+    "mediaAlt": {
+      "workbench": "Stanowisko serwisowe i testowe w warsztacie UTS",
+      "printLab": "Drukarka 3D i stanowisko elektroniczne do prototypowania obudów i części",
+      "validators": "Karton walidatorów banknotów MEI SC Advance gotowych do wysyłki",
+      "cabinets": "Rząd odnowionych automatów do gier w magazynie UTS"
+    }
   }
 }

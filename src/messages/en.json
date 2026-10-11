@@ -229,7 +229,10 @@
     "openPreview": "Enlarge image",
     "closePreview": "Close preview",
     "previous": "Previous image",
-    "next": "Next image"
+    "next": "Next image",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "resetZoom": "Reset zoom"
   },
   "price": {
     "onRequest": "Price on request"
@@ -261,5 +264,40 @@
   },
   "og": {
     "tagline": "Payment systems & components"
+  },
+  "about": {
+    "eyebrow": "About us",
+    "title": "Hardware you can actually count on",
+    "intro": "We know how frustrating it is when a build stalls out because of a flimsy case or one missing component. That is exactly why we started Unique Technology Solutions back in 2018.",
+    "crew": {
+      "title": "A tight crew focused on the details",
+      "body": "There are 15 of us here at UTS. We source and supply custom-fit enclosures and essential electronic parts, focusing entirely on durability and precision. We don't do hype or inflated promises; we just make sure every piece works the way it should before it leaves our hands."
+    },
+    "scale": {
+      "title": "Built for projects at any scale",
+      "items": {
+        "makers": {
+          "title": "For tinkerers and individual creators",
+          "body": "If you only need a single, hard-to-find part or a solid enclosure for a personal build, you get our full attention."
+        },
+        "wholesale": {
+          "title": "For wholesale B2B buyers",
+          "body": "If you need steady shipments and bulk volume to keep production moving on schedule, we have the supply chain ready."
+        },
+        "vision": {
+          "title": "For anyone with a bigger vision",
+          "body": "If you are sketching out a brand-new concept and need hardware advice from folks who know the parts inside out, we are here to help you figure out the specs."
+        }
+      }
+    },
+    "closing": "Got something in the works? Drop us a line and let's get it built.",
+    "cta": "Get in touch",
+    "photosLabel": "Photos from our workshop",
+    "mediaAlt": {
+      "workbench": "Repair and testing workbench in the UTS workshop",
+      "printLab": "3D printer and electronics bench used to prototype enclosures and parts",
+      "validators": "A box of MEI SC Advance bill validators ready to ship",
+      "cabinets": "A row of refurbished gaming cabinets in the UTS warehouse"
+    }
   }
 }

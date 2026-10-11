@@ -11,6 +11,7 @@ import { Hero } from '@/components/home/hero'
 import { CategoryShowcase } from '@/components/home/category-showcase'
 import { Industries } from '@/components/home/industries'
 import { CtaBanner } from '@/components/home/cta-banner'
+import { AboutSection } from '@/components/about/about-section'
 import { ProductRail } from '@/components/product/product-rail'
 import { getBestsellers, getNewArrivals } from '@/lib/data/products'
 import { buildStaticLanguageAlternates } from '@/lib/seo/alternates'
@@ -46,9 +47,8 @@ export default async function HomePage({ params }: PageProps) {
   return (
     <>
       <Hero locale={locale} />
-
       {/* Industries */}
-      <section className="bg-white pt-16 lg:py-12">
+      <section className="bg-white py-12 lg:py-16">
         <Container>
           <SectionHeading
             align="center"
@@ -77,7 +77,7 @@ export default async function HomePage({ params }: PageProps) {
         </Container>
       </section>
 
-      {/* Category showcase */}
+      {/* Category showcase — after a product rail, since the hero already features categories */}
       <section className="bg-white py-12 lg:py-16">
         <Container>
           <SectionHeading
@@ -90,8 +90,15 @@ export default async function HomePage({ params }: PageProps) {
         </Container>
       </section>
 
+      {/* About us — the CTA banner right below carries the contact button */}
+      <section id="about" className="scroll-mt-24 py-12 lg:pt-16 lg:pb-20">
+        <Container>
+          <AboutSection showCta={false} />
+        </Container>
+      </section>
+
       {/* New arrivals */}
-      <section className="py-12 lg:pt-16 lg:pb-20">
+      <section className="py-12 lg:py-16">
         <Container>
           <SectionHeading
             eyebrow={t('newArrivals.eyebrow')}

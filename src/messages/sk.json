@@ -229,7 +229,10 @@
     "openPreview": "Zväčšiť obrázok",
     "closePreview": "Zavrieť náhľad",
     "previous": "Predchádzajúci obrázok",
-    "next": "Ďalší obrázok"
+    "next": "Ďalší obrázok",
+    "zoomIn": "Priblížiť",
+    "zoomOut": "Oddialiť",
+    "resetZoom": "Obnoviť veľkosť"
   },
   "price": {
     "onRequest": "Cena na vyžiadanie"
@@ -261,5 +264,40 @@
   },
   "og": {
     "tagline": "Platobné systémy a komponenty"
+  },
+  "about": {
+    "eyebrow": "O nás",
+    "title": "Hardvér, na ktorý sa naozaj môžete spoľahnúť",
+    "intro": "Vieme, aké frustrujúce je, keď sa projekt zasekne kvôli chatrnej skrinke alebo jednej chýbajúcej súčiastke. Presne preto sme v roku 2018 založili Unique Technology Solutions.",
+    "crew": {
+      "title": "Zohratý tím, ktorý dbá na detaily",
+      "body": "V UTS nás je pätnásť. Zabezpečujeme a dodávame skrinky na mieru a nevyhnutné elektronické súčiastky a zameriavame sa výhradne na odolnosť a presnosť. Žiadny humbuk ani prehnané sľuby — jednoducho sa postaráme, aby každý kus fungoval tak, ako má, skôr než opustí naše ruky."
+    },
+    "scale": {
+      "title": "Pre projekty akéhokoľvek rozsahu",
+      "items": {
+        "makers": {
+          "title": "Pre kutilov a samostatných tvorcov",
+          "body": "Ak potrebujete len jednu ťažko zohnateľnú súčiastku alebo pevnú skrinku pre vlastný projekt, venujeme vám plnú pozornosť."
+        },
+        "wholesale": {
+          "title": "Pre veľkoobchodných B2B odberateľov",
+          "body": "Ak potrebujete pravidelné dodávky a veľké objemy, aby výroba bežala podľa plánu, náš dodávateľský reťazec je pripravený."
+        },
+        "vision": {
+          "title": "Pre každého s väčšou víziou",
+          "body": "Ak navrhujete úplne nový koncept a potrebujete radu k hardvéru od ľudí, ktorí súčiastky poznajú do detailu, pomôžeme vám určiť špecifikácie."
+        }
+      }
+    },
+    "closing": "Máte niečo rozpracované? Ozvite sa nám a poďme to postaviť.",
+    "cta": "Kontaktujte nás",
+    "photosLabel": "Fotografie z našej dielne",
+    "mediaAlt": {
+      "workbench": "Servisné a testovacie pracovisko v dielni UTS",
+      "printLab": "3D tlačiareň a elektronické pracovisko na prototypovanie skriniek a dielov",
+      "validators": "Krabica bankovkových validátorov MEI SC Advance pripravených na odoslanie",
+      "cabinets": "Rad repasovaných herných automatov v sklade UTS"
+    }
   }
 }
