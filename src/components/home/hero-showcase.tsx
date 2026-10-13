@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { ArrowUpRight } from 'lucide-react'
@@ -8,7 +8,7 @@ import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import type { HeroSlide } from '@/lib/data/home-page'
 
-const INTERVAL_MS = 5000
+const INTERVAL_MS = 2000
 const EASE_OUT = 'cubic-bezier(.2,.7,.2,1)'
 /** Longest word that fits the left column at full size; longer ones scale down. */
 const WORD_FIT_CHARS = 7
@@ -46,18 +46,6 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
     const id = setInterval(() => setActive((a) => (a + 1) % slides.length), INTERVAL_MS)
     return () => clearInterval(id)
   }, [slides.length, paused, cycle])
-
-  // Keep the active chip in view as autoplay advances (only when the mobile row is rendered).
-  const chipsRef = useRef<HTMLUListElement>(null)
-  useEffect(() => {
-    const row = chipsRef.current
-    const chip = row?.children[active] as HTMLElement | undefined
-    if (!row || !chip || !row.offsetParent) return
-    row.scrollTo({
-      left: chip.offsetLeft - (row.clientWidth - chip.offsetWidth) / 2,
-      behavior: 'smooth',
-    })
-  }, [active])
 
   const select = (i: number) => {
     setActive(i)
@@ -109,46 +97,46 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
         )}
 
         {slides.length > 0 && (
-          // Mobile selector: a swipeable chip row directly under the product.
+          // Mobile selector: a 2-column chip grid directly under the product, all categories visible.
           <ul
-            ref={chipsRef}
             aria-label={t('slidesLabel')}
             className={cn(
               heroEnter,
-              'no-scrollbar relative order-4 -mx-4 mt-5 flex snap-x gap-2 overflow-x-auto scroll-px-4 px-4 py-0.5 delay-300 sm:-mx-6 sm:scroll-px-6 sm:px-6 lg:hidden',
+              // auto-rows-fr: every row matches the tallest chip, so wrapped names keep heights even.
+              'order-4 mt-5 grid auto-rows-fr grid-cols-2 gap-2 delay-300 lg:hidden',
             )}
           >
             {slides.map((slide, i) => {
               const isActive = i === active
+              const chip =
+                'font-display flex h-full min-h-14 w-full items-center gap-2 rounded-2xl border px-3.5 py-3 text-left text-sm leading-tight font-semibold text-balance transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2'
               return (
-                <li
-                  key={i}
-                  className={cn(
-                    'flex shrink-0 snap-start items-center rounded-full border transition-colors duration-300',
-                    isActive
-                      ? 'border-brand-600 bg-brand-600 text-white'
-                      : 'border-navy-900/10 bg-white/70 text-navy-800',
-                  )}
-                >
-                  <button
-                    type="button"
-                    aria-pressed={isActive}
-                    onClick={() => select(i)}
-                    className={cn(
-                      'font-display flex h-9 cursor-pointer items-center rounded-full pl-3.5 text-sm font-semibold whitespace-nowrap outline-brand-500 focus-visible:outline-2 focus-visible:outline-offset-2',
-                      isActive ? 'pr-1' : 'pr-3.5',
-                    )}
-                  >
-                    {slide.category.name}
-                  </button>
-                  {isActive && (
+                <li key={i} className="min-w-0">
+                  {isActive ? (
+                    // The highlighted chip opens its category.
                     <Link
                       href={{ pathname: '/category/[slug]', params: { slug: slide.category.slug } }}
                       aria-label={t('openCategory', { name: slide.category.name })}
-                      className="mr-1 grid size-7 place-items-center rounded-full outline-white hover:bg-white/15 focus-visible:outline-2"
+                      className={cn(
+                        chip,
+                        'justify-between border-brand-600 bg-brand-600 text-white outline-brand-500 hover:bg-brand-700',
+                      )}
                     >
-                      <ArrowUpRight className="size-4" aria-hidden />
+                      {slide.category.name}
+                      <ArrowUpRight className="size-4 shrink-0" aria-hidden />
                     </Link>
+                  ) : (
+                    <button
+                      type="button"
+                      aria-pressed={false}
+                      onClick={() => select(i)}
+                      className={cn(
+                        chip,
+                        'cursor-pointer border-navy-900/10 bg-white/70 text-navy-800 outline-brand-500',
+                      )}
+                    >
+                      {slide.category.name}
+                    </button>
                   )}
                 </li>
               )
