@@ -5,7 +5,6 @@ import { createPortal } from 'react-dom'
 import { useTranslations } from 'next-intl'
 import { Mail, Menu, Phone, X } from 'lucide-react'
 import { Link, usePathname } from '@/i18n/navigation'
-import { HeaderSearch } from '@/components/layout/header-search'
 import { LocaleSwitcher } from '@/components/layout/locale-switcher'
 import type { NavItem } from '@/components/layout/nav-link'
 import { cn, telHref } from '@/lib/utils'
@@ -44,7 +43,7 @@ export function MobileMenu({ items, phone, email }: MobileMenuProps) {
   useEffect(() => {
     if (!open) return
     const trigger = triggerRef.current
-    // Skips elements hidden at this width (e.g. the search field, which moves into the header bar at `md`).
+    // Skips elements hidden at this width.
     const focusables = () =>
       Array.from(
         panelRef.current?.querySelectorAll<HTMLElement>('a[href], button, input') ?? [],
@@ -135,8 +134,6 @@ export function MobileMenu({ items, phone, email }: MobileMenuProps) {
             >
               {/* Content Body */}
               <div className="p-5">
-                <HeaderSearch variant="drawer" onNavigate={closeMenu} className="mb-4 md:hidden" />
-
                 {/* Navigation Links */}
                 <nav aria-label={t('mainNav')} className="flex flex-col gap-1">
                   {items.map((item) => {

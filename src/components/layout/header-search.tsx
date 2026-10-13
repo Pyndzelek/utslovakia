@@ -30,18 +30,11 @@ function useDebouncedValue<T>(value: T, delay: number): T {
 }
 
 interface HeaderSearchProps {
-  /**
-   * `bar`: compact field in the header, results float below it.
-   * `drawer`: full-width field in the mobile menu, results push the content below down.
-   */
-  variant?: 'bar' | 'drawer'
-  /** Called after the search sends the visitor to another page (e.g. to close the drawer). */
-  onNavigate?: () => void
   className?: string
 }
 
 /** Search-as-you-type over the catalogue, with a dropdown of matching products. */
-export function HeaderSearch({ variant = 'bar', onNavigate, className }: HeaderSearchProps) {
+export function HeaderSearch({ className }: HeaderSearchProps) {
   const t = useTranslations('header.search')
   const locale = useLocale()
   const router = useRouter()
@@ -113,7 +106,6 @@ export function HeaderSearch({ variant = 'bar', onNavigate, className }: HeaderS
     setResponse(null)
     setActiveIndex(-1)
     inputRef.current?.blur()
-    onNavigate?.()
   }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -156,7 +148,7 @@ export function HeaderSearch({ variant = 'bar', onNavigate, className }: HeaderS
       }
       case 'Escape':
         // First press closes the dropdown, the next clears the field. Kept from bubbling so
-        // the mobile drawer (which also closes on Escape) stays open meanwhile.
+        // an open mobile menu (which also closes on Escape) stays open meanwhile.
         if (panelOpen) {
           event.stopPropagation()
           setOpen(false)
@@ -169,8 +161,6 @@ export function HeaderSearch({ variant = 'bar', onNavigate, className }: HeaderS
         return
     }
   }
-
-  const isBar = variant === 'bar'
 
   return (
     <div ref={containerRef} className={cn('relative', className)}>
@@ -202,16 +192,16 @@ export function HeaderSearch({ variant = 'bar', onNavigate, className }: HeaderS
           aria-expanded={panelOpen}
           aria-controls={listId}
           aria-activedescendant={panelOpen && activeIndex >= 0 ? optionId(activeIndex) : undefined}
-          className={cn(
-            'w-full rounded-xl border border-transparent bg-slate-100 pr-9 pl-10 text-navy-900 transition-colors placeholder:text-slate-500 focus:border-brand-400 focus:bg-white focus:outline-none [&::-webkit-search-cancel-button]:appearance-none',
-            isBar ? 'h-10 text-sm' : 'h-11 text-base',
-          )}
+          // 16px below `md` so iOS Safari doesn't zoom in on focus.
+          className="h-10 w-full rounded-xl border border-transparent bg-slate-100 pr-9 pl-10 text-base text-navy-900 transition-colors placeholder:text-slate-500 focus:border-brand-400 focus:bg-white focus:outline-none md:text-sm [&::-webkit-search-cancel-button]:appearance-none"
         />
         <AnimatePresence>
           {query && (
             <motion.button
               type="button"
               aria-label={t('clear')}
+              // Keeps focus in the field, so the expanded header doesn't collapse mid-click.
+              onPointerDown={(event) => event.preventDefault()}
               onClick={() => {
                 setQuery('')
                 setResponse(null)
@@ -237,12 +227,8 @@ export function HeaderSearch({ variant = 'bar', onNavigate, className }: HeaderS
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
-            className={cn(
-              'overflow-hidden rounded-2xl border border-line bg-white',
-              isBar
-                ? 'absolute top-full right-0 z-50 mt-2 w-[min(26rem,calc(100vw-2rem))] shadow-lift'
-                : 'mt-2 shadow-card',
-            )}
+            // Below `md` the field is `static`, so this spans the sticky header's full width.
+            className="absolute inset-x-4 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-line bg-white shadow-lift md:inset-x-auto md:right-0 md:w-[min(26rem,calc(100vw-2rem))]"
           >
             <AutoHeight>
               {response.failed ? (
