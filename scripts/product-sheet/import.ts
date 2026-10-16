@@ -108,11 +108,13 @@ function parseCsv(text: string): string[][] {
 type Row = { at: string; get: (column: string) => string }
 
 const [headerRow = [], ...dataRows] = parseCsv(fs.readFileSync(csvPath, 'utf8').replace(/^﻿/, ''))
+// Tolerates decorated headers such as "sku*" (required markers) or "Price PLN".
 const headers = headerRow.map((h) =>
   h
     .trim()
     .toLowerCase()
-    .replace(/[\s-]+/g, '_'),
+    .replace(/[\s-]+/g, '_')
+    .replace(/[^a-z0-9_]/g, ''),
 )
 const KNOWN = [
   'sku',
