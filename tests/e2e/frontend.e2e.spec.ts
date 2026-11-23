@@ -145,11 +145,130 @@ test.describe('Frontend', () => {
   })
 })
 
+test.describe('Catalogue browsing', () => {
+  test('sorting by price updates the URL and orders the cards', async ({ page }) => {
+    await page.goto('/en/products')
+    const sort = page.getByRole('main').getByLabel('Sort by')
+    await sort.selectOption('price')
+    await expect(page).toHaveURL(/[?&]sort=price(&|$)/)
+    await expect(page.locator('[aria-busy="true"]')).toHaveCount(0)
+
+    // Cards without a price ("Price on request") are skipped; the rest must not decrease.
+    const amounts = (await page.locator('main article').allInnerTexts())
+      .map((text) => text.match(/\$([\d,]+\.\d{2})/)?.[1])
+      .filter((amount): amount is string => Boolean(amount))
+      .map((amount) => Number(amount.replace(/,/g, '')))
+    expect(amounts).toEqual([...amounts].sort((a, b) => a - b))
+  })
+
+  test('a brand filter shows a removable chip', async ({ page }) => {
+    await page.goto('/en/products')
+    const brandBoxes = page.locator('aside').first().locator('details', { hasText: 'Brand' })
+    test.skip((await brandBoxes.count()) === 0, 'no brands with published products')
+
+    const checkbox = brandBoxes.getByRole('checkbox').first()
+    const brandName = (
+      await checkbox.locator('xpath=following-sibling::span[1]').innerText()
+    ).trim()
+    await checkbox.check()
+    await expect(page).toHaveURL(/[?&]brand=\d+/)
+
+    const chips = page.getByRole('list', { name: 'Active filters' })
+    const chip = chips.getByRole('link', { name: `Remove filter: ${brandName}` })
+    await expect(chip).toBeVisible()
+    // The page is kept out of search indexes while filtered.
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/)
+
+    await chip.click()
+    await expect(page).not.toHaveURL(/brand=/)
+    await expect(chips).toHaveCount(0)
+  })
+
+  test('two quick filter changes are both kept', async ({ page }) => {
+    await page.goto('/en/products')
+    const sidebar = page.locator('aside').first()
+    // Hold the first change's response back, so the second one lands while it is loading.
+    await page.route(/stock=in_stock/, async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      await route.continue()
+    })
+    await sidebar.getByLabel('In stock only').check()
+    await sidebar.getByLabel('Bestseller').check()
+
+    await expect(page).toHaveURL(/stock=in_stock/)
+    await expect(page).toHaveURL(/badge=bestseller/)
+  })
+
+  test('the first Tab reaches a skip link that moves focus to the content', async ({ page }) => {
+    await page.goto('/en/products')
+    await page.keyboard.press('Tab')
+    const skip = page.getByRole('link', { name: 'Skip to main content' })
+    await expect(skip).toBeFocused()
+    await page.keyboard.press('Enter')
+    await expect(page.locator('#main-content')).toBeFocused()
+  })
+})
+
+test.describe('Inquiry form', () => {
+  test('reports missing fields without submitting', async ({ page }) => {
+    await page.goto('/en/contact')
+    const form = page.locator('#inquiry form')
+    await form.getByRole('button', { name: 'Send inquiry' }).click()
+
+    await expect(form.getByText('This field is required.')).toHaveCount(3)
+    await expect(form.getByLabel('Full name')).toHaveAttribute('aria-invalid', 'true')
+    await expect(form.getByLabel('Full name')).toBeFocused()
+  })
+
+  test('still validates right after switching the language', async ({ page }) => {
+    await page.goto('/kontakt')
+    await page
+      .getByRole('banner')
+      .getByRole('button', { name: /Zmień język/ })
+      .click()
+    await page.getByRole('link', { name: 'English' }).first().click()
+    await expect(page).toHaveURL(/\/en\/contact/)
+    const form = page.locator('#inquiry form')
+    await form.getByRole('button', { name: 'Send inquiry' }).click()
+
+    await expect(form.getByText('This field is required.')).toHaveCount(3)
+    await expect(page.getByText('your inquiry has been sent')).toHaveCount(0)
+  })
+
+  test("a product's quote button attaches the product to the form", async ({ page }) => {
+    await page.goto('/en/products')
+    await page.waitForLoadState('networkidle')
+    const firstProductLink = page.locator('main article a[href^="/en/products/"]').first()
+    test.skip((await firstProductLink.count()) === 0, 'no published products in this database')
+
+    await firstProductLink.click()
+    await expect(page).toHaveURL(/\/en\/products\/[^/?]+$/)
+    const title = (await page.locator('main h1').innerText()).trim()
+    await page.getByRole('main').getByRole('link', { name: 'Ask for a quote' }).first().click()
+
+    await expect(page).toHaveURL(/\/en\/contact\?product=/)
+    const attached = page.locator('#inquiry').getByText('Inquiry about')
+    await expect(attached).toBeVisible()
+    await expect(page.locator('#inquiry').getByText(title, { exact: true })).toBeVisible()
+
+    await page.getByRole('button', { name: 'Remove product from the inquiry' }).click()
+    await expect(attached).toBeHidden()
+  })
+})
+
 test.describe('Public API access', () => {
   test('anonymous visitors cannot list draft products', async ({ request }) => {
     const res = await request.get('/api/products?where[status][equals]=draft&limit=1')
     expect(res.ok()).toBe(true)
     expect((await res.json()).totalDocs).toBe(0)
+  })
+
+  test('anonymous visitors can neither read nor create inquiries', async ({ request }) => {
+    expect((await request.get('/api/inquiries')).status()).toBe(403)
+    const created = await request.post('/api/inquiries', {
+      data: { name: 'Bot', email: 'bot@example.com', message: 'Spam spam spam' },
+    })
+    expect(created.status()).toBe(403)
   })
 
   test('anonymous visitors cannot list users', async ({ request }) => {
