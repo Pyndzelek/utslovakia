@@ -4,6 +4,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import type { Locale } from '@/i18n/routing'
 import { getPathname, redirect } from '@/i18n/navigation'
 import { Container } from '@/components/ui/container'
+import { ActiveFilters } from '@/components/catalog/active-filters'
+import { CatalogResults, CatalogTransition } from '@/components/catalog/catalog-transition'
 import { FilterSidebar } from '@/components/catalog/filter-sidebar'
 import { CatalogToolbar } from '@/components/catalog/catalog-toolbar'
 import { MobileFilters } from '@/components/catalog/mobile-filters'
@@ -18,6 +20,15 @@ import {
   getCategoryBySlug,
   getCategorySlugsByLocale,
 } from '@/lib/data/categories'
+import {
+  activeFilterCount,
+  buildListingHref,
+  isNarrowed,
+  parseCatalogParams,
+  toQueryRecord,
+  type RawSearchParams,
+} from '@/lib/catalog-params'
+import { getBrandsWithCounts } from '@/lib/data/brands'
 import { getFilteredProducts } from '@/lib/data/products'
 import { buildDynamicLanguageAlternates } from '@/lib/seo/alternates'
 import { breadcrumbJsonLd, itemListJsonLd } from '@/lib/seo/json-ld'
@@ -29,20 +40,15 @@ const PRODUCTS_PER_PAGE = 12
 
 interface PageProps {
   params: Promise<{ locale: Locale; slug: string }>
-  searchParams: Promise<{
-    page?: string
-    minPrice?: string
-    maxPrice?: string
-    sort?: string
-    q?: string
-    badge?: string
-  }>
+  searchParams: Promise<RawSearchParams>
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params
   const category = await getCategoryBySlug(slug, locale)
   if (!category) return {}
+  const query = { ...parseCatalogParams(await searchParams), categoryIds: [] }
+  const narrowed = isNarrowed(query)
 
   const seoImage = typeof category.meta?.image === 'object' ? category.meta.image : null
   const fallbackImage = typeof category.image === 'object' ? category.image : null
@@ -59,9 +65,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     alternates: {
-      canonical: canonicalPath,
+      // Later pages of the plain listing are their own documents.
+      canonical:
+        !narrowed && query.page > 1
+          ? buildListingHref(canonicalPath, { page: String(query.page) })
+          : canonicalPath,
       languages,
     },
+    // Search results and filter combinations are endless near-duplicates of the listing.
+    robots: narrowed ? { index: false, follow: true } : undefined,
     openGraph: {
       ...ogDefaults(locale),
       type: 'website',
@@ -97,31 +109,32 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
   const t = await getTranslations('nav')
   const allCategories = await getCategories(locale, 0)
 
-  const query = await searchParams
-  const page = query.page ? parseInt(query.page, 10) : 1
-  const minPrice = query.minPrice ? parseFloat(query.minPrice) : undefined
-  const maxPrice = query.maxPrice ? parseFloat(query.maxPrice) : undefined
+  // The category is fixed by the URL here, so a stray `?category=` is ignored.
+  const query = { ...parseCatalogParams(await searchParams), categoryIds: [] }
+  const { page } = query
 
-  const {
-    docs: categoryProducts,
-    totalPages,
-    totalDocs,
-  } = await getFilteredProducts(locale, {
-    categoryIds: category.id,
-    page,
-    limit: PRODUCTS_PER_PAGE,
-    minPrice,
-    maxPrice,
-    sort: query.sort,
-    search: query.q,
-    badges: query.badge?.split(','),
-  })
+  const [{ docs: categoryProducts, totalPages, totalDocs }, brands] = await Promise.all([
+    getFilteredProducts(locale, {
+      categoryIds: category.id,
+      brandIds: query.brandIds,
+      inStock: query.inStock,
+      page,
+      limit: PRODUCTS_PER_PAGE,
+      minPrice: query.minPrice,
+      maxPrice: query.maxPrice,
+      sort: query.sort,
+      search: query.q,
+      badges: query.badges,
+    }),
+    getBrandsWithCounts(category.id),
+  ])
 
   const basePath = getPathname({
     locale,
     href: { pathname: '/category/[slug]', params: { slug: category.slug } },
   })
-  const hasFilters = Boolean(query.q || query.badge || query.minPrice || query.maxPrice || page > 1)
+  const hasFilters = isNarrowed(query) || page > 1
+  const filterCount = activeFilterCount(query)
 
   return (
     <>
@@ -165,31 +178,47 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
       <CategoryNavigation categories={allCategories} currentSlug={category.slug} />
 
       <Container className="py-6 lg:py-12">
-        <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
-          <FilterSidebar showCategoryFilter={false} className="hidden self-start lg:block" />
-
-          <div>
-            <CatalogToolbar
-              resultCount={totalDocs}
-              basePath={basePath}
-              searchParams={query}
-              mobileFilters={<MobileFilters showCategoryFilter={false} />}
+        <CatalogTransition>
+          <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
+            <FilterSidebar
+              brands={brands}
+              showCategoryFilter={false}
+              className="hidden self-start lg:block"
             />
-            {categoryProducts.length > 0 ? (
-              <ProductGrid products={categoryProducts} className="mt-6" />
-            ) : (
-              <CatalogEmptyState basePath={basePath} hasFilters={hasFilters} className="mt-6" />
-            )}
-            <div className="mt-10">
-              <Pagination
+
+            <div>
+              <CatalogToolbar
+                resultCount={totalDocs}
                 basePath={basePath}
-                searchParams={query}
-                pages={totalPages}
-                current={page}
+                params={query}
+                mobileFilters={
+                  <MobileFilters
+                    brands={brands}
+                    showCategoryFilter={false}
+                    resultCount={totalDocs}
+                    activeCount={filterCount}
+                  />
+                }
               />
+              <ActiveFilters basePath={basePath} params={query} brands={brands} className="mt-4" />
+              <CatalogResults className="mt-6">
+                {categoryProducts.length > 0 ? (
+                  <ProductGrid products={categoryProducts} />
+                ) : (
+                  <CatalogEmptyState basePath={basePath} hasFilters={hasFilters} />
+                )}
+              </CatalogResults>
+              <div className="mt-10">
+                <Pagination
+                  basePath={basePath}
+                  searchParams={toQueryRecord(query)}
+                  pages={totalPages}
+                  current={page}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        </CatalogTransition>
       </Container>
     </>
   )

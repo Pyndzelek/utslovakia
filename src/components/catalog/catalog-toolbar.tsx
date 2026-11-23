@@ -2,27 +2,29 @@ import React from 'react'
 import { getTranslations } from 'next-intl/server'
 import { Search } from 'lucide-react'
 import { AnimatedResultCount } from '@/components/catalog/animated-result-count'
-
-/** Filter params kept when a new search is submitted (pagination restarts at page 1). */
-const PRESERVED_PARAMS = ['category', 'badge', 'minPrice', 'maxPrice', 'sort'] as const
+import { SortSelect } from '@/components/catalog/sort-select'
+import { toQueryRecord, type CatalogParams } from '@/lib/catalog-params'
 
 interface CatalogToolbarProps {
   resultCount: number
   /** Localized listing URL the search form submits to (a GET form, so it works without JS). */
   basePath: string
-  searchParams: Record<string, string | undefined>
+  /** The listing's parsed URL params; filters and sort are kept when a new search is submitted. */
+  params: CatalogParams
   /** Rendered below `lg`, where the filter sidebar is hidden (the mobile filters drawer). */
   mobileFilters?: React.ReactNode
 }
 
-/** Search form + result count above product listings. */
+/** Search form, result count and sort order above product listings. */
 export async function CatalogToolbar({
   resultCount,
   basePath,
-  searchParams,
+  params,
   mobileFilters,
 }: CatalogToolbarProps) {
   const t = await getTranslations('products.toolbar')
+  // Everything but the search term itself; pagination restarts at page 1.
+  const { q: _q, ...preserved } = toQueryRecord(params)
 
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-line bg-white p-3 shadow-card">
@@ -32,11 +34,9 @@ export async function CatalogToolbar({
         role="search"
         className="peer/search relative min-w-0 flex-1 basis-40"
       >
-        {PRESERVED_PARAMS.map((name) =>
-          searchParams[name] ? (
-            <input key={name} type="hidden" name={name} value={searchParams[name]} />
-          ) : null,
-        )}
+        {Object.entries(preserved).map(([name, value]) => (
+          <input key={name} type="hidden" name={name} value={value} />
+        ))}
         <label htmlFor="catalog-search" className="sr-only">
           {t('searchLabel')}
         </label>
@@ -48,7 +48,9 @@ export async function CatalogToolbar({
           id="catalog-search"
           type="search"
           name="q"
-          defaultValue={searchParams.q ?? ''}
+          defaultValue={params.q ?? ''}
+          // Re-mounts when the term changes from outside the field (e.g. its chip is removed).
+          key={params.q ?? ''}
           maxLength={100}
           placeholder={t('searchPlaceholder')}
           className="h-11 w-full rounded-xl border border-transparent bg-slate-100 pr-24 pl-10 text-base text-navy-900 placeholder:text-slate-500 focus:border-brand-400 focus:bg-white focus:outline-none sm:text-sm"
@@ -69,7 +71,11 @@ export async function CatalogToolbar({
         </div>
       )}
 
-      <AnimatedResultCount text={t('resultCount', { count: resultCount })} count={resultCount} />
+      {/* Own row below `md`, inline with the search from there up. */}
+      <div className="flex w-full items-center justify-between gap-3 md:w-auto">
+        <AnimatedResultCount text={t('resultCount', { count: resultCount })} count={resultCount} />
+        <SortSelect searching={Boolean(params.q)} className="w-48 md:w-52" />
+      </div>
     </div>
   )
 }

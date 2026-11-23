@@ -75,6 +75,32 @@ export function priceRange(
   return { low: Math.min(...amounts), high: Math.max(...amounts), currency }
 }
 
+/**
+ * Sorts by the price a product card shows in `locale` (its lowest variant price), in place.
+ * Whichever the direction, products without a price in the locale's currency — shown in PLN
+ * instead, so not comparable — come after those that have one, and "price on request" last.
+ * Equal prices keep their order.
+ */
+export function sortByDisplayPrice<T extends Pick<Product, 'prices' | 'variants'>>(
+  products: T[],
+  locale: string,
+  direction: 'asc' | 'desc',
+): T[] {
+  const local = currencyForLocale(locale)
+  const keyed = new Map(
+    products.map((product) => {
+      const range = priceRange(product, locale)
+      const group = !range ? 2 : range.currency === local ? 0 : 1
+      return [product, { group, amount: range?.low ?? 0 }]
+    }),
+  )
+  return products.sort((a, b) => {
+    const [x, y] = [keyed.get(a)!, keyed.get(b)!]
+    if (x.group !== y.group) return x.group - y.group
+    return direction === 'asc' ? x.amount - y.amount : y.amount - x.amount
+  })
+}
+
 const formatters = new Map<string, Intl.NumberFormat>()
 
 export function formatPrice(amount: number, currency: Currency, locale: string): string {

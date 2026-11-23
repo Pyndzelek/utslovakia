@@ -137,7 +137,17 @@
       "open": "Filtre",
       "close": "Zavrieť filtre",
       "badge": "Štítok",
-      "showResults": "Zobraziť výsledky"
+      "brand": "Značka",
+      "availability": "Dostupnosť",
+      "inStockOnly": "Len skladom",
+      "showResultsCount": "{count, plural, one {Zobraziť # produkt} few {Zobraziť # produkty} other {Zobraziť # produktov}}",
+      "clearAll": "Vymazať všetko",
+      "removeFilter": "Odstrániť filter: {name}",
+      "activeLabel": "Aktívne filtre",
+      "priceRangeChip": "{min} – {max} {currency}",
+      "priceFromChip": "od {min} {currency}",
+      "priceToChip": "do {max} {currency}",
+      "searchChip": "Hľadanie: {query}"
     },
     "toolbar": {
       "searchPlaceholder": "Hľadať podľa názvu alebo SKU…",
@@ -156,6 +166,15 @@
       "label": "Stránkovanie",
       "previous": "Predchádzajúca stránka",
       "next": "Nasledujúca stránka"
+    },
+    "sort": {
+      "label": "Zoradiť podľa",
+      "relevance": "Najlepšia zhoda",
+      "newest": "Najnovšie",
+      "priceAsc": "Cena: od najnižšej",
+      "priceDesc": "Cena: od najvyššej",
+      "nameAsc": "Názov: A–Z",
+      "nameDesc": "Názov: Z–A"
     }
   },
   "productPage": {

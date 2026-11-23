@@ -2,9 +2,10 @@
 
 import { motion, AnimatePresence } from 'motion/react'
 
+/** The listing's result count; announced to screen readers when a filter changes it. */
 export function AnimatedResultCount({ text, count }: { text: string; count: number }) {
   return (
-    <p className="hidden text-sm whitespace-nowrap text-slate-500 md:block">
+    <p className="text-sm whitespace-nowrap text-slate-500" role="status">
       <AnimatePresence mode="wait" initial={false}>
         <motion.span
           key={count}

@@ -5,7 +5,8 @@ import { cache } from 'react'
 import { unstable_cache } from 'next/cache'
 import type { Locale } from '@/i18n/routing'
 import { Product } from '@/payload-types'
-import { currencyForLocale } from '@/lib/currency'
+import { BADGE_OPTIONS, SORT_OPTIONS, type SortOption } from '@/lib/catalog-params'
+import { currencyForLocale, sortByDisplayPrice } from '@/lib/currency'
 import { searchWords } from '@/lib/search'
 import { getMediaUrl } from '@/lib/utils'
 
@@ -186,6 +187,10 @@ export const getNewArrivals = cache(
 export interface GetFilteredProductsOptions {
   /** Single category ID or an array of IDs for multi-category filtering */
   categoryIds?: number | number[]
+  /** Only products of one of these brands */
+  brandIds?: number[]
+  /** Only products marked "in stock" */
+  inStock?: boolean
   /** Minimum price inclusive */
   minPrice?: number
   /** Maximum price inclusive */
@@ -216,14 +221,6 @@ export interface PaginatedProductsResult {
   hasNextPage: boolean
   hasPrevPage: boolean
 }
-
-/** Sort orders accepted from the `?sort=` query param. */
-export const SORT_OPTIONS = ['-createdAt', 'createdAt', 'title', '-title'] as const
-
-/** Badge values accepted from the `?badge=` query param (the `badge` select's options). */
-const BADGE_OPTIONS: readonly string[] = ['new', 'bestseller'] satisfies NonNullable<
-  Product['badge']
->[]
 
 /**
  * IDs of every product whose text contains all the search `words`, best matches first.
@@ -277,7 +274,7 @@ async function searchProductIds(payload: Payload, words: string[]): Promise<numb
   return rows.map((row) => row.id)
 }
 
-/** One page of products from `ids`, kept in the given order (Payload can't sort by search rank). */
+/** One page of products from `ids`, kept in the given order (one Payload can't sort by itself). */
 async function findPageInOrder(
   payload: Payload,
   locale: Locale,
@@ -320,6 +317,8 @@ export const getFilteredProducts = cache(
     ): Promise<PaginatedProductsResult> => {
       const {
         categoryIds,
+        brandIds,
+        inStock,
         minPrice,
         maxPrice,
         page = 1,
@@ -332,7 +331,10 @@ export const getFilteredProducts = cache(
 
       const payload = await getPayload({ config })
       // `sort` comes straight from the URL; never pass arbitrary field paths to the DB.
-      const safeSort = sort && (SORT_OPTIONS as readonly string[]).includes(sort) ? sort : undefined
+      const safeSort =
+        sort && (SORT_OPTIONS as readonly string[]).includes(sort)
+          ? (sort as SortOption)
+          : undefined
 
       const where: Where = {
         status: { equals: status },
@@ -351,8 +353,19 @@ export const getFilteredProducts = cache(
         }
       }
 
+      const validBrandIds = brandIds?.filter((id) => Number.isInteger(id))
+      if (validBrandIds?.length) {
+        where.brand = { in: validBrandIds }
+      }
+
+      if (inStock) {
+        where.stockStatus = { equals: 'in_stock' }
+      }
+
       // `badge` is a Postgres enum: an unknown value would throw rather than match nothing.
-      const validBadges = badges?.filter((badge) => BADGE_OPTIONS.includes(badge))
+      const validBadges = badges?.filter((badge) =>
+        (BADGE_OPTIONS as readonly string[]).includes(badge),
+      )
       if (validBadges?.length) {
         where.badge = { in: validBadges }
       }
@@ -408,6 +421,23 @@ export const getFilteredProducts = cache(
         })
         const passingIds = new Set(passing.map((doc) => doc.id))
         const orderedIds = rankedIds.filter((id) => passingIds.has(id))
+        return findPageInOrder(payload, locale, orderedIds, page, limit)
+      }
+
+      // The price on a card depends on the locale's currency and the variants, which no
+      // single field holds: order the matches here and page through them.
+      if (safeSort === 'price' || safeSort === '-price') {
+        const { docs: matches } = await payload.find({
+          collection: 'products',
+          locale,
+          where,
+          select: { prices: true, variants: { priceOverrides: true } },
+          sort: '-createdAt',
+          depth: 0,
+          pagination: false,
+        })
+        const ordered = sortByDisplayPrice(matches, locale, safeSort === 'price' ? 'asc' : 'desc')
+        const orderedIds = ordered.map((doc) => doc.id)
         return findPageInOrder(payload, locale, orderedIds, page, limit)
       }
 

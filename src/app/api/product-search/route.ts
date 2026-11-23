@@ -24,5 +24,8 @@ export async function GET(request: NextRequest) {
   if (query.length < MIN_QUERY_LENGTH) {
     return NextResponse.json({ results: [], total: 0 })
   }
-  return NextResponse.json(await searchProductSuggestions(locale, query))
+  // Identical queries are served from the CDN; the data behind them is cached for as long.
+  return NextResponse.json(await searchProductSuggestions(locale, query), {
+    headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600' },
+  })
 }

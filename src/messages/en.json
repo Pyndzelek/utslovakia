@@ -128,7 +128,17 @@
       "open": "Filters",
       "close": "Close filters",
       "badge": "Label",
-      "showResults": "Show results"
+      "brand": "Brand",
+      "availability": "Availability",
+      "inStockOnly": "In stock only",
+      "showResultsCount": "{count, plural, one {Show # product} other {Show # products}}",
+      "clearAll": "Clear all",
+      "removeFilter": "Remove filter: {name}",
+      "activeLabel": "Active filters",
+      "priceRangeChip": "{min} – {max} {currency}",
+      "priceFromChip": "from {min} {currency}",
+      "priceToChip": "up to {max} {currency}",
+      "searchChip": "Search: {query}"
     },
     "toolbar": {
       "searchPlaceholder": "Search by name or SKU…",
@@ -147,6 +157,15 @@
       "label": "Pagination",
       "previous": "Previous page",
       "next": "Next page"
+    },
+    "sort": {
+      "label": "Sort by",
+      "relevance": "Best match",
+      "newest": "Newest first",
+      "priceAsc": "Price: low to high",
+      "priceDesc": "Price: high to low",
+      "nameAsc": "Name: A–Z",
+      "nameDesc": "Name: Z–A"
     }
   },
   "productPage": {

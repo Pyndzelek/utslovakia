@@ -5,6 +5,7 @@ import {
   hasDisplayPrice,
   priceRange,
   resolvePrice,
+  sortByDisplayPrice,
 } from '@/lib/currency'
 import type { Product } from '@/payload-types'
 
@@ -80,5 +81,37 @@ describe('priceRange', () => {
 
   it('is null when nothing has a price', () => {
     expect(priceRange({ prices: prices({ PLN: 0 }), variants: null }, 'pl')).toBeNull()
+  })
+})
+
+describe('sortByDisplayPrice', () => {
+  const product = (id: string, p: Partial<Product['prices']>, variantUsd?: number[]) => ({
+    id,
+    prices: prices(p),
+    variants: variantUsd?.map((USD) => ({ modelName: 'v', priceOverrides: { USD } })),
+  })
+  const order = (locale: string, direction: 'asc' | 'desc', items: ReturnType<typeof product>[]) =>
+    sortByDisplayPrice([...items], locale, direction).map((item) => item.id)
+
+  it("follows the locale's currency, not the PLN base price", () => {
+    const items = [product('a', { PLN: 420, USD: 120 }), product('b', { PLN: 430, USD: 110 })]
+    expect(order('pl', 'asc', items)).toEqual(['a', 'b'])
+    expect(order('en', 'asc', items)).toEqual(['b', 'a'])
+    expect(order('en', 'desc', items)).toEqual(['a', 'b'])
+  })
+
+  it('uses the lowest variant price, like the card', () => {
+    const items = [product('a', { USD: 100 }), product('b', { USD: 200 }, [90, 300])]
+    expect(order('en', 'asc', items)).toEqual(['b', 'a'])
+  })
+
+  it('puts PLN fallbacks after local prices and "on request" last, both ways', () => {
+    const items = [
+      product('onRequest', { PLN: 0, USD: 0 }),
+      product('plnOnly', { PLN: 50 }),
+      product('local', { USD: 60 }),
+    ]
+    expect(order('en', 'asc', items)).toEqual(['local', 'plnOnly', 'onRequest'])
+    expect(order('en', 'desc', items)).toEqual(['local', 'plnOnly', 'onRequest'])
   })
 })
