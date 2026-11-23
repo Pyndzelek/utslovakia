@@ -85,7 +85,9 @@
       "ctaContact": "Kontaktujte nás",
       "imageAlt": "Komponent platobného systému",
       "slidesLabel": "Vybrané kategórie",
-      "openCategory": "Otvoriť kategóriu: {name}"
+      "openCategory": "Otvoriť kategóriu: {name}",
+      "pause": "Pozastaviť prezentáciu",
+      "play": "Pokračovať v prezentácii"
     },
     "categoryShowcase": {
       "productCount": "{count, plural, one {# produkt} few {# produkty} other {# produktov}}",
@@ -133,9 +135,9 @@
       "priceToAria": "Cena do",
       "applyPrice": "Použiť cenový rozsah",
       "open": "Filtre",
-      "showResults": "Zobraziť výsledky",
       "close": "Zavrieť filtre",
-      "badge": "Štítok"
+      "badge": "Štítok",
+      "showResults": "Zobraziť výsledky"
     },
     "toolbar": {
       "searchPlaceholder": "Hľadať podľa názvu alebo SKU…",
@@ -219,7 +221,10 @@
     "changeLanguage": "Zmeniť jazyk",
     "goToProduct": "Prejsť na produkt {index}",
     "scrollBack": "Posunúť späť",
-    "scrollForward": "Posunúť ďalej"
+    "scrollForward": "Posunúť ďalej",
+    "skipToContent": "Preskočiť na obsah",
+    "showCategories": "Zobraziť kategórie",
+    "hideCategories": "Skryť kategórie"
   },
   "gallery": {
     "noImage": "Bez obrázka",
@@ -242,7 +247,8 @@
     "title": "Niečo sa pokazilo",
     "description": "Pri načítaní stránky nastala neočakávaná chyba. Skúste to znova alebo sa vráťte na úvodnú stránku.",
     "retry": "Skúsiť znova",
-    "backHome": "Späť na úvodnú stránku"
+    "backHome": "Späť na úvodnú stránku",
+    "eyebrow": "Chyba"
   },
   "notFound": {
     "code": "Chyba {code}",

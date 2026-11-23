@@ -1,16 +1,23 @@
 import React from 'react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import type { Locale } from '@/i18n/routing'
+import { getCategories } from '@/lib/data/categories'
 import { getSiteSettings } from '@/lib/data/site-settings'
 import { Logo } from '@/components/layout/logo'
-import { NavLink, type NavItem } from '@/components/layout/nav-link'
+import { MainNav, type NavItem } from '@/components/layout/main-nav'
 import { LocaleSwitcher } from '@/components/layout/locale-switcher'
 import { MobileMenu } from '@/components/layout/mobile-menu'
 import { HeaderSearch } from '@/components/layout/header-search'
 
 export async function Header() {
   const t = await getTranslations()
-  const settings = await getSiteSettings((await getLocale()) as Locale)
+  const locale = (await getLocale()) as Locale
+  // Both are cached and shared with the footer.
+  const [settings, allCategories] = await Promise.all([
+    getSiteSettings(locale),
+    getCategories(locale, 0),
+  ])
+  const categories = allCategories.map(({ name, slug }) => ({ name, slug }))
 
   const navItems: NavItem[] = [
     { href: '/', label: t('nav.home') },
@@ -27,11 +34,13 @@ export async function Header() {
           {/* Below `md` the logo collapses while the search is focused, so the field takes the bar. */}
           <Logo className="w-20 overflow-hidden transition-[width,opacity,margin] duration-300 ease-out motion-reduce:transition-none sm:w-24 md:w-28 lg:w-36 max-md:group-has-[input:focus]/header:-mr-4 max-md:group-has-[input:focus]/header:w-0 max-md:group-has-[input:focus]/header:opacity-0" />
 
-          <nav aria-label={t('a11y.mainNav')} className="hidden items-center gap-0.5 lg:flex">
-            {navItems.map((item) => (
-              <NavLink key={item.href} {...item} />
-            ))}
-          </nav>
+          <MainNav
+            items={navItems}
+            categories={categories}
+            label={t('a11y.mainNav')}
+            allCategoriesLabel={t('home.categoryShowcase.viewAllCategories')}
+            className="hidden lg:block"
+          />
 
           <div className="flex min-w-0 flex-1 items-center justify-end gap-2 md:flex-none">
             {/* Below `md` it fills the bar and its results drop below the whole header; above, it widens on focus. */}
@@ -43,6 +52,7 @@ export async function Header() {
 
             <MobileMenu
               items={navItems}
+              categories={categories}
               phone={settings.phones?.[0]?.number}
               email={settings.emails?.[0]?.email}
             />

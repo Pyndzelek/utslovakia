@@ -69,7 +69,11 @@ export default async function FrontendRootLayout({ children, params }: RootLayou
     notFound()
   }
   setRequestLocale(locale)
-  const [messages, settings] = await Promise.all([getMessages(), getSiteSettings(locale as Locale)])
+  const [messages, settings, t] = await Promise.all([
+    getMessages(),
+    getSiteSettings(locale as Locale),
+    getTranslations('a11y'),
+  ])
 
   return (
     <html
@@ -84,9 +88,18 @@ export default async function FrontendRootLayout({ children, params }: RootLayou
         />
         <NextIntlClientProvider messages={messages}>
           <MotionProvider>
+            {/* First tab stop on every page: jump past the header and its search. */}
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[1000] focus:rounded-full focus:bg-navy-900 focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lift"
+            >
+              {t('skipToContent')}
+            </a>
             <div className="flex min-h-screen flex-col">
               <Header />
-              <main className="flex-1">{children}</main>
+              <main id="main-content" tabIndex={-1} className="flex-1">
+                {children}
+              </main>
               <Footer />
             </div>
           </MotionProvider>

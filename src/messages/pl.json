@@ -76,7 +76,9 @@
       "ctaContact": "Skontaktuj się z nami",
       "imageAlt": "Komponent systemu płatniczego",
       "slidesLabel": "Wyróżnione kategorie",
-      "openCategory": "Otwórz kategorię: {name}"
+      "openCategory": "Otwórz kategorię: {name}",
+      "pause": "Zatrzymaj pokaz slajdów",
+      "play": "Wznów pokaz slajdów"
     },
     "categoryShowcase": {
       "productCount": "{count, plural, one {# produkt} few {# produkty} many {# produktów} other {# produktu}}",
@@ -124,9 +126,9 @@
       "priceToAria": "Cena do",
       "applyPrice": "Zastosuj zakres cenowy",
       "open": "Filtry",
-      "showResults": "Pokaż wyniki",
       "close": "Zamknij filtry",
-      "badge": "Etykieta"
+      "badge": "Etykieta",
+      "showResults": "Pokaż wyniki"
     },
     "toolbar": {
       "searchPlaceholder": "Szukaj po nazwie lub SKU…",
@@ -219,7 +221,10 @@
     "changeLanguage": "Zmień język",
     "goToProduct": "Przejdź do produktu {index}",
     "scrollBack": "Przewiń wstecz",
-    "scrollForward": "Przewiń dalej"
+    "scrollForward": "Przewiń dalej",
+    "skipToContent": "Przejdź do treści",
+    "showCategories": "Pokaż kategorie",
+    "hideCategories": "Ukryj kategorie"
   },
   "gallery": {
     "noImage": "Brak zdjęcia",
@@ -242,7 +247,8 @@
     "title": "Coś poszło nie tak",
     "description": "Podczas ładowania strony wystąpił nieoczekiwany błąd. Spróbuj ponownie lub wróć na stronę główną.",
     "retry": "Spróbuj ponownie",
-    "backHome": "Wróć na stronę główną"
+    "backHome": "Wróć na stronę główną",
+    "eyebrow": "Błąd"
   },
   "notFound": {
     "code": "Błąd {code}",

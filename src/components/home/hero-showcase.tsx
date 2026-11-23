@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, Pause, Play } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import type { HeroSlide } from '@/lib/data/home-page'
@@ -34,6 +34,9 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
   const t = useTranslations('home.hero')
   const [active, setActive] = useState(0)
   const [paused, setPaused] = useState(false)
+  // Explicit stop from the pause button — the only way to hold a slide on touch screens,
+  // where there is no hover or lasting focus to pause on.
+  const [stopped, setStopped] = useState(false)
   // Bumped on manual selection so the autoplay timer restarts from zero.
   const [cycle, setCycle] = useState(0)
   // Furthest slide whose image has loaded. Only the first image is in the server HTML, so its
@@ -41,11 +44,11 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
   const [loaded, setLoaded] = useState(-1)
 
   useEffect(() => {
-    if (slides.length < 2 || paused) return
+    if (slides.length < 2 || paused || stopped) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const id = setInterval(() => setActive((a) => (a + 1) % slides.length), INTERVAL_MS)
     return () => clearInterval(id)
-  }, [slides.length, paused, cycle])
+  }, [slides.length, paused, stopped, cycle])
 
   const select = (i: number) => {
     setActive(i)
@@ -253,17 +256,34 @@ export function HeroShowcase({ slides, badge, intro, actions, fallbackVisual }: 
                 </Link>
               ))}
             </div>
-            <p className="flex max-w-md items-baseline gap-3 text-center text-xs text-navy-800">
-              <span className="font-display shrink-0 font-semibold text-brand-600">
-                {pad(active + 1)} / {pad(slides.length)}
-              </span>
-              <Link
-                href={{ pathname: '/products/[slug]', params: { slug: current.productSlug } }}
-                className="tracking-[0.14em] uppercase transition-colors hover:text-brand-700"
-              >
-                {[current.brand, current.productTitle].filter(Boolean).join(' · ')}
-              </Link>
-            </p>
+            <div className="flex max-w-md items-center gap-3 text-xs text-navy-800">
+              {slides.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => setStopped((value) => !value)}
+                  aria-label={stopped ? t('play') : t('pause')}
+                  aria-pressed={stopped}
+                  className="grid size-7 shrink-0 cursor-pointer place-items-center rounded-full border border-navy-900/15 text-navy-800 transition-colors hover:border-brand-400 hover:text-brand-700"
+                >
+                  {stopped ? (
+                    <Play className="size-3 translate-x-px fill-current" aria-hidden />
+                  ) : (
+                    <Pause className="size-3 fill-current" aria-hidden />
+                  )}
+                </button>
+              )}
+              <p className="flex items-baseline gap-3 text-center">
+                <span className="font-display shrink-0 font-semibold text-brand-600">
+                  {pad(active + 1)} / {pad(slides.length)}
+                </span>
+                <Link
+                  href={{ pathname: '/products/[slug]', params: { slug: current.productSlug } }}
+                  className="rounded-sm tracking-[0.14em] uppercase transition-colors hover:text-brand-700"
+                >
+                  {[current.brand, current.productTitle].filter(Boolean).join(' · ')}
+                </Link>
+              </p>
+            </div>
           </div>
         ) : (
           fallbackVisual

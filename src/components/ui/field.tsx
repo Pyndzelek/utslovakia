@@ -2,10 +2,10 @@ import React from 'react'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-/** Visual-only form primitives — nothing submits anywhere yet. */
+/** Form primitives shared by the catalogue filters and the contact page's inquiry form. */
 
 const fieldBase =
-  'w-full rounded-xl border border-line bg-white text-sm text-navy-900 placeholder:text-slate-400 transition-colors focus:border-brand-500 focus:outline-2 focus:outline-brand-500/20'
+  'w-full rounded-xl border border-line bg-white text-sm text-navy-900 placeholder:text-slate-400 transition-colors focus:border-brand-500 focus:outline-2 focus:outline-brand-500/20 aria-invalid:border-rose-500 aria-invalid:focus:outline-rose-500/20'
 
 export function Label({ className, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) {
   return (
@@ -47,7 +47,7 @@ export function Checkbox({ className, ...props }: React.InputHTMLAttributes<HTML
     <input
       type="checkbox"
       className={cn(
-        'size-4 shrink-0 cursor-pointer appearance-none rounded border border-slate-300 bg-white transition-colors checked:border-brand-600 checked:bg-brand-600 ]',
+        'checkbox-check size-4 shrink-0 cursor-pointer appearance-none rounded border border-slate-300 bg-white transition-colors checked:border-brand-600 checked:bg-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500',
         className,
       )}
       {...props}

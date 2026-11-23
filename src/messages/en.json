@@ -76,7 +76,9 @@
       "ctaContact": "Contact us",
       "imageAlt": "Payment system component",
       "slidesLabel": "Featured categories",
-      "openCategory": "Open category: {name}"
+      "openCategory": "Open category: {name}",
+      "pause": "Pause slideshow",
+      "play": "Resume slideshow"
     },
     "categoryShowcase": {
       "productCount": "{count, plural, one {# product} other {# products}}",
@@ -124,9 +126,9 @@
       "priceToAria": "Price to",
       "applyPrice": "Apply price range",
       "open": "Filters",
-      "showResults": "Show results",
       "close": "Close filters",
-      "badge": "Label"
+      "badge": "Label",
+      "showResults": "Show results"
     },
     "toolbar": {
       "searchPlaceholder": "Search by name or SKU…",
@@ -219,7 +221,10 @@
     "changeLanguage": "Change language",
     "goToProduct": "Go to product {index}",
     "scrollBack": "Scroll back",
-    "scrollForward": "Scroll forward"
+    "scrollForward": "Scroll forward",
+    "skipToContent": "Skip to main content",
+    "showCategories": "Show categories",
+    "hideCategories": "Hide categories"
   },
   "gallery": {
     "noImage": "No image",
@@ -242,7 +247,8 @@
     "title": "Something went wrong",
     "description": "An unexpected error occurred while loading this page. You can try again, or head back to the homepage.",
     "retry": "Try again",
-    "backHome": "Back to homepage"
+    "backHome": "Back to homepage",
+    "eyebrow": "Error"
   },
   "notFound": {
     "code": "Error {code}",

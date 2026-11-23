@@ -76,6 +76,17 @@
   background-size: 120px 120px;
 }
 
+/* White check mark for the appearance-none checkbox in components/ui/field.tsx
+   (kept in sync with src/app/[locale]/(frontend)/styles.css) */
+@utility checkbox-check {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  &:checked {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 8.4 2.7 2.7L12 5.6'/%3E%3C/svg%3E");
+  }
+}
+
 /* Hide scrollbars on horizontal product rails while keeping them scrollable */
 @utility no-scrollbar {
   scrollbar-width: none;

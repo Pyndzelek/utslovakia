@@ -3,23 +3,26 @@
 import React, { useEffect, useRef, useState, useCallback, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslations } from 'next-intl'
-import { Mail, Menu, Phone, X } from 'lucide-react'
+import { ChevronDown, Mail, Menu, Phone, X } from 'lucide-react'
 import { Link, usePathname } from '@/i18n/navigation'
 import { LocaleSwitcher } from '@/components/layout/locale-switcher'
-import type { NavItem } from '@/components/layout/nav-link'
+import { isActiveNavItem, type NavCategory, type NavItem } from '@/components/layout/main-nav'
 import { cn, telHref } from '@/lib/utils'
 
 interface MobileMenuProps {
   items: NavItem[]
+  /** Listed under the "Categories" item, behind an expand toggle. */
+  categories?: NavCategory[]
   phone?: string
   email?: string
 }
 
 const noopSubscribe = () => () => {}
 
-export function MobileMenu({ items, phone, email }: MobileMenuProps) {
+export function MobileMenu({ items, categories = [], phone, email }: MobileMenuProps) {
   const t = useTranslations('a11y')
   const [open, setOpen] = useState(false)
+  const [categoriesOpen, setCategoriesOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
   // True on the client only, so the portal never renders during SSR.
@@ -137,16 +140,14 @@ export function MobileMenu({ items, phone, email }: MobileMenuProps) {
                 {/* Navigation Links */}
                 <nav aria-label={t('mainNav')} className="flex flex-col gap-1">
                   {items.map((item) => {
-                    const active =
-                      item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
-                    return (
+                    const active = isActiveNavItem(item.href, pathname)
+                    const link = (
                       <Link
-                        key={item.href}
                         href={item.href}
                         aria-current={active ? 'page' : undefined}
                         onClick={closeMenu}
                         className={cn(
-                          'rounded-xl px-4 py-3 text-[15px] font-medium transition-all duration-150',
+                          'min-w-0 flex-1 rounded-xl px-4 py-3 text-[15px] font-medium transition-all duration-150',
                           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500',
                           active
                             ? 'bg-brand-50 text-brand-700 shadow-xs'
@@ -155,6 +156,59 @@ export function MobileMenu({ items, phone, email }: MobileMenuProps) {
                       >
                         {item.label}
                       </Link>
+                    )
+
+                    if (item.href !== '/category' || categories.length === 0) {
+                      return (
+                        <div key={item.href} className="flex">
+                          {link}
+                        </div>
+                      )
+                    }
+
+                    // "Categories" opens the index; the toggle beside it lists them in place.
+                    return (
+                      <div key={item.href}>
+                        <div className="flex items-center gap-1">
+                          {link}
+                          <button
+                            type="button"
+                            aria-expanded={categoriesOpen}
+                            aria-controls="mobile-navigation-categories"
+                            aria-label={categoriesOpen ? t('hideCategories') : t('showCategories')}
+                            onClick={() => setCategoriesOpen((value) => !value)}
+                            className="flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-xl text-slate-600 transition-colors hover:bg-slate-50 hover:text-navy-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                          >
+                            <ChevronDown
+                              className={cn(
+                                'size-4 transition-transform duration-200',
+                                categoriesOpen && 'rotate-180',
+                              )}
+                              aria-hidden
+                            />
+                          </button>
+                        </div>
+                        <ul
+                          id="mobile-navigation-categories"
+                          hidden={!categoriesOpen}
+                          className="mt-1 mb-1 ml-4 border-l border-line pl-2"
+                        >
+                          {categories.map((category) => (
+                            <li key={category.slug}>
+                              <Link
+                                href={{
+                                  pathname: '/category/[slug]',
+                                  params: { slug: category.slug },
+                                }}
+                                onClick={closeMenu}
+                                className="block rounded-lg px-3 py-2.5 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-navy-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                              >
+                                {category.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     )
                   })}
                 </nav>

@@ -53,6 +53,28 @@
   ::selection {
     @apply bg-brand-600 text-white;
   }
+
+  /* Keyboard focus baseline for every interactive element that doesn't style its own.
+     Zero specificity (`:where`), so any `focus-visible:*` utility still wins. Programmatic
+     focus targets (tabindex="-1": dialog popups, the skip link's <main>) are left alone. */
+  :where(a, button, summary, [tabindex]:not([tabindex='-1'])):focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+
+  :where([tabindex='-1']):focus {
+    outline: none;
+  }
+}
+
+/* White check mark for the appearance-none checkbox in components/ui/field.tsx */
+@utility checkbox-check {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  &:checked {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 8.4 2.7 2.7L12 5.6'/%3E%3C/svg%3E");
+  }
 }
 
 /* Chevron pattern for dark hero / banner surfaces */

@@ -2,8 +2,9 @@
 
 import { useEffect } from 'react'
 import { useTranslations } from 'next-intl'
-import { Container } from '@/components/ui/container'
+import { RotateCcw, TriangleAlert } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
+import { StatusHero } from '@/components/layout/status-hero'
 import { Link } from '@/i18n/navigation'
 
 export default function FrontendError({
@@ -20,22 +21,23 @@ export default function FrontendError({
   }, [error])
 
   return (
-    <Container className="flex flex-col items-center py-24 text-center">
-      <h1 className="font-display text-3xl font-semibold tracking-tight text-navy-900">
-        {t('title')}
-      </h1>
-      <p className="mt-3 max-w-md text-[15px] leading-relaxed text-slate-500">{t('description')}</p>
-      <div className="mt-8 flex flex-wrap justify-center gap-3">
-        <button
-          onClick={() => reset()}
-          className={buttonVariants({ variant: 'primary', size: 'md' })}
-        >
-          {t('retry')}
-        </button>
-        <Link href="/" className={buttonVariants({ variant: 'outline', size: 'md' })}>
-          {t('backHome')}
-        </Link>
-      </div>
-    </Container>
+    <StatusHero
+      icon={<TriangleAlert className="size-3.5" aria-hidden />}
+      eyebrow={t('eyebrow')}
+      title={t('title')}
+      description={t('description')}
+    >
+      <button
+        type="button"
+        onClick={() => reset()}
+        className={buttonVariants({ variant: 'inverse', size: 'md' })}
+      >
+        <RotateCcw aria-hidden />
+        {t('retry')}
+      </button>
+      <Link href="/" className={buttonVariants({ variant: 'outline-inverse', size: 'md' })}>
+        {t('backHome')}
+      </Link>
+    </StatusHero>
   )
 }

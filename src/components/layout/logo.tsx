@@ -15,7 +15,7 @@ export function Logo({ className, imageClassName }: LogoProps) {
         alt="UTS Slovakia"
         width={863}
         height={289}
-        priority
+        preload
         className={cn('block h-auto w-full rounded-xl', imageClassName)}
       />
     </Link>
