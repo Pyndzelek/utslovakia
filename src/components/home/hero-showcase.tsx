@@ -8,7 +8,7 @@ import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import type { HeroSlide } from '@/lib/data/home-page'
 
-const INTERVAL_MS = 2000
+const INTERVAL_MS = 2900
 const EASE_OUT = 'cubic-bezier(.2,.7,.2,1)'
 /** Longest word that fits the left column at full size; longer ones scale down. */
 const WORD_FIT_CHARS = 7
