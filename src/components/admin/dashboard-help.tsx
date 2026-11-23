@@ -3,9 +3,15 @@ import React from 'react'
 const tips: { title: string; text: string; href?: string; linkLabel?: string }[] = [
   {
     title: 'Dodawanie produktu',
-    text: 'Produkty → „Stwórz nowy”. Wpisz nazwę, wybierz kategorię, dodaj zdjęcia i cenę w PLN (pozostałe waluty są opcjonalne). Status „Opublikowany” pokazuje produkt na stronie.',
+    text: 'Produkty → „Stwórz nowy”. Wpisz nazwę, wybierz kategorię, dodaj zdjęcia i cenę w PLN (pozostałe waluty są opcjonalne). Status „Opublikowany” pokazuje produkt na stronie, a przycisk „Podgląd” otwiera jego stronę.',
     href: '/admin/collections/products/create',
     linkLabel: 'Dodaj produkt',
+  },
+  {
+    title: 'Zapytania od klientów',
+    text: 'Wiadomości z formularza na stronie Kontakt trafiają do listy „Zapytania”. Po odpowiedzi zmień status na „Załatwione”.',
+    href: '/admin/collections/inquiries',
+    linkLabel: 'Zobacz zapytania',
   },
   {
     title: 'Tłumaczenia',
@@ -18,8 +24,14 @@ const tips: { title: string; text: string; href?: string; linkLabel?: string }[]
     linkLabel: 'Biblioteka mediów',
   },
   {
+    title: 'Strona główna',
+    text: 'Slajdy w sekcji powitalnej: krótkie hasło i produkt, z którego pochodzi zdjęcie, marka i kategoria.',
+    href: '/admin/globals/home-page',
+    linkLabel: 'Edytuj stronę główną',
+  },
+  {
     title: 'Dane firmy i kontakt',
-    text: 'Telefony, e-maile, adres, godziny otwarcia i FAQ widoczne w stopce i na stronie Kontakt. W zakładce „Strona główna” wybierasz produkty do sekcji powitalnej.',
+    text: 'Telefony, e-maile, adres, godziny otwarcia i FAQ widoczne w stopce i na stronie Kontakt.',
     href: '/admin/globals/site-settings',
     linkLabel: 'Edytuj dane firmy',
   },
@@ -62,7 +74,10 @@ export function DashboardHelp() {
         ))}
       </div>
       <p style={{ margin: 0, marginTop: 'var(--base)', color: 'var(--theme-elevation-600)' }}>
-        Zmiany są widoczne na stronie od razu po zapisaniu.
+        Zmiany są widoczne na stronie od razu po zapisaniu.{' '}
+        <a href="/" target="_blank" rel="noopener noreferrer">
+          Otwórz stronę →
+        </a>
       </p>
     </section>
   )

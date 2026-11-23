@@ -11,6 +11,7 @@ export const Media: CollectionConfig = {
   admin: {
     useAsTitle: 'alt',
     defaultColumns: ['filename', 'alt', 'updatedAt'],
+    listSearchableFields: ['alt', 'filename'],
     description:
       'Maksymalny rozmiar pliku ok. 4 MB (większe zdjęcia z telefonu najpierw zmniejsz). Zdjęcia są automatycznie konwertowane do WebP i zmniejszane.',
     group: 'Treści',
@@ -90,6 +91,8 @@ export const Media: CollectionConfig = {
   ],
   upload: {
     mimeTypes: ['image/*'],
+    // The 200px variant is plenty for the admin's list and picker, instead of the original.
+    adminThumbnail: 'thumbnail',
     // Cap the stored "original" so a full camera/DSLR export doesn't burn
     // through the free storage tier; sharp is already wired into
     // payload.config.ts, this is what activates it.

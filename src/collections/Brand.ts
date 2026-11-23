@@ -8,7 +8,8 @@ export const Brand: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'updatedAt'],
-    description: 'Marki / producenci — używane jako opcja filtrowania na stronie /products',
+    description:
+      'Marki / producenci. Marka jest pokazywana przy produkcie i jako filtr w katalogu (tylko marki, które mają opublikowane produkty).',
     group: 'Katalog',
   },
   access: {

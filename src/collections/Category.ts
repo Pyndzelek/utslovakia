@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { authenticated, publicWhenStatus } from '@/access'
 import { slugField } from '@/fields/slug'
 import { revalidateCollection } from '@/hooks/revalidate'
+import { publicUrl } from '@/lib/site-paths'
 
 // Product listings embed category names/slugs, so both tags go stale on a category change.
 const { afterChange, afterDelete } = revalidateCollection('categories', 'products')
@@ -12,9 +13,15 @@ export const Category: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'order', 'status', 'updatedAt'],
+    listSearchableFields: ['name', 'slug'],
     description: 'Kategorie produktów',
     group: 'Katalog',
+    // "Podgląd" button: the category's public page (its slug differs per language).
+    preview: (doc, { locale }) =>
+      typeof doc?.slug === 'string' ? publicUrl(locale, '/category/[slug]', doc.slug) : null,
   },
+  // Same order as on the site.
+  defaultSort: 'order',
   access: {
     read: publicWhenStatus('active'),
     create: authenticated,
@@ -58,7 +65,8 @@ export const Category: CollectionConfig = {
       defaultValue: 0,
       admin: {
         position: 'sidebar',
-        description: 'Mniejsze liczby wyświetlają się jako pierwsze.',
+        description:
+          'Mniejsze liczby wyświetlają się jako pierwsze. Kategoria z najmniejszą liczbą jest dużym kafelkiem na stronie głównej — nadaj każdej kategorii inną liczbę, inaczej kolejność jest przypadkowa.',
       },
     },
     {

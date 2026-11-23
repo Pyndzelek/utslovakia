@@ -1,6 +1,7 @@
 import type { GlobalConfig } from 'payload'
 import { authenticated } from '@/access'
 import { revalidateGlobal } from '@/hooks/revalidate'
+import { rowLabel } from '@/fields/row-label'
 
 export const HOME_PAGE_TAG = 'home-page'
 
@@ -32,7 +33,8 @@ export const HomePage: GlobalConfig = {
       maxRows: 5,
       admin: {
         description:
-          'Rotują co 5 sekund. Zdjęcie, marka i kategoria pochodzą z wybranego produktu. Bez slajdów sekcja pokazuje samo hasło i przyciski.',
+          'Slajdy zmieniają się automatycznie co kilka sekund. Zdjęcie, marka i kategoria pochodzą z wybranego produktu. Bez slajdów sekcja pokazuje samo hasło i przyciski.',
+        components: { RowLabel: rowLabel('word', 'Slajd') },
       },
       fields: [
         {
@@ -47,8 +49,7 @@ export const HomePage: GlobalConfig = {
               maxLength: 10,
               admin: {
                 placeholder: 'ACCEPT',
-                description:
-                  'Jedno krótkie słowo (do 10 znaków), osobne dla każdego języka.',
+                description: 'Jedno krótkie słowo (do 10 znaków), osobne dla każdego języka.',
               },
             },
             {

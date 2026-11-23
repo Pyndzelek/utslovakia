@@ -2,6 +2,8 @@ import type { CollectionConfig } from 'payload'
 import { authenticated, publicWhenStatus } from '@/access'
 import { slugField } from '@/fields/slug'
 import { revalidateCollection } from '@/hooks/revalidate'
+import { publicUrl } from '@/lib/site-paths'
+import { rowLabel } from '@/fields/row-label'
 
 const { afterChange, afterDelete } = revalidateCollection('products')
 
@@ -13,10 +15,17 @@ export const Product: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'sku', 'brand', 'categories', 'status', 'updatedAt'],
+    defaultColumns: ['title', 'sku', 'brand', 'categories', 'stockStatus', 'status', 'updatedAt'],
+    // The list's search box matches the name, the SKU and the URL slug.
+    listSearchableFields: ['title', 'sku', 'slug'],
     description: 'Zarządzaj katalogiem produktów',
     group: 'Katalog',
+    // "Podgląd" button in the edit view: the product's public page in the edited language.
+    preview: (doc, { locale }) =>
+      typeof doc?.slug === 'string' ? publicUrl(locale, '/products/[slug]', doc.slug) : null,
   },
+  // Most recently edited first — what an editor is usually looking for.
+  defaultSort: '-updatedAt',
   access: {
     // Anonymous API visitors only see published products; the site's data layer filters too.
     read: publicWhenStatus('published'),
@@ -172,12 +181,22 @@ export const Product: CollectionConfig = {
               label: 'Opis',
               localized: true,
               required: true,
+              admin: {
+                rows: 12,
+                description:
+                  'Formatowanie jest automatyczne: pusta linia rozdziela akapity; krótka linia zakończona dwukropkiem (np. „Dane techniczne:”) staje się nagłówkiem; kilka linii pod rząd tworzy listę, a w linii „Napięcie: 12 V” część przed dwukropkiem jest pogrubiona.',
+              },
             },
             {
               name: 'keyFeatures',
               type: 'array',
               label: 'Kluczowe cechy',
               labels: { singular: 'Cecha', plural: 'Cechy' },
+              admin: {
+                description:
+                  'Krótkie punkty (3–6) pokazywane w karcie „Szczegóły produktu” obok opisu.',
+                components: { RowLabel: rowLabel('text', 'Cecha') },
+              },
               fields: [
                 {
                   name: 'text',
@@ -203,7 +222,8 @@ export const Product: CollectionConfig = {
               type: 'group',
               label: 'Cena bazowa',
               admin: {
-                description: 'PLN jest wymagane. Pozostałe waluty opcjonalnie.',
+                description:
+                  'PLN jest wymagane. Pozostałe waluty opcjonalnie — bez nich dana wersja językowa pokazuje cenę w PLN. Cena 0 wyświetla się jako „Cena na zapytanie”.',
               },
               fields: [
                 {
@@ -249,7 +269,10 @@ export const Product: CollectionConfig = {
               label: 'Modele / Warianty',
               labels: { singular: 'Model', plural: 'Modele' },
               admin: {
-                description: 'Dodaj różne wersje tego produktu.',
+                description:
+                  'Dodaj różne wersje tego produktu. Pierwszy model z listy jest domyślnie wybrany na stronie.',
+                initCollapsed: true,
+                components: { RowLabel: rowLabel('modelName', 'Model') },
               },
               fields: [
                 {

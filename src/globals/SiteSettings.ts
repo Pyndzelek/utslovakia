@@ -1,6 +1,7 @@
 import type { GlobalConfig } from 'payload'
 import { authenticated } from '@/access'
 import { revalidateGlobal } from '@/hooks/revalidate'
+import { rowLabel } from '@/fields/row-label'
 
 export const SITE_SETTINGS_TAG = 'site-settings'
 
@@ -70,7 +71,10 @@ export const SiteSettings: GlobalConfig = {
               type: 'array',
               label: 'Telefony',
               labels: { singular: 'Telefon', plural: 'Telefony' },
-              admin: { description: 'Pierwszy numer jest pokazywany w stopce i menu mobilnym.' },
+              admin: {
+                description: 'Pierwszy numer jest pokazywany w stopce i menu mobilnym.',
+                components: { RowLabel: rowLabel('number', 'Telefon') },
+              },
               fields: [
                 {
                   type: 'row',
@@ -102,7 +106,11 @@ export const SiteSettings: GlobalConfig = {
               type: 'array',
               label: 'Adresy e-mail',
               labels: { singular: 'E-mail', plural: 'E-maile' },
-              admin: { description: 'Pierwszy adres jest pokazywany w stopce i menu mobilnym.' },
+              admin: {
+                description:
+                  'Pierwszy adres jest pokazywany w stopce i menu mobilnym. Na niego trafiają też powiadomienia o nowych zapytaniach z formularza (gdy wysyłka e-maili jest włączona).',
+                components: { RowLabel: rowLabel('email', 'E-mail') },
+              },
               fields: [
                 {
                   type: 'row',
@@ -145,6 +153,8 @@ export const SiteSettings: GlobalConfig = {
               admin: {
                 description:
                   'Osobna lista dla każdego języka (przełącz język u góry strony). Sekcja jest ukryta, gdy lista jest pusta.',
+                initCollapsed: true,
+                components: { RowLabel: rowLabel('question', 'Pytanie') },
               },
               fields: [
                 { name: 'question', type: 'text', label: 'Pytanie', required: true },

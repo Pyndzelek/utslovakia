@@ -43,6 +43,7 @@ Required vars (see `.env.example` and README). Tests load `.env.test.local` befo
 - `DATABASE_URL` — Postgres connection string (`@payloadcms/db-postgres`).
 - `PAYLOAD_SECRET`
 - `NEXT_PUBLIC_SITE_URL` — public origin used for `metadataBase`, canonical/OG URLs, and JSON-LD (must be absolute).
+- `RESEND_API_KEY` (optional, with `EMAIL_FROM` / `INQUIRY_NOTIFY_EMAIL`) — enables e-mail: inquiry notifications and admin password reset. Unset = inquiries are only stored in the CMS.
 
 ## Architecture
 
@@ -62,15 +63,16 @@ Required vars (see `.env.example` and README). Tests load `.env.test.local` befo
 ### Payload CMS layer
 
 - Config: `src/payload.config.ts` — Postgres adapter, Lexical editor, `seoPlugin` (scoped to `products`), custom admin logo/icon (`src/components/admin/`).
-- Collections: `src/collections/{Users,Media,Category,Product,Brand}.ts`. `Product` is the largest/most complex — sidebar fields (slug, sku, status, badge, stockStatus, brand, external link) plus a tabbed body: "Treść" (content: title, categories, images, description, keyFeatures, warranty, multi-currency `prices` group) and "Warianty" (a `variants` array of model/color/size variants, each with its own optional `stockStatus` override — defaulting to `inherit` from the parent — and its own optional `priceOverrides` group, filled in only for currencies that differ from the base price).
+- Collections: `src/collections/{Users,Media,Category,Product,Brand,Inquiry}.ts`. `Inquiry` holds contact-form submissions: created only by the `submitInquiry` server action (`src/app/[locale]/(frontend)/contact/actions.ts`), never through the public API. `Product` is the largest/most complex — sidebar fields (slug, sku, status, badge, stockStatus, brand, external link) plus a tabbed body: "Treść" (content: title, categories, images, description, keyFeatures, warranty, multi-currency `prices` group) and "Warianty" (a `variants` array of model/color/size variants, each with its own optional `stockStatus` override — defaulting to `inherit` from the parent — and its own optional `priceOverrides` group, filled in only for currencies that differ from the base price).
 - Schema push is off: every collection/field change needs `pnpm generate:types` + `pnpm migrate:create <name>` (files in `src/migrations/`), applied with `pnpm migrate`; Vercel runs migrations in `vercel-build`.
 - Generated types live in `src/payload-types.ts` — **do not hand-edit**; regenerate with `pnpm generate:types` after touching any collection/field. This file (and `src/payload-generated-schema.ts`) is excluded from ESLint.
-- Data-fetching helpers wrapping the Payload Local API live in `src/lib/data/` (e.g. `products.ts`, `categories.ts`) — typed, locale-aware `get*` functions used by frontend pages/server components. Follow this pattern (Local API + typed return shape) when adding new queries rather than calling `payload.find` ad hoc from components. `src/lib/payload.ts` exports a cached `getPayloadClient()` for places needing the raw client.
+- Data-fetching helpers wrapping the Payload Local API live in `src/lib/data/` (e.g. `products.ts`, `categories.ts`) — typed, locale-aware `get*` functions used by frontend pages/server components. Follow this pattern (Local API + typed return shape) when adding new queries rather than calling `payload.find` ad hoc from components.
+- Catalogue listings (`/products`, `/category/[slug]`) share one URL contract in `src/lib/catalog-params.ts` (`parseCatalogParams`: `q`, `category`, `brand`, `badge`, `stock`, `minPrice`, `maxPrice`, `sort`, `page`). Add new filters there, then in `getFilteredProducts` and `components/catalog/filter-sidebar.tsx`.
 - Access control lives in `src/access/`: anonymous reads see only published products / active categories (`publicWhenStatus`), writes need a logged-in user, and `Users` has `admin`/`editor` roles (only admins manage users). Company/contact data is the `site-settings` global (`src/globals/SiteSettings.ts`, read via `getSiteSettings`).
 
 ### Frontend/UI
 
-- Component folders under `src/components/`: `admin/` (custom Payload admin components), `catalog/`, `product/`, `home/`, `layout/`, `ui/` (shadcn-generated primitives).
+- Component folders under `src/components/`: `admin/` (custom Payload admin components), `catalog/`, `product/`, `contact/`, `home/`, `layout/`, `ui/` (shadcn-generated primitives).
 - shadcn config: `components.json` — style `base-nova`, neutral base color, Tailwind CSS variables, Lucide icons, path aliases `@/components`, `@/lib`, `@/components/ui`, `@/hooks`.
 - Path aliases (`tsconfig.json`): `@/*` → `src/*`, `@payload-config` → `src/payload.config.ts`.
 - `src/lib/site.ts` exports `SITE_URL` from `NEXT_PUBLIC_SITE_URL`, used wherever absolute URLs are required (metadata, JSON-LD, OG image routes like `products/[slug]/opengraph-image.tsx`).
