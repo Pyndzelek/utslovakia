@@ -1,5 +1,6 @@
 import { SITE_URL } from '@/lib/site'
-import { resolvePrice } from '@/lib/currency'
+import { priceRange } from '@/lib/currency'
+import { variantStockStatus } from '@/lib/variants'
 import type { Product, SiteSetting } from '@/payload-types'
 
 export interface BreadcrumbItem {
@@ -70,42 +71,52 @@ const availabilityMap: Record<Product['stockStatus'], string> = {
   preorder: 'https://schema.org/PreOrder',
 }
 
+/** Best availability first: a product is buyable if any of its variants is. */
+const AVAILABILITY_ORDER: Product['stockStatus'][] = ['in_stock', 'preorder', 'out_of_stock']
+
+function productAvailability(product: Product): Product['stockStatus'] {
+  if (!product.variants?.length) return product.stockStatus
+  const statuses = product.variants.map((variant) =>
+    variantStockStatus(variant, product.stockStatus),
+  )
+  return AVAILABILITY_ORDER.find((status) => statuses.includes(status)) ?? product.stockStatus
+}
+
 export function productJsonLd(params: {
   product: Product
   locale: string
   canonicalPath: string
-  imageUrl?: string | null
+  /** Every product image, main one first. */
+  imageUrls?: (string | null | undefined)[]
 }) {
-  const { product, locale, canonicalPath, imageUrl } = params
+  const { product, locale, canonicalPath, imageUrls } = params
   const brand = typeof product.brand === 'object' ? product.brand : null
+  const firstCategory = typeof product.categories?.[0] === 'object' ? product.categories[0] : null
+  const url = toAbsoluteUrl(canonicalPath)
+  const images = (imageUrls ?? []).filter((image): image is string => Boolean(image))
 
-  // Same currency the page displays for this locale (PLN when that currency isn't set).
-  const base = resolvePrice(product.prices, locale)
-  const variantAmounts = (product.variants ?? []).map(
-    (variant) => resolvePrice(product.prices, locale, variant.priceOverrides).amount,
-  )
-  const allAmounts = [base.amount, ...variantAmounts]
-  const lowPrice = Math.min(...allAmounts)
-  const highPrice = Math.max(...allAmounts)
-  const availability = availabilityMap[product.stockStatus]
-
-  const offers =
-    lowPrice === highPrice
+  // Same currency and amounts the page displays for this locale. "Price on request"
+  // products (no price, or 0) get no offer at all rather than one claiming a price of 0.
+  const range = priceRange(product, locale)
+  const availability = availabilityMap[productAvailability(product)]
+  const offers = !range
+    ? undefined
+    : range.low === range.high
       ? {
           '@type': 'Offer',
-          priceCurrency: base.currency,
-          price: base.amount,
+          priceCurrency: range.currency,
+          price: range.low,
           availability,
-          url: toAbsoluteUrl(canonicalPath),
+          url,
         }
       : {
           '@type': 'AggregateOffer',
-          priceCurrency: base.currency,
-          lowPrice,
-          highPrice,
-          offerCount: allAmounts.length,
+          priceCurrency: range.currency,
+          lowPrice: range.low,
+          highPrice: range.high,
+          offerCount: product.variants?.length ?? 1,
           availability,
-          url: toAbsoluteUrl(canonicalPath),
+          url,
         }
 
   return {
@@ -113,8 +124,10 @@ export function productJsonLd(params: {
     '@type': 'Product',
     name: product.title,
     description: product.description,
+    url,
     sku: product.sku ?? undefined,
-    image: imageUrl ? [toAbsoluteUrl(imageUrl)] : undefined,
+    category: firstCategory?.name,
+    image: images.length > 0 ? images.map(toAbsoluteUrl) : undefined,
     brand: brand ? { '@type': 'Brand', name: brand.name } : undefined,
     offers,
   }

@@ -97,8 +97,6 @@ export default async function ProductPage({ params }: PageProps) {
     locale,
     href: { pathname: '/products/[slug]', params: { slug } },
   })
-  const image =
-    typeof payloadProduct.images?.[0]?.image === 'object' ? payloadProduct.images[0].image : null
   const tNav = await getTranslations('nav')
 
   return (
@@ -123,7 +121,7 @@ export default async function ProductPage({ params }: PageProps) {
               product: payloadProduct,
               locale,
               canonicalPath,
-              imageUrl: getMediaUrl(image),
+              imageUrls: payloadProduct.images?.map((item) => getMediaUrl(item.image)),
             }),
           ),
         }}

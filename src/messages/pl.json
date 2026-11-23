@@ -175,7 +175,14 @@
     },
     "askForOffer": "Zapytaj o ofertę",
     "variant": "Wariant",
-    "sku": "SKU: {sku}"
+    "sku": "SKU: {sku}",
+    "details": "Szczegóły produktu",
+    "detailSku": "SKU",
+    "detailBrand": "Marka",
+    "detailCategory": "Kategoria",
+    "detailWarranty": "Gwarancja",
+    "warrantyMonths": "{months, plural, one {# miesiąc} few {# miesiące} many {# miesięcy} other {# miesiąca}}",
+    "variantUnavailable": "niedostępny"
   },
   "category": {
     "meta": {
@@ -279,7 +286,8 @@
     "playVideo": "Odtwórz wideo"
   },
   "price": {
-    "onRequest": "Cena na zapytanie"
+    "onRequest": "Cena na zapytanie",
+    "from": "od"
   },
   "errorPage": {
     "title": "Coś poszło nie tak",

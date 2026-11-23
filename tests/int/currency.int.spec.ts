@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { currencyForLocale, formatPrice, resolvePrice } from '@/lib/currency'
+import {
+  currencyForLocale,
+  formatPrice,
+  hasDisplayPrice,
+  priceRange,
+  resolvePrice,
+} from '@/lib/currency'
 import type { Product } from '@/payload-types'
 
 const prices = (p: Partial<Product['prices']>) => ({ PLN: 100, ...p }) as Product['prices']
@@ -37,5 +43,42 @@ describe('formatPrice', () => {
     // Polish only groups thousands from five digits up.
     expect(plain(formatPrice(12345.5, 'PLN', 'pl'))).toBe('12 345,50 zł')
     expect(plain(formatPrice(1234.5, 'USD', 'en'))).toBe('$1,234.50')
+  })
+})
+
+describe('hasDisplayPrice', () => {
+  it('treats 0 and missing prices as "price on request"', () => {
+    expect(hasDisplayPrice(prices({}), 'pl')).toBe(true)
+    expect(hasDisplayPrice(prices({ PLN: 0 }), 'pl')).toBe(false)
+    expect(hasDisplayPrice(undefined, 'pl')).toBe(false)
+  })
+
+  it("looks at the variant's price when it overrides", () => {
+    expect(hasDisplayPrice(prices({ PLN: 0 }), 'pl', { PLN: 80 })).toBe(true)
+  })
+})
+
+describe('priceRange', () => {
+  const variant = (priceOverrides?: Partial<Product['prices']>) =>
+    ({ modelName: 'v', priceOverrides }) as NonNullable<Product['variants']>[number]
+
+  it('is the base price for a product without variants', () => {
+    expect(priceRange({ prices: prices({ EUR: 25 }), variants: [] }, 'sk')).toEqual({
+      low: 25,
+      high: 25,
+      currency: 'EUR',
+    })
+  })
+
+  it("spans the variants' prices, each falling back to the base price", () => {
+    const product = {
+      prices: prices({}),
+      variants: [variant(), variant({ PLN: 80 }), variant({ PLN: 140 })],
+    }
+    expect(priceRange(product, 'pl')).toEqual({ low: 80, high: 140, currency: 'PLN' })
+  })
+
+  it('is null when nothing has a price', () => {
+    expect(priceRange({ prices: prices({ PLN: 0 }), variants: null }, 'pl')).toBeNull()
   })
 })

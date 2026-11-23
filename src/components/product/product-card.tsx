@@ -1,7 +1,9 @@
 import Image from 'next/image'
+import { useLocale } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { Price } from '@/components/ui/price'
 import type { Product } from '@/payload-types'
+import { priceRange } from '@/lib/currency'
 import { cn, getMediaUrl } from '@/lib/utils'
 import { InStock } from '@/components/product/in-stock'
 import { ProductBadgeTag } from './product-badge'
@@ -16,7 +18,9 @@ export function ProductCard({
   /** Above-the-fold cards: preload the image instead of lazy-loading it. */
   preload?: boolean
 }) {
-  const inStock = product.stockStatus === 'in_stock'
+  const locale = useLocale()
+  // With variants the card shows the cheapest one, marked "from" when they differ.
+  const range = priceRange(product, locale)
   const brand = typeof product.brand === 'object' ? product.brand : null
   const image = typeof product.images?.[0] === 'object' ? product.images?.[0] : null
   const imageUrl = getMediaUrl(image?.image, 'card')
@@ -59,8 +63,13 @@ export function ProductCard({
           </Link>
         </h3>
         <div className="mt-auto pt-3">
-          <Price prices={product.prices} size="sm" />
-          <InStock inStock={inStock} />
+          <Price
+            prices={product.prices}
+            amount={range?.low ?? 0}
+            from={range ? range.low < range.high : false}
+            size="sm"
+          />
+          <InStock status={product.stockStatus} />
         </div>
       </div>
     </article>

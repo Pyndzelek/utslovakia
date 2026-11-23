@@ -1,6 +1,6 @@
 'use client'
 
-import { useLayoutEffect, useRef, useState } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { Dialog } from '@base-ui/react/dialog'
 import { useTranslations } from 'next-intl'
@@ -61,12 +61,38 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
   const step = (direction: 1 | -1) =>
     setActive((index) => (index + direction + imageCount) % imageCount)
 
+  // Horizontal swipe browses the images — on the main image and in the preview alike.
+  const swipeHandlers = {
+    onTouchStart: (event: React.TouchEvent) => {
+      touchStartX.current = event.touches[0]?.clientX ?? null
+    },
+    onTouchEnd: (event: React.TouchEvent) => {
+      const startX = touchStartX.current
+      const endX = event.changedTouches[0]?.clientX
+      touchStartX.current = null
+      if (!hasMultiple || startX === null || endX === undefined) return
+      if (Math.abs(endX - startX) > 50) step(endX < startX ? 1 : -1)
+    },
+  }
+
   return (
     <Dialog.Root open={previewOpen} onOpenChange={setPreviewOpen}>
       <div>
         {/* Main Active Image */}
-        <div className="relative aspect-square overflow-hidden rounded-3xl border border-line bg-linear-to-br from-slate-50 to-slate-100">
+        <div
+          // pan-y: vertical scrolling stays with the page, horizontal swipes come to us.
+          className="relative aspect-square touch-pan-y overflow-hidden rounded-3xl border border-line bg-linear-to-br from-slate-50 to-slate-100"
+          {...swipeHandlers}
+        >
           {badge && <ProductBadgeTag badge={badge} className="absolute top-4 left-4 z-10" />}
+          {hasMultiple && (
+            <p
+              className="pointer-events-none absolute bottom-4 left-4 z-10 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-navy-900 tabular-nums shadow-card lg:hidden"
+              aria-hidden
+            >
+              {active + 1} / {imageCount}
+            </p>
+          )}
 
           {activeImageUrl ? (
             <Dialog.Trigger
@@ -78,7 +104,7 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
                 src={activeImageUrl}
                 alt={altFor(active)}
                 fill
-                priority
+                preload
                 sizes="(max-width: 1024px) 90vw, 560px"
                 className="object-contain p-10 animate-in fade-in zoom-in-95 duration-300 sm:p-14"
               />
@@ -151,19 +177,7 @@ export function ProductGallery({ images, title, badge }: ProductGalleryProps) {
           </Dialog.Close>
 
           {previewImageUrl && (
-            <div
-              className="relative h-[80vh] w-full max-w-6xl"
-              onTouchStart={(event) => {
-                touchStartX.current = event.touches[0]?.clientX ?? null
-              }}
-              onTouchEnd={(event) => {
-                const startX = touchStartX.current
-                const endX = event.changedTouches[0]?.clientX
-                touchStartX.current = null
-                if (!hasMultiple || startX === null || endX === undefined) return
-                if (Math.abs(endX - startX) > 50) step(endX < startX ? 1 : -1)
-              }}
-            >
+            <div className="relative h-[80vh] w-full max-w-6xl" {...swipeHandlers}>
               <Image
                 key={previewImageUrl}
                 src={previewImageUrl}

@@ -44,6 +44,37 @@ export function resolvePrice(
   }
 }
 
+/** Whether there is a real price to show: 0 (or nothing) means "price on request". */
+export function hasDisplayPrice(
+  prices: Product['prices'] | null | undefined,
+  locale: string,
+  overrides?: Prices | null,
+): boolean {
+  if (!prices) return false
+  const { amount } = resolvePrice(prices, locale, overrides)
+  return typeof amount === 'number' && amount > 0
+}
+
+/**
+ * Lowest and highest price a product can be bought at in `locale`'s currency. With variants,
+ * those are the variants' prices (each falling back to the base price where it has no
+ * override); without, the base price. `null` when nothing has a price ("price on request").
+ */
+export function priceRange(
+  product: Pick<Product, 'prices' | 'variants'>,
+  locale: string,
+): { low: number; high: number; currency: Currency } | null {
+  const { currency } = resolvePrice(product.prices, locale)
+  const candidates = product.variants?.length
+    ? product.variants.map(
+        (variant) => resolvePrice(product.prices, locale, variant.priceOverrides).amount,
+      )
+    : [resolvePrice(product.prices, locale).amount]
+  const amounts = candidates.filter((amount) => typeof amount === 'number' && amount > 0)
+  if (amounts.length === 0) return null
+  return { low: Math.min(...amounts), high: Math.max(...amounts), currency }
+}
+
 const formatters = new Map<string, Intl.NumberFormat>()
 
 export function formatPrice(amount: number, currency: Currency, locale: string): string {

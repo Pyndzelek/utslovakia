@@ -175,7 +175,14 @@
     },
     "askForOffer": "Ask for a quote",
     "variant": "Variant",
-    "sku": "SKU: {sku}"
+    "sku": "SKU: {sku}",
+    "details": "Product details",
+    "detailSku": "SKU",
+    "detailBrand": "Brand",
+    "detailCategory": "Category",
+    "detailWarranty": "Warranty",
+    "warrantyMonths": "{months, plural, one {# month} other {# months}}",
+    "variantUnavailable": "out of stock"
   },
   "category": {
     "meta": {
@@ -279,7 +286,8 @@
     "playVideo": "Play video"
   },
   "price": {
-    "onRequest": "Price on request"
+    "onRequest": "Price on request",
+    "from": "from"
   },
   "errorPage": {
     "title": "Something went wrong",

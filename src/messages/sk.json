@@ -184,7 +184,14 @@
     },
     "askForOffer": "Vyžiadať ponuku",
     "variant": "Variant",
-    "sku": "SKU: {sku}"
+    "sku": "SKU: {sku}",
+    "details": "Detaily produktu",
+    "detailSku": "SKU",
+    "detailBrand": "Značka",
+    "detailCategory": "Kategória",
+    "detailWarranty": "Záruka",
+    "warrantyMonths": "{months, plural, one {# mesiac} few {# mesiace} other {# mesiacov}}",
+    "variantUnavailable": "nedostupný"
   },
   "contact": {
     "meta": {
@@ -279,7 +286,8 @@
     "playVideo": "Prehrať video"
   },
   "price": {
-    "onRequest": "Cena na vyžiadanie"
+    "onRequest": "Cena na vyžiadanie",
+    "from": "od"
   },
   "errorPage": {
     "title": "Niečo sa pokazilo",
