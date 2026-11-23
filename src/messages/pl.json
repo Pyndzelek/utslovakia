@@ -196,7 +196,8 @@
     "description": "Pytania dotyczące sprzętu czy porady przy zakupie. Odpowiadamy najszybciej jak to możliwe.",
     "cards": {
       "visit": {
-        "title": "Odwiedź nas"
+        "title": "Odwiedź nas",
+        "openMap": "Otwórz w Mapach"
       },
       "call": {
         "title": "Zadzwoń do nas"
@@ -209,7 +210,44 @@
       }
     },
     "vatNumber": "IČ DPH / VAT ID: {number}",
-    "faqTitle": "Najczęściej zadawane pytania"
+    "faqTitle": "Najczęściej zadawane pytania",
+    "form": {
+      "eyebrow": "Zapytanie",
+      "title": "Wyślij nam zapytanie",
+      "description": "Napisz, czego potrzebujesz — numer części, ilość albo urządzenie, do którego ma pasować. Odpowiemy e-mailem.",
+      "points": {
+        "reply": "Odpowiada człowiek, nie automat",
+        "advice": "Pomożemy dobrać część do Twojego urządzenia",
+        "bulk": "Wycena większych ilości"
+      },
+      "name": "Imię i nazwisko",
+      "email": "E-mail",
+      "phone": "Telefon",
+      "company": "Firma",
+      "optional": "opcjonalnie",
+      "message": "Wiadomość",
+      "messagePlaceholder": "Czego szukasz?",
+      "productLabel": "Zapytanie dotyczy",
+      "removeProduct": "Usuń produkt z zapytania",
+      "submit": "Wyślij zapytanie",
+      "sending": "Wysyłanie…",
+      "privacy": "Podane dane wykorzystamy wyłącznie do odpowiedzi na to zapytanie.",
+      "successTitle": "Dziękujemy — zapytanie zostało wysłane",
+      "successText": "Odpowiemy e-mailem tak szybko, jak to możliwe.",
+      "sendAnother": "Wyślij kolejne zapytanie",
+      "errors": {
+        "required": "To pole jest wymagane.",
+        "invalidEmail": "Podaj poprawny adres e-mail.",
+        "invalidPhone": "Podaj poprawny numer telefonu.",
+        "tooShort": "Dodaj, proszę, kilka szczegółów.",
+        "tooLong": "Ten tekst jest za długi.",
+        "summary": "Sprawdź zaznaczone pola.",
+        "expired": "Formularz wygasł. Odśwież stronę i spróbuj ponownie.",
+        "tooFast": "To było bardzo szybkie. Poczekaj chwilę i wyślij zapytanie jeszcze raz.",
+        "rateLimited": "Zbyt wiele zapytań w krótkim czasie. Spróbuj ponownie za kilka minut.",
+        "failed": "Nie udało się wysłać zapytania. Spróbuj ponownie albo skontaktuj się z nami telefonicznie lub e-mailem."
+      }
+    }
   },
   "a11y": {
     "mainNav": "Główna nawigacja",

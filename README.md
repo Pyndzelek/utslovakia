@@ -34,6 +34,7 @@ On an empty database, `/admin` first asks you to create a user. The first accoun
 | `NEXT_PUBLIC_SITE_URL`                                                 | yes             | Public origin, e.g. `https://www.utslovakia.sk`. Used for canonical/OG/JSON-LD URLs and admin CSRF. |
 | `S3_BUCKET`, `S3_ENDPOINT`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | on Vercel       | R2 bucket and API token. Required when `VERCEL` is set.                                             |
 | `S3_PUBLIC_HOSTNAME`                                                   | yes, for images | The R2 custom domain images are served from (allowed in `next/image`).                              |
+| `RESEND_API_KEY`, `EMAIL_FROM`, `INQUIRY_NOTIFY_EMAIL`                 | no              | E-mail via Resend: notifies the team about contact-form inquiries and enables admin password reset. |
 
 For tests, create **`.env.test.local`** (gitignored). The test configs load it before `.env`:
 

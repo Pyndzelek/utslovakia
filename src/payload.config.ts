@@ -7,12 +7,14 @@ import sharp from 'sharp'
 import { pl } from '@payloadcms/translations/languages/pl'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { s3Storage } from '@payloadcms/storage-s3'
+import { resendAdapter } from '@payloadcms/email-resend'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Category } from './collections/Category'
 import { Product } from './collections/Product'
 import { Brand } from './collections/Brand'
+import { Inquiry } from './collections/Inquiry'
 import { SiteSettings } from './globals/SiteSettings'
 import { HomePage } from './globals/HomePage'
 import { SITE_URL } from './lib/site'
@@ -92,9 +94,18 @@ export default buildConfig({
     defaultLocale: 'pl',
     fallback: true,
   },
-  collections: [Product, Category, Brand, Media, Users],
+  collections: [Product, Category, Brand, Inquiry, Media, Users],
   globals: [HomePage, SiteSettings],
   editor: lexicalEditor(),
+  // Optional: with RESEND_API_KEY set, new inquiries are e-mailed to the team and the admin's
+  // "forgot password" link works. Without it Payload only logs outgoing mail to the console.
+  ...(process.env.RESEND_API_KEY && {
+    email: resendAdapter({
+      apiKey: process.env.RESEND_API_KEY,
+      defaultFromAddress: process.env.EMAIL_FROM || 'noreply@utslovakia.sk',
+      defaultFromName: 'UTSlovakia',
+    }),
+  }),
   secret: requiredEnv('PAYLOAD_SECRET'),
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),

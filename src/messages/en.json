@@ -196,7 +196,8 @@
     "description": "Questions about equipment or advice before you buy. We reply as soon as we can.",
     "cards": {
       "visit": {
-        "title": "Visit us"
+        "title": "Visit us",
+        "openMap": "Open in Maps"
       },
       "call": {
         "title": "Call us"
@@ -209,7 +210,44 @@
       }
     },
     "vatNumber": "IČ DPH / VAT ID: {number}",
-    "faqTitle": "Frequently asked questions"
+    "faqTitle": "Frequently asked questions",
+    "form": {
+      "eyebrow": "Inquiry",
+      "title": "Send us an inquiry",
+      "description": "Tell us what you need — a part number, a quantity or the machine it has to fit. We reply by e-mail.",
+      "points": {
+        "reply": "A reply from a person, not an autoresponder",
+        "advice": "Help choosing the right part for your machine",
+        "bulk": "Quotes for larger quantities"
+      },
+      "name": "Full name",
+      "email": "E-mail",
+      "phone": "Phone",
+      "company": "Company",
+      "optional": "optional",
+      "message": "Message",
+      "messagePlaceholder": "What are you looking for?",
+      "productLabel": "Inquiry about",
+      "removeProduct": "Remove product from the inquiry",
+      "submit": "Send inquiry",
+      "sending": "Sending…",
+      "privacy": "We use these details only to answer your inquiry.",
+      "successTitle": "Thank you — your inquiry has been sent",
+      "successText": "We'll get back to you by e-mail as soon as we can.",
+      "sendAnother": "Send another inquiry",
+      "errors": {
+        "required": "This field is required.",
+        "invalidEmail": "Enter a valid e-mail address.",
+        "invalidPhone": "Enter a valid phone number.",
+        "tooShort": "Please add a few more details.",
+        "tooLong": "This text is too long.",
+        "summary": "Please check the highlighted fields.",
+        "expired": "The form has expired. Reload the page and try again.",
+        "tooFast": "That was very quick. Please wait a moment and send your inquiry again.",
+        "rateLimited": "Too many inquiries in a short time. Please try again in a few minutes.",
+        "failed": "The inquiry could not be sent. Please try again, or contact us by phone or e-mail."
+      }
+    }
   },
   "a11y": {
     "mainNav": "Main navigation",

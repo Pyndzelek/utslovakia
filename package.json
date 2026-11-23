@@ -26,6 +26,7 @@
   "dependencies": {
     "@base-ui/react": "^1.6.0",
     "@payloadcms/db-postgres": "3.85.2",
+    "@payloadcms/email-resend": "3.85.2",
     "@payloadcms/next": "3.85.2",
     "@payloadcms/plugin-seo": "3.85.2",
     "@payloadcms/richtext-lexical": "3.85.2",

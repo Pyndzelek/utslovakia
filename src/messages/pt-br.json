@@ -196,7 +196,8 @@
     "description": "Dúvidas sobre equipamentos ou orientação na compra. Respondemos o mais rápido possível.",
     "cards": {
       "visit": {
-        "title": "Visite-nos"
+        "title": "Visite-nos",
+        "openMap": "Abrir no Maps"
       },
       "call": {
         "title": "Ligue para nós"
@@ -209,7 +210,44 @@
       }
     },
     "vatNumber": "IČ DPH / VAT ID: {number}",
-    "faqTitle": "Perguntas frequentes"
+    "faqTitle": "Perguntas frequentes",
+    "form": {
+      "eyebrow": "Consulta",
+      "title": "Envie sua consulta",
+      "description": "Diga o que você precisa — o código da peça, a quantidade ou a máquina em que ela será usada. Respondemos por e-mail.",
+      "points": {
+        "reply": "Quem responde é uma pessoa, não um robô",
+        "advice": "Ajudamos a escolher a peça certa para a sua máquina",
+        "bulk": "Orçamentos para grandes quantidades"
+      },
+      "name": "Nome completo",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "company": "Empresa",
+      "optional": "opcional",
+      "message": "Mensagem",
+      "messagePlaceholder": "O que você procura?",
+      "productLabel": "Consulta sobre",
+      "removeProduct": "Remover produto da consulta",
+      "submit": "Enviar consulta",
+      "sending": "Enviando…",
+      "privacy": "Usamos estes dados apenas para responder à sua consulta.",
+      "successTitle": "Obrigado — sua consulta foi enviada",
+      "successText": "Responderemos por e-mail o mais rápido possível.",
+      "sendAnother": "Enviar outra consulta",
+      "errors": {
+        "required": "Este campo é obrigatório.",
+        "invalidEmail": "Informe um e-mail válido.",
+        "invalidPhone": "Informe um telefone válido.",
+        "tooShort": "Adicione mais alguns detalhes.",
+        "tooLong": "Este texto é longo demais.",
+        "summary": "Verifique os campos destacados.",
+        "expired": "O formulário expirou. Recarregue a página e tente novamente.",
+        "tooFast": "Isso foi muito rápido. Aguarde um instante e envie sua consulta novamente.",
+        "rateLimited": "Muitas consultas em pouco tempo. Tente novamente em alguns minutos.",
+        "failed": "Não foi possível enviar a consulta. Tente novamente ou fale conosco por telefone ou e-mail."
+      }
+    }
   },
   "a11y": {
     "mainNav": "Navegação principal",

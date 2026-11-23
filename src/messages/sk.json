@@ -196,7 +196,8 @@
     "description": "Otázky o zariadení alebo rada pred nákupom. Odpovedáme čo najskôr.",
     "cards": {
       "visit": {
-        "title": "Navštívte nás"
+        "title": "Navštívte nás",
+        "openMap": "Otvoriť v Mapách"
       },
       "call": {
         "title": "Zavolajte nám"
@@ -209,7 +210,44 @@
       }
     },
     "vatNumber": "IČ DPH / VAT ID: {number}",
-    "faqTitle": "Často kladené otázky"
+    "faqTitle": "Často kladené otázky",
+    "form": {
+      "eyebrow": "Dopyt",
+      "title": "Pošlite nám dopyt",
+      "description": "Napíšte, čo potrebujete — číslo dielu, množstvo alebo zariadenie, do ktorého má pasovať. Odpovieme e-mailom.",
+      "points": {
+        "reply": "Odpovedá človek, nie automat",
+        "advice": "Pomôžeme vybrať správny diel pre vaše zariadenie",
+        "bulk": "Cenové ponuky na väčšie množstvá"
+      },
+      "name": "Meno a priezvisko",
+      "email": "E-mail",
+      "phone": "Telefón",
+      "company": "Firma",
+      "optional": "voliteľné",
+      "message": "Správa",
+      "messagePlaceholder": "Čo hľadáte?",
+      "productLabel": "Dopyt sa týka",
+      "removeProduct": "Odstrániť produkt z dopytu",
+      "submit": "Odoslať dopyt",
+      "sending": "Odosiela sa…",
+      "privacy": "Uvedené údaje použijeme výlučne na odpoveď na váš dopyt.",
+      "successTitle": "Ďakujeme — dopyt bol odoslaný",
+      "successText": "Odpovieme e-mailom čo najskôr.",
+      "sendAnother": "Odoslať ďalší dopyt",
+      "errors": {
+        "required": "Toto pole je povinné.",
+        "invalidEmail": "Zadajte platnú e-mailovú adresu.",
+        "invalidPhone": "Zadajte platné telefónne číslo.",
+        "tooShort": "Doplňte, prosím, viac podrobností.",
+        "tooLong": "Tento text je príliš dlhý.",
+        "summary": "Skontrolujte označené polia.",
+        "expired": "Platnosť formulára vypršala. Obnovte stránku a skúste to znova.",
+        "tooFast": "To bolo veľmi rýchle. Počkajte chvíľu a odošlite dopyt znova.",
+        "rateLimited": "Príliš veľa dopytov v krátkom čase. Skúste to znova o pár minút.",
+        "failed": "Dopyt sa nepodarilo odoslať. Skúste to znova alebo nás kontaktujte telefonicky či e-mailom."
+      }
+    }
   },
   "a11y": {
     "mainNav": "Hlavná navigácia",

@@ -70,6 +70,7 @@ export interface Config {
     products: Product;
     categories: Category;
     brands: Brand;
+    inquiries: Inquiry;
     media: Media;
     users: User;
     'payload-kv': PayloadKv;
@@ -82,6 +83,7 @@ export interface Config {
     products: ProductsSelect<false> | ProductsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     brands: BrandsSelect<false> | BrandsSelect<true>;
+    inquiries: InquiriesSelect<false> | InquiriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -164,7 +166,13 @@ export interface Product {
     alt?: string | null;
     id?: string | null;
   }[];
+  /**
+   * Formatowanie jest automatyczne: pusta linia rozdziela akapity; krótka linia zakończona dwukropkiem (np. „Dane techniczne:”) staje się nagłówkiem; kilka linii pod rząd tworzy listę, a w linii „Napięcie: 12 V” część przed dwukropkiem jest pogrubiona.
+   */
   description: string;
+  /**
+   * Krótkie punkty (3–6) pokazywane w karcie „Szczegóły produktu” obok opisu.
+   */
   keyFeatures?:
     | {
         text: string;
@@ -176,7 +184,7 @@ export interface Product {
    */
   warranty?: number | null;
   /**
-   * PLN jest wymagane. Pozostałe waluty opcjonalnie.
+   * PLN jest wymagane. Pozostałe waluty opcjonalnie — bez nich dana wersja językowa pokazuje cenę w PLN. Cena 0 wyświetla się jako „Cena na zapytanie”.
    */
   prices: {
     PLN: number;
@@ -185,7 +193,7 @@ export interface Product {
     BRL?: number | null;
   };
   /**
-   * Dodaj różne wersje tego produktu.
+   * Dodaj różne wersje tego produktu. Pierwszy model z listy jest domyślnie wybrany na stronie.
    */
   variants?:
     | {
@@ -222,7 +230,7 @@ export interface Product {
   createdAt: string;
 }
 /**
- * Marki / producenci — używane jako opcja filtrowania na stronie /products
+ * Marki / producenci. Marka jest pokazywana przy produkcie i jako filtr w katalogu (tylko marki, które mają opublikowane produkty).
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "brands".
@@ -252,7 +260,7 @@ export interface Category {
    */
   image: number | Media;
   /**
-   * Mniejsze liczby wyświetlają się jako pierwsze.
+   * Mniejsze liczby wyświetlają się jako pierwsze. Kategoria z najmniejszą liczbą jest dużym kafelkiem na stronie głównej — nadaj każdej kategorii inną liczbę, inaczej kolejność jest przypadkowa.
    */
   order?: number | null;
   /**
@@ -336,6 +344,33 @@ export interface Media {
   };
 }
 /**
+ * Wiadomości wysłane przez formularz na stronie Kontakt. Po odpowiedzi zmień status na „Załatwione”.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiries".
+ */
+export interface Inquiry {
+  id: number;
+  status: 'new' | 'in_progress' | 'done';
+  /**
+   * Widoczne tylko w panelu, np. co ustalono z klientem.
+   */
+  notes?: string | null;
+  name: string;
+  email: string;
+  phone?: string | null;
+  company?: string | null;
+  message: string;
+  product?: (number | null) | Product;
+  variant?: string | null;
+  /**
+   * W tym języku klient przeglądał stronę.
+   */
+  locale?: ('pl' | 'en' | 'sk' | 'pt-br') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
@@ -400,6 +435,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'brands';
         value: number | Brand;
+      } | null)
+    | ({
+        relationTo: 'inquiries';
+        value: number | Inquiry;
       } | null)
     | ({
         relationTo: 'media';
@@ -546,6 +585,24 @@ export interface BrandsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiries_select".
+ */
+export interface InquiriesSelect<T extends boolean = true> {
+  status?: T;
+  notes?: T;
+  name?: T;
+  email?: T;
+  phone?: T;
+  company?: T;
+  message?: T;
+  product?: T;
+  variant?: T;
+  locale?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
@@ -680,7 +737,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface HomePage {
   id: number;
   /**
-   * Rotują co 5 sekund. Zdjęcie, marka i kategoria pochodzą z wybranego produktu. Bez slajdów sekcja pokazuje samo hasło i przyciski.
+   * Slajdy zmieniają się automatycznie co kilka sekund. Zdjęcie, marka i kategoria pochodzą z wybranego produktu. Bez slajdów sekcja pokazuje samo hasło i przyciski.
    */
   heroSlides?:
     | {
@@ -730,7 +787,7 @@ export interface SiteSetting {
       }[]
     | null;
   /**
-   * Pierwszy adres jest pokazywany w stopce i menu mobilnym.
+   * Pierwszy adres jest pokazywany w stopce i menu mobilnym. Na niego trafiają też powiadomienia o nowych zapytaniach z formularza (gdy wysyłka e-maili jest włączona).
    */
   emails?:
     | {
