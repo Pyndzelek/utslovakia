@@ -122,6 +122,10 @@ export default buildConfig({
       // DATABASE_URL should point at Neon's pooled ("-pooler") connection
       // string — a large max here just defeats the pooler.
       max: 5,
+      // Fail instead of hanging for the OS's TCP timeout (over a minute) when the database
+      // is unreachable. Long enough for Neon to wake a suspended compute. Also limits how
+      // long a query waits for a free connection from this pool.
+      connectionTimeoutMillis: 10_000,
     },
   }),
   sharp,
